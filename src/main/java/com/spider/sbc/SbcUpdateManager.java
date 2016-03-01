@@ -11,10 +11,6 @@ public interface SbcUpdateManager {
 
     <T> void update(T data, String tag, String topic) throws MqException;
 
-    String getProducerGroup();
-
-    String getInplayTopic();
-
     String getHdcTag();
 
     String getHiloTag();

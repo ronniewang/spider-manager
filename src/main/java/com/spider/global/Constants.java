@@ -26,10 +26,6 @@ public final class Constants {
 
     public static final String ENDPOINT_SBC_MATCH_COMPARE = ConfigProperties.$("endpoint.sbc.match_compare");
 
-    public static final String[] ROCKET_MQ_ADDRS = ConfigProperties.$("rocket.mq.addr").split("\\|");
-
-    public static final String[] ROCKET_MQ_GROUPS = ConfigProperties.$("inplay.odds.group").split("\\|");
-
     public static final String UTF_8 = "utf-8";
 
     public static final String STATUS_SELLING = "SELLING";

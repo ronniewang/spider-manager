@@ -20,7 +20,7 @@ public final class ConfigProperties {
 
     private static Logger logger = Logger.getLogger(ConfigProperties.class);
 
-    private static Map<String, String> propertiesMap = new HashMap<String, String>();
+    private static Map<String, String> propertiesMap = new HashMap<>();
     static {
         Properties properties = new Properties();
         try {

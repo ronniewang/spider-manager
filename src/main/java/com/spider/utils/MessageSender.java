@@ -4,8 +4,8 @@ import com.alibaba.rocketmq.client.exception.MQClientException;
 import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
 import com.alibaba.rocketmq.client.producer.SendResult;
 import com.alibaba.rocketmq.common.message.Message;
-import com.spider.global.Constants;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
@@ -26,11 +26,14 @@ public class MessageSender {
 
     private static List<DefaultMQProducer> defaultMQProducers = new ArrayList<>();
 
-    static {
-        for (int i = 0; i < Constants.ROCKET_MQ_ADDRS.length; i++) {
+    public MessageSender(String mqGroup, String addr) {
+
+        String[] ROCKET_MQ_ADDRS = addr.split("\\|");
+        String[] ROCKET_MQ_GROUPS = mqGroup.split("\\|");
+        for (int i = 0; i < ROCKET_MQ_ADDRS.length; i++) {
             DefaultMQProducer defaultMQProducer = new DefaultMQProducer();
-            defaultMQProducer.setProducerGroup(Constants.ROCKET_MQ_GROUPS[i]);
-            defaultMQProducer.setNamesrvAddr(Constants.ROCKET_MQ_ADDRS[i]);
+            defaultMQProducer.setProducerGroup(ROCKET_MQ_GROUPS[i]);
+            defaultMQProducer.setNamesrvAddr(ROCKET_MQ_ADDRS[i]);
             defaultMQProducers.add(defaultMQProducer);
         }
         try {
@@ -40,10 +43,6 @@ public class MessageSender {
         } catch (MQClientException e) {
             throw new IllegalStateException("rocket mq producer start failed", e);
         }
-    }
-
-    private MessageSender() {
-
     }
 
     public <T> void sendObjectMessage(T object, String producerGroup, String topic, String tag) {

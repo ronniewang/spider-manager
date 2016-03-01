@@ -9,7 +9,7 @@ public enum AbsenceState {
 
     Yes("1"), No("0");
 
-    private AbsenceState(String id) {
+    AbsenceState(String id) {
 
         this.id = id;
     }

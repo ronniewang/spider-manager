@@ -66,33 +66,19 @@ public class DatabaseConfig {
         return entityManagerFactory;
     }
 
-    /**
-     * Declare the transaction manager.
-     */
     @Bean
     public JpaTransactionManager transactionManager() {
 
-        JpaTransactionManager transactionManager =
-                new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(
-                entityManagerFactory.getObject());
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory.getObject());
         return transactionManager;
     }
 
-    /**
-     * PersistenceExceptionTranslationPostProcessor is a bean post processor
-     * which adds an advisor to any bean annotated with Repository so that any
-     * platform-specific exceptions are caught and then rethrown as one
-     * Spring's unchecked data access exceptions (i.e. a subclass of
-     * DataAccessException).
-     */
     @Bean
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
 
         return new PersistenceExceptionTranslationPostProcessor();
     }
-
-    // Private fields
 
     @Autowired
     private Environment env;

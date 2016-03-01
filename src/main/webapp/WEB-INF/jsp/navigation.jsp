@@ -1,21 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <ul class="list-group">
-    <a href="../../listMatchLeaguePage">
+    <a href="listMatchLeaguePage">
         <li class="list-group-item">联赛列表</li>
     </a>
-    <a href="../../listMatchTeamPage">
+    <a href="listMatchTeamPage">
         <li class="list-group-item">队名列表</li>
     </a>
-    <a href="../../listMatchPage">
+    <a href="listMatchPage">
         <li class="list-group-item">赛事列表</li>
     </a>
     <a href="index">
         <li class="list-group-item">赔率信息</li>
     </a>
-    <a href="../../listProductPage">
+    <a href="listProductPage">
         <li class="list-group-item">奖池信息</li>
     </a>
-    <a href="../../listServiceStatePage">
+    <a href="listServiceStatePage">
         <li class="list-group-item">爬虫运行信息</li>
     </a>
     <a href="exportMatchInfoPage">

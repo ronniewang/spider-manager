@@ -46,18 +46,6 @@ public class SbcUpdateManagerImpl implements SbcUpdateManager {
     }
 
     @Override
-    public String getProducerGroup() {
-
-        return producerGroup;
-    }
-
-    @Override
-    public String getInplayTopic() {
-
-        return inplayTopic;
-    }
-
-    @Override
     public String getHdcTag() {
 
         return hdcTag;
