@@ -1,7 +1,7 @@
 package com.spider.service;
 
-import com.spider.entity.TCrawlerSporttery;
-import com.spider.entity.TCrawlerWin310;
+import com.spider.db.entity.TCrawlerSporttery;
+import com.spider.db.entity.TCrawlerWin310;
 import com.spider.model.ExcelMatchStatisticModel;
 import com.spider.model.MatchModel;
 import com.spider.model.MatchPlayerInfoModel;

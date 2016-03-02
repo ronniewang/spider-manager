@@ -1,6 +1,4 @@
-package com.spider.model;
-
-import com.spider.db.entity.SportteryAllEntity;
+package com.spider.db.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -8,7 +6,9 @@ import java.sql.Timestamp;
 /**
  * Created by wsy on 2015/11/19.
  */
-public class SportteryAllModel {
+@Entity
+@Table(name = "sporttery_all", schema = "", catalog = "crawler")
+public class SportteryAllEntity {
 
     private long id;
 
@@ -20,188 +20,121 @@ public class SportteryAllModel {
 
     private String awayTeam;
 
-    private String hadH;
+    private Double hadH;
 
-    private String hadD;
+    private Double hadD;
 
-    private String hadA;
+    private Double hadA;
 
-    private String hhadH;
+    private Double hhadH;
 
-    private String hhadD;
+    private Double hhadD;
 
-    private String hhadA;
+    private Double hhadA;
 
-    private String hhadLine;
+    private Double hhadLine;
 
-    private String hafuHh;
+    private Double hafuHh;
 
-    private String hafuHd;
+    private Double hafuHd;
 
-    private String hafuHa;
+    private Double hafuHa;
 
-    private String hafuDh;
+    private Double hafuDh;
 
-    private String hafuDd;
+    private Double hafuDd;
 
-    private String hafuDa;
+    private Double hafuDa;
 
-    private String hafuAh;
+    private Double hafuAh;
 
-    private String hafuAd;
+    private Double hafuAd;
 
-    private String hafuAa;
+    private Double hafuAa;
 
-    private String ttg0;
+    private Double ttg0;
 
-    private String ttg1;
+    private Double ttg1;
 
-    private String ttg2;
+    private Double ttg2;
 
-    private String ttg3;
+    private Double ttg3;
 
-    private String ttg4;
+    private Double ttg4;
 
-    private String ttg5;
+    private Double ttg5;
 
-    private String ttg6;
+    private Double ttg6;
 
-    private String ttg7Up;
+    private Double ttg7Up;
 
-    private String score10;
+    private Double score10;
 
-    private String score20;
+    private Double score20;
 
-    private String score21;
+    private Double score21;
 
-    private String score30;
+    private Double score30;
 
-    private String score31;
+    private Double score31;
 
-    private String score32;
+    private Double score32;
 
-    private String score40;
+    private Double score40;
 
-    private String score41;
+    private Double score41;
 
-    private String score42;
+    private Double score42;
 
-    private String score50;
+    private Double score50;
 
-    private String score51;
+    private Double score51;
 
-    private String score52;
+    private Double score52;
 
-    private String scoreHElse;
+    private Double scoreHElse;
 
-    private String score00;
+    private Double score00;
 
-    private String score11;
+    private Double score11;
 
-    private String score22;
+    private Double score22;
 
-    private String score33;
+    private Double score33;
 
-    private String scoreDElse;
+    private Double scoreDElse;
 
-    private String score01;
+    private Double score01;
 
-    private String score02;
+    private Double score02;
 
-    private String score12;
+    private Double score12;
 
-    private String score03;
+    private Double score03;
 
-    private String score13;
+    private Double score13;
 
-    private String score23;
+    private Double score23;
 
-    private String score04;
+    private Double score04;
 
-    private String score14;
+    private Double score14;
 
-    private String score24;
+    private Double score24;
 
-    private String score05;
+    private Double score05;
 
-    private String score15;
+    private Double score15;
 
-    private String score25;
+    private Double score25;
 
-    private String scoreAElse;
+    private Double scoreAElse;
 
-    private Timestamp oddsUpdateTime;
+    private Timestamp startDateTime;
 
     private Timestamp updateTime;
 
-    public SportteryAllModel() {
-
-    }
-
-    public SportteryAllModel(SportteryAllEntity s) {
-
-        this.matchCode = s.getMatchCode();
-        this.league = s.getLeague();
-        this.homeTeam = s.getHomeTeam();
-        this.awayTeam = s.getAwayTeam();
-        this.hadH = s.getHadH() + "";
-        this.hadD = s.getHadD() + "";
-        this.hadA = s.getHadA() + "";
-        this.hhadH = s.getHhadH() + "";
-        this.hhadD = s.getHhadD() + "";
-        this.hhadA = s.getHhadA() + "";
-        this.hhadLine = s.getHhadLine() + "";
-        this.hafuHh = s.getHafuHh() + "";
-        this.hafuHd = s.getHafuHd() + "";
-        this.hafuHa = s.getHafuHa() + "";
-        this.hafuDh = s.getHafuDh() + "";
-        this.hafuDd = s.getHafuDd() + "";
-        this.hafuDa = s.getHafuDa() + "";
-        this.hafuAh = s.getHafuAh() + "";
-        this.hafuAd = s.getHafuAd() + "";
-        this.hafuAa = s.getHafuAa() + "";
-        this.ttg0 = s.getTtg0() + "";
-        this.ttg1 = s.getTtg1() + "";
-        this.ttg2 = s.getTtg2() + "";
-        this.ttg3 = s.getTtg3() + "";
-        this.ttg4 = s.getTtg4() + "";
-        this.ttg5 = s.getTtg5() + "";
-        this.ttg6 = s.getTtg6() + "";
-        this.ttg7Up = s.getTtg7Up() + "";
-        this.score10 = s.getScore10() + "";
-        this.score20 = s.getScore20() + "";
-        this.score21 = s.getScore21() + "";
-        this.score30 = s.getScore30() + "";
-        this.score31 = s.getScore31() + "";
-        this.score32 = s.getScore32() + "";
-        this.score40 = s.getScore40() + "";
-        this.score41 = s.getScore41() + "";
-        this.score42 = s.getScore42() + "";
-        this.score50 = s.getScore50() + "";
-        this.score51 = s.getScore51() + "";
-        this.score52 = s.getScore52() + "";
-        this.scoreHElse = s.getScoreHElse() + "";
-        this.score00 = s.getScore00() + "";
-        this.score11 = s.getScore11() + "";
-        this.score22 = s.getScore22() + "";
-        this.score33 = s.getScore33() + "";
-        this.scoreDElse = s.getScoreDElse() + "";
-        this.score01 = s.getScore01() + "";
-        this.score02 = s.getScore02() + "";
-        this.score12 = s.getScore12() + "";
-        this.score03 = s.getScore03() + "";
-        this.score13 = s.getScore13() + "";
-        this.score23 = s.getScore23() + "";
-        this.score04 = s.getScore04() + "";
-        this.score14 = s.getScore14() + "";
-        this.score24 = s.getScore24() + "";
-        this.score05 = s.getScore05() + "";
-        this.score15 = s.getScore15() + "";
-        this.score25 = s.getScore25() + "";
-        this.scoreAElse = s.getScoreAElse() + "";
-        this.oddsUpdateTime = s.getStartDateTime();
-        this.updateTime = s.getUpdateTime();
-    }
+    private Long uniqueId;
 
     @Id
     @Column(name = "id")
@@ -265,660 +198,660 @@ public class SportteryAllModel {
 
     @Basic
     @Column(name = "had_h")
-    public String getHadH() {
+    public Double getHadH() {
 
         return hadH;
     }
 
-    public void setHadH(String hadH) {
+    public void setHadH(Double hadH) {
 
         this.hadH = hadH;
     }
 
     @Basic
     @Column(name = "had_d")
-    public String getHadD() {
+    public Double getHadD() {
 
         return hadD;
     }
 
-    public void setHadD(String hadD) {
+    public void setHadD(Double hadD) {
 
         this.hadD = hadD;
     }
 
     @Basic
     @Column(name = "had_a")
-    public String getHadA() {
+    public Double getHadA() {
 
         return hadA;
     }
 
-    public void setHadA(String hadA) {
+    public void setHadA(Double hadA) {
 
         this.hadA = hadA;
     }
 
     @Basic
     @Column(name = "hhad_h")
-    public String getHhadH() {
+    public Double getHhadH() {
 
         return hhadH;
     }
 
-    public void setHhadH(String hhadH) {
+    public void setHhadH(Double hhadH) {
 
         this.hhadH = hhadH;
     }
 
     @Basic
     @Column(name = "hhad_d")
-    public String getHhadD() {
+    public Double getHhadD() {
 
         return hhadD;
     }
 
-    public void setHhadD(String hhadD) {
+    public void setHhadD(Double hhadD) {
 
         this.hhadD = hhadD;
     }
 
     @Basic
     @Column(name = "hhad_a")
-    public String getHhadA() {
+    public Double getHhadA() {
 
         return hhadA;
     }
 
-    public void setHhadA(String hhadA) {
+    public void setHhadA(Double hhadA) {
 
         this.hhadA = hhadA;
     }
 
     @Basic
     @Column(name = "hhad_line")
-    public String getHhadLine() {
+    public Double getHhadLine() {
 
         return hhadLine;
     }
 
-    public void setHhadLine(String hhadLine) {
+    public void setHhadLine(Double hhadLine) {
 
         this.hhadLine = hhadLine;
     }
 
     @Basic
     @Column(name = "hafu_hh")
-    public String getHafuHh() {
+    public Double getHafuHh() {
 
         return hafuHh;
     }
 
-    public void setHafuHh(String hafuHh) {
+    public void setHafuHh(Double hafuHh) {
 
         this.hafuHh = hafuHh;
     }
 
     @Basic
     @Column(name = "hafu_hd")
-    public String getHafuHd() {
+    public Double getHafuHd() {
 
         return hafuHd;
     }
 
-    public void setHafuHd(String hafuHd) {
+    public void setHafuHd(Double hafuHd) {
 
         this.hafuHd = hafuHd;
     }
 
     @Basic
     @Column(name = "hafu_ha")
-    public String getHafuHa() {
+    public Double getHafuHa() {
 
         return hafuHa;
     }
 
-    public void setHafuHa(String hafuHa) {
+    public void setHafuHa(Double hafuHa) {
 
         this.hafuHa = hafuHa;
     }
 
     @Basic
     @Column(name = "hafu_dh")
-    public String getHafuDh() {
+    public Double getHafuDh() {
 
         return hafuDh;
     }
 
-    public void setHafuDh(String hafuDh) {
+    public void setHafuDh(Double hafuDh) {
 
         this.hafuDh = hafuDh;
     }
 
     @Basic
     @Column(name = "hafu_dd")
-    public String getHafuDd() {
+    public Double getHafuDd() {
 
         return hafuDd;
     }
 
-    public void setHafuDd(String hafuDd) {
+    public void setHafuDd(Double hafuDd) {
 
         this.hafuDd = hafuDd;
     }
 
     @Basic
     @Column(name = "hafu_da")
-    public String getHafuDa() {
+    public Double getHafuDa() {
 
         return hafuDa;
     }
 
-    public void setHafuDa(String hafuDa) {
+    public void setHafuDa(Double hafuDa) {
 
         this.hafuDa = hafuDa;
     }
 
     @Basic
     @Column(name = "hafu_ah")
-    public String getHafuAh() {
+    public Double getHafuAh() {
 
         return hafuAh;
     }
 
-    public void setHafuAh(String hafuAh) {
+    public void setHafuAh(Double hafuAh) {
 
         this.hafuAh = hafuAh;
     }
 
     @Basic
     @Column(name = "hafu_ad")
-    public String getHafuAd() {
+    public Double getHafuAd() {
 
         return hafuAd;
     }
 
-    public void setHafuAd(String hafuAd) {
+    public void setHafuAd(Double hafuAd) {
 
         this.hafuAd = hafuAd;
     }
 
     @Basic
     @Column(name = "hafu_aa")
-    public String getHafuAa() {
+    public Double getHafuAa() {
 
         return hafuAa;
     }
 
-    public void setHafuAa(String hafuAa) {
+    public void setHafuAa(Double hafuAa) {
 
         this.hafuAa = hafuAa;
     }
 
     @Basic
     @Column(name = "ttg_0")
-    public String getTtg0() {
+    public Double getTtg0() {
 
         return ttg0;
     }
 
-    public void setTtg0(String ttg0) {
+    public void setTtg0(Double ttg0) {
 
         this.ttg0 = ttg0;
     }
 
     @Basic
     @Column(name = "ttg_1")
-    public String getTtg1() {
+    public Double getTtg1() {
 
         return ttg1;
     }
 
-    public void setTtg1(String ttg1) {
+    public void setTtg1(Double ttg1) {
 
         this.ttg1 = ttg1;
     }
 
     @Basic
     @Column(name = "ttg_2")
-    public String getTtg2() {
+    public Double getTtg2() {
 
         return ttg2;
     }
 
-    public void setTtg2(String ttg2) {
+    public void setTtg2(Double ttg2) {
 
         this.ttg2 = ttg2;
     }
 
     @Basic
     @Column(name = "ttg_3")
-    public String getTtg3() {
+    public Double getTtg3() {
 
         return ttg3;
     }
 
-    public void setTtg3(String ttg3) {
+    public void setTtg3(Double ttg3) {
 
         this.ttg3 = ttg3;
     }
 
     @Basic
     @Column(name = "ttg_4")
-    public String getTtg4() {
+    public Double getTtg4() {
 
         return ttg4;
     }
 
-    public void setTtg4(String ttg4) {
+    public void setTtg4(Double ttg4) {
 
         this.ttg4 = ttg4;
     }
 
     @Basic
     @Column(name = "ttg_5")
-    public String getTtg5() {
+    public Double getTtg5() {
 
         return ttg5;
     }
 
-    public void setTtg5(String ttg5) {
+    public void setTtg5(Double ttg5) {
 
         this.ttg5 = ttg5;
     }
 
     @Basic
     @Column(name = "ttg_6")
-    public String getTtg6() {
+    public Double getTtg6() {
 
         return ttg6;
     }
 
-    public void setTtg6(String ttg6) {
+    public void setTtg6(Double ttg6) {
 
         this.ttg6 = ttg6;
     }
 
     @Basic
     @Column(name = "ttg_7up")
-    public String getTtg7Up() {
+    public Double getTtg7Up() {
 
         return ttg7Up;
     }
 
-    public void setTtg7Up(String ttg7Up) {
+    public void setTtg7Up(Double ttg7Up) {
 
         this.ttg7Up = ttg7Up;
     }
 
     @Basic
     @Column(name = "score1_0")
-    public String getScore10() {
+    public Double getScore10() {
 
         return score10;
     }
 
-    public void setScore10(String score10) {
+    public void setScore10(Double score10) {
 
         this.score10 = score10;
     }
 
     @Basic
     @Column(name = "score2_0")
-    public String getScore20() {
+    public Double getScore20() {
 
         return score20;
     }
 
-    public void setScore20(String score20) {
+    public void setScore20(Double score20) {
 
         this.score20 = score20;
     }
 
     @Basic
     @Column(name = "score2_1")
-    public String getScore21() {
+    public Double getScore21() {
 
         return score21;
     }
 
-    public void setScore21(String score21) {
+    public void setScore21(Double score21) {
 
         this.score21 = score21;
     }
 
     @Basic
     @Column(name = "score3_0")
-    public String getScore30() {
+    public Double getScore30() {
 
         return score30;
     }
 
-    public void setScore30(String score30) {
+    public void setScore30(Double score30) {
 
         this.score30 = score30;
     }
 
     @Basic
     @Column(name = "score3_1")
-    public String getScore31() {
+    public Double getScore31() {
 
         return score31;
     }
 
-    public void setScore31(String score31) {
+    public void setScore31(Double score31) {
 
         this.score31 = score31;
     }
 
     @Basic
     @Column(name = "score3_2")
-    public String getScore32() {
+    public Double getScore32() {
 
         return score32;
     }
 
-    public void setScore32(String score32) {
+    public void setScore32(Double score32) {
 
         this.score32 = score32;
     }
 
     @Basic
     @Column(name = "score4_0")
-    public String getScore40() {
+    public Double getScore40() {
 
         return score40;
     }
 
-    public void setScore40(String score40) {
+    public void setScore40(Double score40) {
 
         this.score40 = score40;
     }
 
     @Basic
     @Column(name = "score4_1")
-    public String getScore41() {
+    public Double getScore41() {
 
         return score41;
     }
 
-    public void setScore41(String score41) {
+    public void setScore41(Double score41) {
 
         this.score41 = score41;
     }
 
     @Basic
     @Column(name = "score4_2")
-    public String getScore42() {
+    public Double getScore42() {
 
         return score42;
     }
 
-    public void setScore42(String score42) {
+    public void setScore42(Double score42) {
 
         this.score42 = score42;
     }
 
     @Basic
     @Column(name = "score5_0")
-    public String getScore50() {
+    public Double getScore50() {
 
         return score50;
     }
 
-    public void setScore50(String score50) {
+    public void setScore50(Double score50) {
 
         this.score50 = score50;
     }
 
     @Basic
     @Column(name = "score5_1")
-    public String getScore51() {
+    public Double getScore51() {
 
         return score51;
     }
 
-    public void setScore51(String score51) {
+    public void setScore51(Double score51) {
 
         this.score51 = score51;
     }
 
     @Basic
     @Column(name = "score5_2")
-    public String getScore52() {
+    public Double getScore52() {
 
         return score52;
     }
 
-    public void setScore52(String score52) {
+    public void setScore52(Double score52) {
 
         this.score52 = score52;
     }
 
     @Basic
     @Column(name = "score_h_else")
-    public String getScoreHElse() {
+    public Double getScoreHElse() {
 
         return scoreHElse;
     }
 
-    public void setScoreHElse(String scoreHElse) {
+    public void setScoreHElse(Double scoreHElse) {
 
         this.scoreHElse = scoreHElse;
     }
 
     @Basic
     @Column(name = "score0_0")
-    public String getScore00() {
+    public Double getScore00() {
 
         return score00;
     }
 
-    public void setScore00(String score00) {
+    public void setScore00(Double score00) {
 
         this.score00 = score00;
     }
 
     @Basic
     @Column(name = "score1_1")
-    public String getScore11() {
+    public Double getScore11() {
 
         return score11;
     }
 
-    public void setScore11(String score11) {
+    public void setScore11(Double score11) {
 
         this.score11 = score11;
     }
 
     @Basic
     @Column(name = "score2_2")
-    public String getScore22() {
+    public Double getScore22() {
 
         return score22;
     }
 
-    public void setScore22(String score22) {
+    public void setScore22(Double score22) {
 
         this.score22 = score22;
     }
 
     @Basic
     @Column(name = "score3_3")
-    public String getScore33() {
+    public Double getScore33() {
 
         return score33;
     }
 
-    public void setScore33(String score33) {
+    public void setScore33(Double score33) {
 
         this.score33 = score33;
     }
 
     @Basic
     @Column(name = "score_d_else")
-    public String getScoreDElse() {
+    public Double getScoreDElse() {
 
         return scoreDElse;
     }
 
-    public void setScoreDElse(String scoreDElse) {
+    public void setScoreDElse(Double scoreDElse) {
 
         this.scoreDElse = scoreDElse;
     }
 
     @Basic
     @Column(name = "score0_1")
-    public String getScore01() {
+    public Double getScore01() {
 
         return score01;
     }
 
-    public void setScore01(String score01) {
+    public void setScore01(Double score01) {
 
         this.score01 = score01;
     }
 
     @Basic
     @Column(name = "score0_2")
-    public String getScore02() {
+    public Double getScore02() {
 
         return score02;
     }
 
-    public void setScore02(String score02) {
+    public void setScore02(Double score02) {
 
         this.score02 = score02;
     }
 
     @Basic
     @Column(name = "score1_2")
-    public String getScore12() {
+    public Double getScore12() {
 
         return score12;
     }
 
-    public void setScore12(String score12) {
+    public void setScore12(Double score12) {
 
         this.score12 = score12;
     }
 
     @Basic
     @Column(name = "score0_3")
-    public String getScore03() {
+    public Double getScore03() {
 
         return score03;
     }
 
-    public void setScore03(String score03) {
+    public void setScore03(Double score03) {
 
         this.score03 = score03;
     }
 
     @Basic
     @Column(name = "score1_3")
-    public String getScore13() {
+    public Double getScore13() {
 
         return score13;
     }
 
-    public void setScore13(String score13) {
+    public void setScore13(Double score13) {
 
         this.score13 = score13;
     }
 
     @Basic
     @Column(name = "score2_3")
-    public String getScore23() {
+    public Double getScore23() {
 
         return score23;
     }
 
-    public void setScore23(String score23) {
+    public void setScore23(Double score23) {
 
         this.score23 = score23;
     }
 
     @Basic
     @Column(name = "score0_4")
-    public String getScore04() {
+    public Double getScore04() {
 
         return score04;
     }
 
-    public void setScore04(String score04) {
+    public void setScore04(Double score04) {
 
         this.score04 = score04;
     }
 
     @Basic
     @Column(name = "score1_4")
-    public String getScore14() {
+    public Double getScore14() {
 
         return score14;
     }
 
-    public void setScore14(String score14) {
+    public void setScore14(Double score14) {
 
         this.score14 = score14;
     }
 
     @Basic
     @Column(name = "score2_4")
-    public String getScore24() {
+    public Double getScore24() {
 
         return score24;
     }
 
-    public void setScore24(String score24) {
+    public void setScore24(Double score24) {
 
         this.score24 = score24;
     }
 
     @Basic
     @Column(name = "score0_5")
-    public String getScore05() {
+    public Double getScore05() {
 
         return score05;
     }
 
-    public void setScore05(String score05) {
+    public void setScore05(Double score05) {
 
         this.score05 = score05;
     }
 
     @Basic
     @Column(name = "score1_5")
-    public String getScore15() {
+    public Double getScore15() {
 
         return score15;
     }
 
-    public void setScore15(String score15) {
+    public void setScore15(Double score15) {
 
         this.score15 = score15;
     }
 
     @Basic
     @Column(name = "score2_5")
-    public String getScore25() {
+    public Double getScore25() {
 
         return score25;
     }
 
-    public void setScore25(String score25) {
+    public void setScore25(Double score25) {
 
         this.score25 = score25;
     }
 
     @Basic
     @Column(name = "score_a_else")
-    public String getScoreAElse() {
+    public Double getScoreAElse() {
 
         return scoreAElse;
     }
 
-    public void setScoreAElse(String scoreAElse) {
+    public void setScoreAElse(Double scoreAElse) {
 
         this.scoreAElse = scoreAElse;
     }
@@ -929,7 +862,7 @@ public class SportteryAllModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SportteryAllModel that = (SportteryAllModel) o;
+        SportteryAllEntity that = (SportteryAllEntity) o;
 
         if (matchCode != null ? !matchCode.equals(that.matchCode) : that.matchCode != null) return false;
         if (league != null ? !league.equals(that.league) : that.league != null) return false;
@@ -989,6 +922,7 @@ public class SportteryAllModel {
         if (score05 != null ? !score05.equals(that.score05) : that.score05 != null) return false;
         if (score15 != null ? !score15.equals(that.score15) : that.score15 != null) return false;
         if (score25 != null ? !score25.equals(that.score25) : that.score25 != null) return false;
+        if (uniqueId != null ? !uniqueId.equals(that.uniqueId) : that.uniqueId != null) return false;
         if (scoreAElse != null ? !scoreAElse.equals(that.scoreAElse) : that.scoreAElse != null) return false;
 
         return true;
@@ -1124,21 +1058,22 @@ public class SportteryAllModel {
                 ", score15=" + score15 +
                 ", score25=" + score25 +
                 ", scoreAElse=" + scoreAElse +
-                ", oddsUpdateTime=" + oddsUpdateTime +
+                ", startDateTime=" + startDateTime +
                 ", updateTime=" + updateTime +
+                ", uniqueId=" + uniqueId +
                 '}';
     }
 
     @Basic
-    @Column(name = "odds_update_time")
-    public Timestamp getOddsUpdateTime() {
+    @Column(name = "start_date_time")
+    public Timestamp getStartDateTime() {
 
-        return oddsUpdateTime;
+        return startDateTime;
     }
 
-    public void setOddsUpdateTime(Timestamp oddsUpdateTime) {
+    public void setStartDateTime(Timestamp startDateTime) {
 
-        this.oddsUpdateTime = oddsUpdateTime;
+        this.startDateTime = startDateTime;
     }
 
     @Basic
@@ -1151,5 +1086,17 @@ public class SportteryAllModel {
     public void setUpdateTime(Timestamp updateTime) {
 
         this.updateTime = updateTime;
+    }
+
+    public void setUniqueId(Long uniqueId) {
+
+        this.uniqueId = uniqueId;
+    }
+
+    @Basic
+    @Column(name = "unique_id")
+    public Long getUniqueId() {
+
+        return uniqueId;
     }
 }

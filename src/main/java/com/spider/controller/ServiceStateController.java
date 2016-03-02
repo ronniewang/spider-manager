@@ -1,9 +1,9 @@
 package com.spider.controller;
 
-import com.spider.entity.ServiceStateEntity;
-import com.spider.entity.ServiceStateHistoryEntity;
-import com.spider.repository.ServiceStateHistoryRepository;
-import com.spider.repository.ServiceStateRepository;
+import com.spider.db.entity.ServiceStateEntity;
+import com.spider.db.entity.ServiceStateHistoryEntity;
+import com.spider.db.repository.ServiceStateHistoryRepository;
+import com.spider.db.repository.ServiceStateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;

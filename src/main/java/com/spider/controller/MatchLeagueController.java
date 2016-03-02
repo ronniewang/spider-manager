@@ -1,10 +1,10 @@
 package com.spider.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.spider.entity.SbcLeague;
+import com.spider.db.entity.SbcLeague;
 import com.spider.model.JsonResult;
-import com.spider.repository.SbcLeagueRepository;
-import com.spider.repository.TCrawlerWin310Repository;
+import com.spider.db.repository.SbcLeagueRepository;
+import com.spider.db.repository.TCrawlerWin310Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;

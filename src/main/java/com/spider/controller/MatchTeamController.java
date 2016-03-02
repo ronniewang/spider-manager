@@ -1,9 +1,9 @@
 package com.spider.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.spider.entity.SbcTeamEntity;
+import com.spider.db.entity.SbcTeamEntity;
 import com.spider.model.JsonResult;
-import com.spider.repository.SbcTeamRepository;
+import com.spider.db.repository.SbcTeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;

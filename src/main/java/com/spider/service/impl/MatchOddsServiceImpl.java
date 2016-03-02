@@ -1,6 +1,6 @@
 package com.spider.service.impl;
 
-import com.spider.entity.*;
+import com.spider.db.entity.*;
 import com.spider.global.Constants;
 import com.spider.global.GamingCompany;
 import com.spider.global.MatchCompareState;
@@ -8,9 +8,9 @@ import com.spider.model.ExcelOddsModel;
 import com.spider.model.OddsModel;
 import com.spider.model.SportteryAllModel;
 import com.spider.model.SupAndTtgModel;
-import com.spider.repository.*;
-import com.spider.repository.specifications.SpotterySpecifications;
-import com.spider.repository.specifications.Win310Specifications;
+import com.spider.db.repository.*;
+import com.spider.db.repository.specifications.SpotterySpecifications;
+import com.spider.db.repository.specifications.Win310Specifications;
 import com.spider.service.MatchOddsServcie;
 import com.spider.service.MatchService;
 import com.spider.service.SbcLeagueService;

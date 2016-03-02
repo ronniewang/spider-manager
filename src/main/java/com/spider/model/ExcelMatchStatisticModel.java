@@ -1,7 +1,7 @@
 package com.spider.model;
 
-import com.spider.entity.NowgoalMatchStatisticEntity;
-import com.spider.entity.TCrawlerWin310;
+import com.spider.db.entity.NowgoalMatchStatisticEntity;
+import com.spider.db.entity.TCrawlerWin310;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WriteException;

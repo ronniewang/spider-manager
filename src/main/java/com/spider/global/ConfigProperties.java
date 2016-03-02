@@ -24,7 +24,7 @@ public final class ConfigProperties {
     static {
         Properties properties = new Properties();
         try {
-            properties.load(new DefaultResourceLoader().getResource("classpath:config.properties").getInputStream());
+            properties.load(new DefaultResourceLoader().getResource("classpath:application.properties").getInputStream());
         } catch (IOException e) {
             logger.fatal("配置文件读取异常");
             throw new RuntimeException("配置文件读取异常");

@@ -1,11 +1,11 @@
 package com.spider.service.impl;
 
-import com.spider.entity.*;
+import com.spider.db.entity.*;
 import com.spider.exception.MqException;
 import com.spider.global.GamingCompany;
 import com.spider.global.UpdateSBCType;
 import com.spider.model.JsonResult;
-import com.spider.repository.*;
+import com.spider.db.repository.*;
 import com.spider.sbc.SbcUpdateManager;
 import com.spider.service.SbcService;
 import com.google.common.base.Preconditions;

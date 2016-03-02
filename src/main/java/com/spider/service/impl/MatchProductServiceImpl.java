@@ -1,14 +1,14 @@
 package com.spider.service.impl;
 
-import com.spider.entity.SportteryAllEntity;
-import com.spider.entity.TCrawlerSporttery;
-import com.spider.entity.TCrawlerWin310;
+import com.spider.db.entity.SportteryAllEntity;
+import com.spider.db.entity.TCrawlerSporttery;
+import com.spider.db.entity.TCrawlerWin310;
 import com.spider.global.Constants;
 import com.spider.model.ProductModel;
-import com.spider.repository.SportteryAllRepository;
-import com.spider.repository.TCrawlerSportteryRepository;
-import com.spider.repository.TCrawlerWin310Repository;
-import com.spider.repository.specifications.SpotterySpecifications;
+import com.spider.db.repository.SportteryAllRepository;
+import com.spider.db.repository.TCrawlerSportteryRepository;
+import com.spider.db.repository.TCrawlerWin310Repository;
+import com.spider.db.repository.specifications.SpotterySpecifications;
 import com.spider.service.MatchProductService;
 import com.spider.service.MatchService;
 import com.spider.service.SbcLeagueService;

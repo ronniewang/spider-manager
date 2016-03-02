@@ -1,6 +1,6 @@
 package com.spider.service;
 
-import com.spider.entity.TCrawlerSporttery;
+import com.spider.db.entity.TCrawlerSporttery;
 
 public interface SbcLeagueService {
 

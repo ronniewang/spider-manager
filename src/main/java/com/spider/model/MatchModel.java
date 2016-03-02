@@ -1,6 +1,6 @@
 package com.spider.model;
 
-import com.spider.entity.GamingCompanyConfig;
+import com.spider.db.entity.GamingCompanyConfig;
 import com.spider.global.AbsenceState;
 
 import java.util.List;

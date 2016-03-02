@@ -13,8 +13,6 @@ public final class Constants {
 
     public static final Integer HTTP_UTIL_REQUEST_CONNECTION_TIMEOUT = Integer.valueOf(ConfigProperties.$("com.caiex.httputil.request.connection.timeout"));
 
-    ;
-
     public static final Integer HTTP_UTIL_CONNECTION_MANAGER_MAX_TOTAL = Integer.valueOf(ConfigProperties.$("com.caiex.httputil.connectionmanager.max.total"));
 
     public static final Integer HTTP_UTIL_CONNECTION_MANAGER_MAX_PER_ROUTE = Integer.valueOf(ConfigProperties
@@ -29,36 +27,6 @@ public final class Constants {
     public static final String UTF_8 = "utf-8";
 
     public static final String STATUS_SELLING = "SELLING";
-
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ crawler ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public static final String NBSP = " ";
-
-    public static final String NBSP_HTML = "\u00a0";
-
-    public static final String WIN310_ODDS_TYPE_HHAD = "HHAD";
-
-    public static final String WIN310_ODDS_TYPE_HAD = "HAD";
-
-    public static final String WIN310_ODDS_TYPE_HIGH_LOW = "HIGH_LOW";
-
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ rocket mq ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public static final String UPDATE_ODDS_GROUP = ConfigProperties.$("update.odds.group");
-
-    public static final String UPDATE_ODDS_TOPIC = ConfigProperties.$("update.odds.topic");
-
-    public static final String UPDATE_ODDS_HAD_TAG = ConfigProperties.$("update.odds.had.tag");
-
-    public static final String UPDATE_ODDS_HHAD_TAG = ConfigProperties.$("update.odds.hhad.tag");
-
-    public static final String UPDATE_SCORE_TAG = ConfigProperties.$("update.score.tag");
-
-    public static final String ROCKET_MQ_ADDR = ConfigProperties.$("rocket.mq.addr");
-
-    public static final String ROCKET_MQ_ADDR1 = ConfigProperties.$("rocket.mq.addr1");
-
-    public static final String ROCKET_MQ_GROUP = ConfigProperties.$("inplay.odds.group");
-
-    public static final String ROCKET_MQ_GROUP1 = ConfigProperties.$("inplay.odds.group1");
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ gaming company ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

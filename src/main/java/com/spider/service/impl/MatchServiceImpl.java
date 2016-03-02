@@ -1,15 +1,15 @@
 package com.spider.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
-import com.spider.entity.*;
+import com.spider.db.entity.*;
 import com.spider.global.Constants;
 import com.spider.httputil.HttpRequest;
 import com.spider.model.ExcelMatchStatisticModel;
 import com.spider.model.MatchModel;
 import com.spider.model.MatchPlayerInfoModel;
-import com.spider.repository.*;
-import com.spider.repository.specifications.SpotterySpecifications;
-import com.spider.repository.specifications.Win310Specifications;
+import com.spider.db.repository.*;
+import com.spider.db.repository.specifications.SpotterySpecifications;
+import com.spider.db.repository.specifications.Win310Specifications;
 import com.spider.service.MatchService;
 import com.spider.service.SbcLeagueService;
 import com.spider.utils.Calendars;

@@ -1,8 +1,8 @@
 package com.spider.service.impl;
 
-import com.spider.entity.SbcLeague;
-import com.spider.entity.TCrawlerSporttery;
-import com.spider.repository.SbcLeagueRepository;
+import com.spider.db.entity.SbcLeague;
+import com.spider.db.entity.TCrawlerSporttery;
+import com.spider.db.repository.SbcLeagueRepository;
 import com.spider.service.SbcLeagueService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
