@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 
@@ -15,13 +15,6 @@
     <!-- 		<script src="//cdn.bootcss.com/bootstrap-datepicker/1.4.0/js/bootstrap-datepicker.min.js"></script> -->
     <script src="../../js/bootstrap-datepicker.js"></script>
     <style>
-        .absence {
-            text-decoration: line-through;
-        }
-
-        .chosen {
-            background-color: gold;
-        }
 
         body {
             padding-top: 70px;
@@ -31,10 +24,6 @@
         .form-center {
             text-align: center;
             padding-top: 10px;
-        }
-
-        .different {
-            color: red;
         }
     </style>
 </head>
@@ -266,6 +255,9 @@
             }
             return element.matchCode.indexOf($scope.query) != -1 ? true : false;
         };
+        $scope.logout = function () {
+            $http.post('logout');
+        }
         $scope.defaultSeconds = 30;
         $scope.seconds = $scope.defaultSeconds;
         setInterval(function () {
