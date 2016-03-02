@@ -21,14 +21,6 @@ public class SampleTomcat7JspApplication extends SpringBootServletInitializer {
     private Environment environment;
 
     @Bean
-    static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-
-        PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
-        propertySourcesPlaceholderConfigurer.setLocation(new ClassPathResource("config.properties"));
-        return propertySourcesPlaceholderConfigurer;
-    }
-
-    @Bean
     public MessageSender messageSender() {
 
         return new MessageSender(environment.getProperty("inplay.odds.group"), environment.getProperty("rocket.mq.addr"));
