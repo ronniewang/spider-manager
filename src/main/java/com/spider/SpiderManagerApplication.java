@@ -48,9 +48,9 @@ public class SpiderManagerApplication extends SpringBootServletInitializer {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
-            http.authorizeRequests().anyRequest().fullyAuthenticated().and().formLogin()
-                    .loginPage("/login").failureUrl("/login?error").permitAll().and()
-                    .logout().permitAll();
+//            http.authorizeRequests().anyRequest().fullyAuthenticated().and().formLogin()
+//                    .loginPage("/login").failureUrl("/login?error").permitAll().and()
+//                    .logout().permitAll();
             http.authorizeRequests().antMatchers("/css/**", "/js/**", "/image/**").permitAll().anyRequest()
                     .fullyAuthenticated().and().formLogin().loginPage("/login")
                     .failureUrl("/login?error=1").permitAll().and().logout().permitAll();
@@ -59,7 +59,7 @@ public class SpiderManagerApplication extends SpringBootServletInitializer {
         @Override
         public void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-            auth.inMemoryAuthentication().withUser("admin").password("admin")
+            auth.inMemoryAuthentication().withUser("caiex").password("caiex")
                     .roles("ADMIN", "USER").and().withUser("user").password("user")
                     .roles("USER");
         }
