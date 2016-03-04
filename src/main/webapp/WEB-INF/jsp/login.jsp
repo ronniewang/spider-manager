@@ -1,7 +1,7 @@
 <html>
 <head></head>
 <body>
-<script src="//cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
+<script src="/js/jquery.min.js-2.2.1.js"></script>
 <script>
     $('.message a').click(function () {
         $('form').animate({height: "toggle", opacity: "toggle"}, "slow");

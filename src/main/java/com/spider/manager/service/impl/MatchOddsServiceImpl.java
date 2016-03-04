@@ -3,7 +3,6 @@ package com.spider.manager.service.impl;
 import com.spider.db.entity.*;
 import com.spider.global.Constants;
 import com.spider.global.GamingCompany;
-import com.spider.global.MatchCompareState;
 import com.spider.manager.model.ExcelOddsModel;
 import com.spider.manager.model.OddsModel;
 import com.spider.manager.model.SportteryAllModel;
@@ -74,18 +73,14 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
     public List<OddsModel> listOdds(Date startDate, Date endDate) {
 
         List<OddsModel> oddslist = Lists.newArrayList();
-        List<TCrawlerSporttery> sportteryList;
-        List<TCrawlerWin310> queryWin310List;
         if (startDate == null) {
+            startDate = Calendars.getTodayEleven();
             endDate = DateUtils.add(new Date(), 7, TimeUnit.DAYS);//默认显示今天及以后的所有赔率
-            sportteryList = sportteryRepository.findByStartDateAndEndDate(Calendars.getTodayEleven(), endDate);
-            queryWin310List = win310Repository.findAll(Win310Specifications.startDateTimeBetween(Calendars.getTodayEleven(), endDate));
         } else {
             startDate = DateUtils.addHours(startDate, 11);
             endDate = DateUtils.addHours(endDate, 11);
-            sportteryList = sportteryRepository.findAll(SpotterySpecifications.startDateTimeBetween(startDate, endDate));
-            queryWin310List = win310Repository.findAll(Win310Specifications.startDateTimeBetween(startDate, endDate));
         }
+        List<TCrawlerSporttery> sportteryList = sportteryRepository.findByStartDateAndEndDate(startDate, endDate);
         if (sportteryList == null) {
             return oddslist;
         }
@@ -93,22 +88,22 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
         for (TCrawlerSporttery sporttery : sportteryList) {
             TCrawlerWin310 win310 = win310Repository.findByCompetitionNum(sporttery.getCompetitionNum());
 
+            OddsModel oddsModel = getOddsModel(sporttery, win310);
             if (win310 != null) {
-                OddsModel oddsModel = getOddsModel(sporttery, win310);
                 if (!win310.sameAs(sporttery)) {
                     oddsModel.setIsDifferent(true);
                 }
                 setState(sporttery, absenceMatchSet, oddsModel);
-//                oddsModel.setState(MatchCompareState.Both.desc());
-                oddslist.add(oddsModel);
             } else {
-                if (sporttery.getStartDateTime().before(new Date())) {
+                if (sporttery.getStartDateTime().before(new Date())) {//老的那一场
                     continue;
                 }
-                OddsModel oddsModel = getOddsModel(sporttery, win310);
-                oddsModel.setState(MatchCompareState.SportteryOnly.desc());
-                oddslist.add(oddsModel);
             }
+            SportteryAllEntity sportteryAllEntity = sportteryAllRepository.findByMatchCode(sporttery.getCompetitionNum());
+            if (sportteryAllEntity != null) {
+                oddsModel.setSportteryAllModel(new SportteryAllModel(sportteryAllEntity));
+            }
+            oddslist.add(oddsModel);
         }
         return oddslist;
     }
@@ -128,13 +123,9 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
 
     private OddsModel getOddsModel(TCrawlerSporttery sporttery, TCrawlerWin310 win310) {
 
-        SportteryAllEntity sportteryAllEntity = sportteryAllRepository.findByMatchCode(sporttery.getCompetitionNum());
         OddsModel oddsModel = new OddsModel();
         setGeneralData(sporttery, oddsModel);
         setSportteryOdds(sporttery, oddsModel);
-        if (sportteryAllEntity != null) {
-            oddsModel.setSportteryAllModel(new SportteryAllModel(sportteryAllEntity));
-        }
         if (win310 == null) {
             return oddsModel;
         }
@@ -142,17 +133,10 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
         return oddsModel;
     }
 
-    private void setState(TCrawlerSporttery sporttery, List<String> absenceMatchSet, OddsModel oddsModel) {
-
-        if (absenceMatchSet.contains(sporttery.getCompetitionNum())) {
-            oddsModel.setAbsenceState(MatchService.ABSENCE_STATE_YES);
-        }
-    }
-
     private void setGeneralData(TCrawlerSporttery sporttery, OddsModel oddsModel) {
 
         oddsModel.setMatchLeague(sbcLeagueService.getLeagueName(sporttery));
-        oddsModel.setID(sporttery.getId());
+        oddsModel.setId(sporttery.getId());
         oddsModel.setMatchDate(DateUtils.getDate("yyyy-MM-dd HH:mm", sporttery.getStartDateTime()));
         oddsModel.setMatchCode(sporttery.getCompetitionNum());
         oddsModel.setHomeTeam(sporttery.getHomeTeam());
@@ -256,6 +240,13 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
         if (CollectionUtils.isNotEmpty(durationList)) {
             Integer maxDurationTime = LotteryUtils.getMaxDurationTime(durationList);
             oddsModel.setDurationTime(maxDurationTime == null ? "" : maxDurationTime + "");
+        }
+    }
+
+    private void setState(TCrawlerSporttery sporttery, List<String> absenceMatchSet, OddsModel oddsModel) {
+
+        if (absenceMatchSet.contains(sporttery.getCompetitionNum())) {
+            oddsModel.setAbsenceState(MatchService.ABSENCE_STATE_YES);
         }
     }
 

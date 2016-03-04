@@ -4,7 +4,7 @@ import com.spider.global.AbsenceState;
 
 public class OddsModel {
 
-    private long ID;//
+    private long id;//
 
     private String matchDate;// 2014-01-01 00:00:00
 
@@ -394,14 +394,14 @@ public class OddsModel {
         this.absenceState = absenceState;
     }
 
-    public long getID() {
+    public long getId() {
 
-        return ID;
+        return id;
     }
 
-    public void setID(long iD) {
+    public void setId(long iD) {
 
-        ID = iD;
+        id = iD;
     }
 
     public String getMatchDate() {
