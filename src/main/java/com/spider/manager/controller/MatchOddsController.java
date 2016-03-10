@@ -39,6 +39,14 @@ public class MatchOddsController {
         binder.registerCustomEditor(Date.class, orderDateEditor);
     }
 
+    /**
+     * startDate和endDate经过aop处理了，{@link com.spider.aspect.SearchDateAspect}
+     *
+     * @param startDate
+     * @param endDate
+     * @return
+     * @see com.spider.aspect.SearchDateAspect
+     */
     @RequestMapping(value = "/listOdds", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public List<OddsModel> listOdds(@RequestParam Date startDate, @RequestParam Date endDate) {

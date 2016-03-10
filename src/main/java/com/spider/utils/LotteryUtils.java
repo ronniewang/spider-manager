@@ -2,6 +2,7 @@ package com.spider.utils;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.spider.db.entity.TCrawlerSporttery;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -10,10 +11,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -170,5 +168,17 @@ public class LotteryUtils {
         } else {
             return "-";
         }
+    }
+
+
+    public static List<String> getMatchCodes(List<TCrawlerSporttery> sportteries) {
+
+        Preconditions.checkNotNull(sportteries);
+
+        List<String> matchCodes = new ArrayList<>(sportteries.size());
+        for (TCrawlerSporttery sporttery : sportteries) {
+            matchCodes.add(sporttery.getCompetitionNum().trim());
+        }
+        return matchCodes;
     }
 }

@@ -13,7 +13,7 @@ public interface MatchService {
 
     String ABSENCE_STATE_YES = "0";
 
-    List<String> getAbsenceMatchCodes(List<TCrawlerSporttery> sportteries);
+    List<String> getAbsenceMatchCodes(List<String> sportteries);
 
     TCrawlerWin310 getWin310MatchByMatchCode(String matchCode);
 

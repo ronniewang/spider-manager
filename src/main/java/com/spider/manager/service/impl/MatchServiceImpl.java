@@ -14,6 +14,7 @@ import com.spider.manager.service.MatchService;
 import com.spider.manager.service.SbcLeagueService;
 import com.spider.utils.Calendars;
 import com.spider.utils.DateUtils;
+import com.spider.utils.LotteryUtils;
 import org.apache.http.HttpException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,19 +59,12 @@ public class MatchServiceImpl implements MatchService {
     public List<MatchModel> listMatch(Date startDate, Date endDate) {
 
         List<MatchModel> matchList = new ArrayList<>();
-        List<TCrawlerSporttery> sportteryList;
-        if (startDate == null) {
-            endDate = DateUtils.add(new Date(), 7, TimeUnit.DAYS);
-            sportteryList = sportteryRepository
-                    .findAll(SpotterySpecifications.startDateTimeBetween(Calendars.getTodayEleven(), endDate));
-        } else {
-            sportteryList = sportteryRepository
-                    .findAll(SpotterySpecifications.startDateTimeBetween(Calendars.getEleven(startDate), Calendars.getEleven(endDate)));
-        }
+        List<TCrawlerSporttery> sportteryList = sportteryRepository.findAll(SpotterySpecifications.startDateTimeBetween(startDate, endDate));
         if (sportteryList == null) {
             return matchList;
         }
-        List<String> absenceMatchSet = getAbsenceMatchCodes(sportteryList);
+        List<String> matchCodes = LotteryUtils.getMatchCodes(sportteryList);
+        List<String> absenceMatchSet = getAbsenceMatchCodes(matchCodes);
         for (TCrawlerSporttery sporttery : sportteryList) {
             TCrawlerWin310 win310 = win310Repository
                     .findByStartDateTimeAndCompetitionNum(sporttery.getStartDateTime(), sporttery.getCompetitionNum());
@@ -133,12 +127,8 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public List<String> getAbsenceMatchCodes(List<TCrawlerSporttery> sportteries) {
+    public List<String> getAbsenceMatchCodes(List<String> matchCodes) {
 
-        List<String> matchCodes = new ArrayList<>(sportteries.size());
-        for (TCrawlerSporttery sporttery : sportteries) {
-            matchCodes.add(sporttery.getCompetitionNum().trim());
-        }
         JSONArray jsonArray = new JSONArray();
         jsonArray.addAll(matchCodes);
         List<String> absenceMatchSet = new ArrayList<>();

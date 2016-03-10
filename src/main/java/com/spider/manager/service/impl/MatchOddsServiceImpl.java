@@ -73,18 +73,12 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
     public List<OddsModel> listOdds(Date startDate, Date endDate) {
 
         List<OddsModel> oddslist = Lists.newArrayList();
-        if (startDate == null) {
-            startDate = Calendars.getTodayEleven();
-            endDate = DateUtils.add(new Date(), 7, TimeUnit.DAYS);//默认显示今天及以后的所有赔率
-        } else {
-            startDate = DateUtils.addHours(startDate, 11);
-            endDate = DateUtils.addHours(endDate, 11);
-        }
         List<TCrawlerSporttery> sportteryList = sportteryRepository.findByStartDateAndEndDate(startDate, endDate);
         if (sportteryList == null) {
             return oddslist;
         }
-        List<String> absenceMatchSet = matchService.getAbsenceMatchCodes(sportteryList);
+        List<String> matchCodes = LotteryUtils.getMatchCodes(sportteryList);
+        List<String> absenceMatchSet = matchService.getAbsenceMatchCodes(matchCodes);
         for (TCrawlerSporttery sporttery : sportteryList) {
             TCrawlerWin310 win310 = win310Repository.findByCompetitionNum(sporttery.getCompetitionNum());
 
@@ -282,7 +276,7 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
             }
         }
         //~~~~~~~~~~~~~~~~~~~~~~liji~~~~~~~~~~~~~~~~~~~~~~~~
-        double[][] supAndTtg = null;
+        double[][] supAndTtg;
         try {
             String hdcHome = oddsModel.getLijiHdcHome();
             String hdcLine = oddsModel.getLijiHdcLine();
@@ -311,7 +305,7 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
         map.put("liji", new SupAndTtgModel(new BigDecimal(supAndTtg[ODDS_TYPE_HAD][ODDS_TYPE_HAD]).setScale(2, RoundingMode.HALF_DOWN).toString(), new BigDecimal(supAndTtg[ODDS_TYPE_HAD][1]).setScale(2,
                 RoundingMode.HALF_DOWN).toString()));
         //~~~~~~~~~~~~~~~~~~~~~~jinbaobo~~~~~~~~~~~~~~~~~~~~~~~
-        double[][] supAndTtg1 = null;
+        double[][] supAndTtg1;
         try {
             String hdcHome1 = oddsModel.getJinbaoboHdcHome();
             String hdcLine1 = oddsModel.getJinbaoboHdcLine();

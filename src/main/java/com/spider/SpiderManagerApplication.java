@@ -10,6 +10,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
@@ -19,10 +20,26 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @SpringBootApplication
 @Import(value = {DatabaseConfig.class})
+//@EnableSolrRepositories("com.spider.solr.repository")
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 public class SpiderManagerApplication extends SpringBootServletInitializer {
 
     @Autowired
     private Environment environment;
+
+//    @Bean
+//    public EmbeddedSolrServerFactoryBean solrServerFactoryBean() {
+//        EmbeddedSolrServerFactoryBean factory = new EmbeddedSolrServerFactoryBean();
+//
+//        factory.setSolrHome(environment.getRequiredProperty("solr.solr.home"));
+//
+//        return factory;
+//    }
+
+//    @Bean
+//    public SolrTemplate solrTemplate() throws Exception {
+//        return new SolrTemplate(solrServerFactoryBean().getObject());
+//    }
 
     @Bean
     public MessageSender messageSender() {

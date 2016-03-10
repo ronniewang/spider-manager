@@ -14,6 +14,7 @@ import com.spider.manager.service.MatchService;
 import com.spider.manager.service.SbcLeagueService;
 import com.spider.utils.Calendars;
 import com.spider.utils.DateUtils;
+import com.spider.utils.LotteryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,18 +45,12 @@ public class MatchProductServiceImpl implements MatchProductService {
     public List<ProductModel> listMatchProduct(Date startDate, Date endDate) {
 
         List<ProductModel> productlist = new ArrayList<>();
-        List<TCrawlerSporttery> sportteryList;
-        if (startDate == null) {
-            endDate = DateUtils.add(new Date(), 7, TimeUnit.DAYS);
-            sportteryList = tCrawlerSportteryRepository.findAll(SpotterySpecifications.startDateTimeBetween(Calendars.getTodayEleven(), endDate));
-        } else {
-            sportteryList = tCrawlerSportteryRepository.findAll(SpotterySpecifications.startDateTimeBetween(Calendars.getEleven(startDate),
-                    Calendars.getEleven(endDate)));
-        }
+        List<TCrawlerSporttery> sportteryList = tCrawlerSportteryRepository.findAll(SpotterySpecifications.startDateTimeBetween(startDate, endDate));
         if (sportteryList == null) {
             return productlist;
         }
-        List<String> absenceMatchSet = matchService.getAbsenceMatchCodes(sportteryList);
+        List<String> matchCodes = LotteryUtils.getMatchCodes(sportteryList);
+        List<String> absenceMatchSet = matchService.getAbsenceMatchCodes(matchCodes);
         for (TCrawlerSporttery sporttery : sportteryList) {
             TCrawlerWin310 win310 = tCrawlerWin310Repository.findByStartDateTimeAndCompetitionNum(sporttery.getStartDateTime(),
                     sporttery.getCompetitionNum());
