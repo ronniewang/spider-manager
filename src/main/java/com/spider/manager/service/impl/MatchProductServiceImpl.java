@@ -12,7 +12,6 @@ import com.spider.db.repository.specifications.SpotterySpecifications;
 import com.spider.manager.service.MatchProductService;
 import com.spider.manager.service.MatchService;
 import com.spider.manager.service.SbcLeagueService;
-import com.spider.utils.Calendars;
 import com.spider.utils.DateUtils;
 import com.spider.utils.LotteryUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +20,15 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class MatchProductServiceImpl implements MatchProductService {
 
     @Autowired
-    private TCrawlerSportteryRepository tCrawlerSportteryRepository;
+    private TCrawlerSportteryRepository sportteryRepository;
 
     @Autowired
-    private TCrawlerWin310Repository tCrawlerWin310Repository;
+    private TCrawlerWin310Repository win310Repository;
 
     @Autowired
     private SportteryAllRepository sportteryAllRepository;
@@ -45,14 +43,14 @@ public class MatchProductServiceImpl implements MatchProductService {
     public List<ProductModel> listMatchProduct(Date startDate, Date endDate) {
 
         List<ProductModel> productlist = new ArrayList<>();
-        List<TCrawlerSporttery> sportteryList = tCrawlerSportteryRepository.findAll(SpotterySpecifications.startDateTimeBetween(startDate, endDate));
+        List<TCrawlerSporttery> sportteryList = sportteryRepository.findAll(SpotterySpecifications.startDateTimeBetween(startDate, endDate));
         if (sportteryList == null) {
             return productlist;
         }
         List<String> matchCodes = LotteryUtils.getMatchCodes(sportteryList);
         List<String> absenceMatchSet = matchService.getAbsenceMatchCodes(matchCodes);
         for (TCrawlerSporttery sporttery : sportteryList) {
-            TCrawlerWin310 win310 = tCrawlerWin310Repository.findByStartDateTimeAndCompetitionNum(sporttery.getStartDateTime(),
+            TCrawlerWin310 win310 = win310Repository.findByStartDateTimeAndCompetitionNum(sporttery.getStartDateTime(),
                     sporttery.getCompetitionNum());
 
             ProductModel productModel = new ProductModel();

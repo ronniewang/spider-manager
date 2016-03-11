@@ -9,9 +9,9 @@ import com.spider.db.repository.*;
 import com.spider.manager.sbc.SbcUpdateManager;
 import com.spider.manager.service.SbcService;
 import com.google.common.base.Preconditions;
-import com.spider.manager.domain.UpdateHdcOdds;
-import com.spider.manager.domain.UpdateHiloOdds;
-import com.spider.manager.domain.UpdateScoreAndHalf;
+import com.spider.domain.UpdateHdcOdds;
+import com.spider.domain.UpdateHiloOdds;
+import com.spider.domain.UpdateScoreAndHalf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

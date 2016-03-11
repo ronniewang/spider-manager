@@ -1,4 +1,4 @@
-package com.spider.manager.domain;
+package com.spider.domain;
 
 import java.io.Serializable;
 import java.util.Date;

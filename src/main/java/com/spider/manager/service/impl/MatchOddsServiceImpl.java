@@ -4,7 +4,6 @@ import com.spider.db.entity.*;
 import com.spider.global.Constants;
 import com.spider.global.GamingCompany;
 import com.spider.manager.model.ExcelOddsModel;
-import com.spider.manager.model.OddsModel;
 import com.spider.manager.model.SportteryAllModel;
 import com.spider.manager.model.SupAndTtgModel;
 import com.spider.db.repository.*;
@@ -69,6 +68,9 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
     @Autowired
     private CompanyOddsHistoryRepository companyOddsHistoryRepository;
 
+    @Autowired
+    private OddsModelRepository oddsModelRepository;
+
     @Override
     public List<OddsModel> listOdds(Date startDate, Date endDate) {
 
@@ -82,7 +84,10 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
         for (TCrawlerSporttery sporttery : sportteryList) {
             TCrawlerWin310 win310 = win310Repository.findByCompetitionNum(sporttery.getCompetitionNum());
 
-            OddsModel oddsModel = getOddsModel(sporttery, win310);
+            OddsModel oddsModel = oddsModelRepository.findByEuropeId(Integer.valueOf(win310.getWin310EuropeId()));
+            if (oddsModel == null) {
+                continue;
+            }
             if (win310 != null) {
                 if (!win310.sameAs(sporttery)) {
                     oddsModel.setIsDifferent(true);
@@ -94,7 +99,7 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
                 }
             }
             SportteryAllEntity sportteryAllEntity = sportteryAllRepository.findByMatchCode(sporttery.getCompetitionNum());
-            if (sportteryAllEntity != null) {
+            if (sportteryAllEntity != null && oddsModel != null) {
                 oddsModel.setSportteryAllModel(new SportteryAllModel(sportteryAllEntity));
             }
             oddslist.add(oddsModel);
@@ -137,7 +142,6 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
         oddsModel.setAwayTeam(sporttery.getVisitionTeam());
         Integer winCountTwo = sporttery.getWinCountTwo();
         oddsModel.setHandicapLine(winCountTwo == null ? null : winCountTwo.toString());
-        oddsModel.setUpdateTime(sporttery.getUpdateTime().toString());
     }
 
     private void setSportteryOdds(TCrawlerSporttery sporttery, OddsModel oddsModel) {
@@ -239,6 +243,9 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
 
     private void setState(TCrawlerSporttery sporttery, List<String> absenceMatchSet, OddsModel oddsModel) {
 
+        if (sporttery == null || oddsModel == null) {
+            return;
+        }
         if (absenceMatchSet.contains(sporttery.getCompetitionNum())) {
             oddsModel.setAbsenceState(MatchService.ABSENCE_STATE_YES);
         }

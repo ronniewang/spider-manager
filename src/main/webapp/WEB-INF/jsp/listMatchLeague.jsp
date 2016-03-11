@@ -127,7 +127,7 @@
 </body>
 
 </html>
-<script src="../../js/my-angular-config.js"></script>
+<script src="/spider-web/js/my-angular-config.js"></script>
 <script>
     var app = angular.module("matchApp", ['ui.bootstrap']);
     MY_ANGULAR_CONFIG(app);

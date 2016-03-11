@@ -1,19 +1,17 @@
-package com.spider.manager.domain;
+package com.spider.domain;
 
 import com.spider.global.GamingCompany;
 
 import java.io.Serializable;
 
 /**
- * 用于向sbc推送hdc赔率的变化情况
+ * 用于向sbc推送hilo赔率的变化情况
  *
  * @author wsy
  */
-public class UpdateHdcOdds implements Serializable {
+public class UpdateHiloOdds implements Serializable {
 
-    private static long serialVersionUID = 1485252681161618287L;
-
-    private final String updateTime;
+    private static long serialVersionUID = 1485252682161618287L;
 
     /**
      * 比赛编号
@@ -36,17 +34,17 @@ public class UpdateHdcOdds implements Serializable {
     private String score;
 
     /**
-     * 为空的时候为"-"
+     * 为空的时候推送"-"
      */
-    private String oddsH;
+    private String oddsHigh;
 
     /**
-     * 为空的时候为"-"
+     * 为空的时候推送"-"
      */
-    private String oddsD;
+    private String oddsLow;
 
     /**
-     * 为空的时候为""
+     * 为空的时候推送""
      */
     private String line;
 
@@ -60,17 +58,18 @@ public class UpdateHdcOdds implements Serializable {
      */
     private Integer awayRedCard;
 
-    public UpdateHdcOdds(
-            String matchCode, String company, String timeMinute,
-            String score, String oddsH, String oddsD, String line,
-            Integer homeRedCard, Integer awayRedCard, String updateTime) {
+    private String updateTime;
+
+    public UpdateHiloOdds(String matchCode, String company, String timeMinute,
+                          String score, String oddsHigh, String oddsLow, String line,
+                          Integer homeRedCard, Integer awayRedCard, String updateTime) {
 
         this.matchCode = matchCode;
         this.company = GamingCompany.abbr(company);
         this.timeMinute = timeMinute;
         this.score = score;
-        this.oddsH = oddsH;
-        this.oddsD = oddsD;
+        this.oddsHigh = oddsHigh;
+        this.oddsLow = oddsLow;
         this.line = line;
         this.updateTime = updateTime;
         this.homeRedCard = homeRedCard;
@@ -80,6 +79,11 @@ public class UpdateHdcOdds implements Serializable {
     public String getUpdateTime() {
 
         return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+
+        this.updateTime = updateTime;
     }
 
     public Integer getHomeRedCard() {
@@ -122,14 +126,14 @@ public class UpdateHdcOdds implements Serializable {
         return score;
     }
 
-    public String getOddsH() {
+    public String getOddsHigh() {
 
-        return oddsH;
+        return oddsHigh;
     }
 
-    public String getOddsD() {
+    public String getOddsLow() {
 
-        return oddsD;
+        return oddsLow;
     }
 
     public String getLine() {
@@ -139,7 +143,7 @@ public class UpdateHdcOdds implements Serializable {
 
     public static void setSerialVersionUID(long serialVersionUID) {
 
-        UpdateHdcOdds.serialVersionUID = serialVersionUID;
+        UpdateHiloOdds.serialVersionUID = serialVersionUID;
     }
 
     public void setMatchCode(String matchCode) {
@@ -162,14 +166,14 @@ public class UpdateHdcOdds implements Serializable {
         this.score = score;
     }
 
-    public void setOddsH(String oddsH) {
+    public void setOddsHigh(String oddsHigh) {
 
-        this.oddsH = oddsH;
+        this.oddsHigh = oddsHigh;
     }
 
-    public void setOddsD(String oddsD) {
+    public void setOddsLow(String oddsLow) {
 
-        this.oddsD = oddsD;
+        this.oddsLow = oddsLow;
     }
 
     public void setLine(String line) {
@@ -180,13 +184,13 @@ public class UpdateHdcOdds implements Serializable {
     @Override
     public String toString() {
 
-        return "UpdateHdcOdds{" +
+        return "UpdateHiloOdds{" +
                 "matchCode='" + matchCode + '\'' +
                 ", company='" + company + '\'' +
                 ", timeMinute='" + timeMinute + '\'' +
                 ", score='" + score + '\'' +
-                ", oddsH='" + oddsH + '\'' +
-                ", oddsD='" + oddsD + '\'' +
+                ", oddsHigh='" + oddsHigh + '\'' +
+                ", oddsLow='" + oddsLow + '\'' +
                 ", line='" + line + '\'' +
                 ", homeRedCard=" + homeRedCard +
                 ", awayRedCard=" + awayRedCard +

@@ -1,7 +1,7 @@
 package com.spider.manager.service;
 
+import com.spider.db.entity.OddsModel;
 import com.spider.manager.model.ExcelOddsModel;
-import com.spider.manager.model.OddsModel;
 import com.spider.manager.model.SupAndTtgModel;
 
 import java.util.Date;

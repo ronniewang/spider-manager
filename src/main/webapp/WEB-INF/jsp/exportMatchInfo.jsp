@@ -15,7 +15,7 @@
     <link href="//cdn.bootcss.com/bootstrap-datepicker/1.4.0/css/bootstrap-datepicker3.min.css" rel="stylesheet">
     <script src="//cdn.bootcss.com/bootstrap-datepicker/1.4.0/js/bootstrap-datepicker.min.js"></script>
     <!--<script src="js/bootstrap-datepicker.js"></script>-->
-    <script src="../../js/my-datepicker.js"></script>
+    <script src="/spider-web/js/my-datepicker.js"></script>
     <style>
         body {
             padding-top: 70px;
@@ -63,7 +63,7 @@
 </body>
 
 </html>
-<script src="../../js/my-angular-config.js"></script>
+<script src="/spider-web/js/my-angular-config.js"></script>
 <script>
     var app = angular.module("matchApp", []);
     MY_ANGULAR_CONFIG(app);

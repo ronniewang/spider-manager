@@ -1,7 +1,7 @@
 <html>
 <head></head>
 <body>
-<script src="/js/jquery.min.js-2.2.1.js"></script>
+<script src="/spider-web/js/jquery.min.js-2.2.1.js"></script>
 <script>
     $('.message a').click(function () {
         $('form').animate({height: "toggle", opacity: "toggle"}, "slow");

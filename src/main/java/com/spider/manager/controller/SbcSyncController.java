@@ -21,7 +21,7 @@ public class SbcSyncController {
     @Autowired
     private SbcService sbcService;
 
-    @RequestMapping(value = "/sync", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "/sync.do", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public JsonResult sync(@RequestParam String matchCode, @RequestParam(required = false) Integer type) {
 

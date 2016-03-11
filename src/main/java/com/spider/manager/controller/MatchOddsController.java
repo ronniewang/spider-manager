@@ -1,6 +1,7 @@
 package com.spider.manager.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.spider.db.entity.OddsModel;
 import com.spider.global.Constants;
 import com.spider.manager.model.*;
 import com.spider.manager.service.MatchOddsServcie;

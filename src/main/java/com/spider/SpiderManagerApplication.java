@@ -1,6 +1,7 @@
 package com.spider;
 
 import com.spider.config.DatabaseConfig;
+import com.spider.config.WebSocketConfig;
 import com.spider.utils.MessageSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -19,7 +20,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 @SpringBootApplication
-@Import(value = {DatabaseConfig.class})
+@Import(value = {DatabaseConfig.class, WebSocketConfig.class})
 //@EnableSolrRepositories("com.spider.solr.repository")
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class SpiderManagerApplication extends SpringBootServletInitializer {
@@ -65,12 +66,10 @@ public class SpiderManagerApplication extends SpringBootServletInitializer {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
-//            http.authorizeRequests().anyRequest().fullyAuthenticated().and().formLogin()
-//                    .loginPage("/login").failureUrl("/login?error").permitAll().and()
-//                    .logout().permitAll();
-            http.authorizeRequests().antMatchers("/css/**", "/js/**", "/image/**").permitAll().anyRequest()
-                    .fullyAuthenticated().and().formLogin().loginPage("/login")
-                    .failureUrl("/login?error=1").permitAll().and().logout().permitAll();
+            http.authorizeRequests().anyRequest().permitAll();
+//            http.authorizeRequests().antMatchers("/css/**", "/js/**", "/image/**").permitAll().anyRequest()
+//                    .fullyAuthenticated().and().formLogin().loginPage("/login")
+//                    .failureUrl("/login?error=1").permitAll().and().logout().permitAll();
         }
 
         @Override
