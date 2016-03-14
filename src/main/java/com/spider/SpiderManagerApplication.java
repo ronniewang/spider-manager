@@ -21,26 +21,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @SpringBootApplication
 @Import(value = {DatabaseConfig.class, WebSocketConfig.class})
-//@EnableSolrRepositories("com.spider.solr.repository")
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class SpiderManagerApplication extends SpringBootServletInitializer {
 
     @Autowired
     private Environment environment;
-
-//    @Bean
-//    public EmbeddedSolrServerFactoryBean solrServerFactoryBean() {
-//        EmbeddedSolrServerFactoryBean factory = new EmbeddedSolrServerFactoryBean();
-//
-//        factory.setSolrHome(environment.getRequiredProperty("solr.solr.home"));
-//
-//        return factory;
-//    }
-
-//    @Bean
-//    public SolrTemplate solrTemplate() throws Exception {
-//        return new SolrTemplate(solrServerFactoryBean().getObject());
-//    }
 
     @Bean
     public MessageSender messageSender() {
