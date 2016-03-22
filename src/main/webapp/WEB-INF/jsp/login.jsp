@@ -7,7 +7,7 @@
         $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
     });
 </script>
-<link href="/css/login.css" rel="stylesheet">
+<link href="/spider-web/css/login.css" rel="stylesheet">
 <div class="login-page">
     <div class="form">
         <form class="register-form">

@@ -15,6 +15,9 @@
     <!-- 		<script src="//cdn.bootcss.com/bootstrap-datepicker/1.4.0/js/bootstrap-datepicker.min.js"></script> -->
     <script src="/spider-web/js/bootstrap-datepicker.js"></script>
     <style>
+        .chosen {
+            background-color: gold;
+        }
 
         body {
             padding-top: 70px;

@@ -68,4 +68,5 @@ public class SbcUpdateManagerImpl implements SbcUpdateManager {
 
         return parameterTopic;
     }
+
 }
