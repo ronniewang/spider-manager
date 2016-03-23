@@ -31,9 +31,9 @@ public enum GamingCompany {
 
     public static String abbr(String company) {
 
-        if(company.contains("金")){
+        if (company.contains("金")) {
             return "jbb";
-        }else{
+        } else {
             return "lj";
         }
     }

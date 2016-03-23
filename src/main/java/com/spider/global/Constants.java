@@ -22,8 +22,6 @@ public final class Constants {
 
     public static final Integer HTTP_UTIL_SOCKET_TIMEOUT = Integer.valueOf(ConfigProperties.$("com.caiex.httputil.socket.timeout"));
 
-    public static final String ENDPOINT_SBC_MATCH_COMPARE = ConfigProperties.$("endpoint.sbc.match_compare");
-
     public static final String UTF_8 = "utf-8";
 
     public static final String STATUS_SELLING = "SELLING";
@@ -33,8 +31,6 @@ public final class Constants {
     public static final String LIJI_NAME = GamingCompany.LiJi.getName();
 
     public static final String JINBAOBO_NAME = GamingCompany.JinBaoBo.getName();
-
-    public static final String SPORTTERY = GamingCompany.Sporttery.getName();
 
     private Constants() {
 

@@ -30,6 +30,7 @@ public class MatchTeamController {
 
         return sbcTeamRepository.findAll();
     }
+
     @RequestMapping(value = "/listMatchTeamPage")
     public String listMatchTeamPage() {
 

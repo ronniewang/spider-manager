@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 
  * @author wsy
- *
  */
 @Controller
 public class DownloadController {

@@ -1,9 +1,7 @@
 package com.spider.manager.service.impl;
 
 import com.spider.db.entity.*;
-import com.spider.exception.MqException;
-import com.spider.global.GamingCompany;
-import com.spider.global.UpdateSBCType;
+import com.spider.exception.UpdateException;
 import com.spider.manager.model.JsonResult;
 import com.spider.db.repository.*;
 import com.spider.manager.sbc.SbcUpdateManager;
@@ -12,8 +10,11 @@ import com.google.common.base.Preconditions;
 import com.spider.domain.UpdateHdcOdds;
 import com.spider.domain.UpdateHiloOdds;
 import com.spider.domain.UpdateScoreAndHalf;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by wsy on 2015/10/21.
@@ -25,7 +26,7 @@ public class SbcServiceImpl implements SbcService {
 
     public static final int ODDS_TYPE_HILO = 2;
 
-    public static final int ODDS_TYPE_HDC = 1;
+    private Logger logger = Logger.getLogger("info_logger");
 
     @Autowired
     private TCrawlerWin310Repository win310Repository;
@@ -39,114 +40,125 @@ public class SbcServiceImpl implements SbcService {
     @Autowired
     private CompanyOddsRepository companyOddsRepository;
 
+    /**
+     * 同步赔率信息，根据id进行查找
+     *
+     * @param id not null
+     * @return
+     * @see UpdateHiloOdds
+     * @see UpdateHdcOdds
+     */
+    @Override
+    public JsonResult syncOdds(String id) {
+
+        Preconditions.checkNotNull(id);
+
+        try {
+            CompanyOddsEntity odds = companyOddsRepository.findOne(Long.valueOf(id));
+            if (odds == null) {
+                logger.error("no this odds, id is [" + id + "]");
+                return new JsonResult(1, "no this odds, id is [" + id + "]");
+            }
+            String europeId = odds.getEuropeId() + "";
+            TCrawlerWin310 win310 = win310Repository.findByWin310EuropeId(europeId);
+            String matchCode = win310.getCompetitionNum();
+            if (win310 == null) {
+                logger.error("no this win310, europeId is [" + europeId + "]");
+                return new JsonResult(2, "no this win310, europeId is [" + europeId + "]");
+            }
+            doUpdateToMQ(matchCode, odds);
+        } catch (UpdateException e) {
+            logger.error("mq error", e);
+            return new JsonResult(2, "mq error");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return new JsonResult(1, e.getMessage());
+        }
+        return new JsonResult(1, "unknown exception");
+    }
+
+    /**
+     * 目前只有两个type选项可以使用
+     * 如果type是null，全量同步到sbc，同步内容包括比赛进程信息和两家博彩公司的赔率
+     * 否则，只同步比赛进程信息
+     *
+     * @param matchCode not null
+     * @param type
+     * @return
+     * @see UpdateScoreAndHalf
+     * @see UpdateHiloOdds
+     * @see UpdateHdcOdds
+     */
     @Override
     public JsonResult sync(String matchCode, Integer type) {
 
         Preconditions.checkArgument(matchCode != null);
 
-        TCrawlerWin310 win310 = win310Repository.findByCompetitionNum(matchCode);
-        W500Entity w500Entity = w500Repository.findByMatchCode(Integer.valueOf(matchCode));
+        TCrawlerWin310 win310;
+        W500Entity w500Entity;
         try {
-            if (win310 != null && w500Entity != null && type == null) {
-                updateSbcScoreAndHalf(w500Entity, matchCode);
-                updateAllHiloOdds(win310);
-                updateAllHdcOdds(win310);
-                return JsonResult.SUCCESS;
-            } else if (w500Entity != null && type == UpdateSBCType.ScoreAndHalf.intValue()) {
-                updateSbcScoreAndHalf(w500Entity, matchCode);
-                return JsonResult.SUCCESS;
-            } else if (win310 != null && type == UpdateSBCType.HiloOdds.intValue()) {
-                updateAllHiloOdds(win310);
-                return JsonResult.SUCCESS;
-            } else if (win310 != null && type == UpdateSBCType.HdcOdds.intValue()) {
-                updateAllHdcOdds(win310);
-                return JsonResult.SUCCESS;
-            }
-        } catch (MqException e) {
-            return new JsonResult(2, "mq error");
-        } catch (Exception e) {
-            return new JsonResult(1, "no match found");//rtodo
-        }
-        return new JsonResult(1, "no match found");
-    }
-
-    @Override
-    public JsonResult syncOdds(String id) {
-
-        CompanyOddsEntity companyOddsEntity = companyOddsRepository.findOne(Long.valueOf(id));
-        if (companyOddsEntity == null) {
-            return new JsonResult(1, "no this odds, id is " + id);
-        } else {
-            TCrawlerWin310 win310 = win310Repository.findByWin310EuropeId(companyOddsEntity.getEuropeId() + "");
+            win310 = win310Repository.findByCompetitionNum(matchCode);
             if (win310 == null) {
-                return new JsonResult(2, "no this win310, europeId is " + companyOddsEntity.getEuropeId());
-            } else {
-                try {
-                    Integer oddsType = companyOddsEntity.getOddsType();
-                    if (oddsType == ODDS_TYPE_HDC) {//hdc
-                        sbcUpdateManager.update(
-                                new UpdateHdcOdds(win310.getCompetitionNum(),
-                                        companyOddsEntity.getGamingCompany(),
-                                        companyOddsEntity.getDurationTime(),
-                                        companyOddsEntity.getScore(),
-                                        companyOddsEntity.getOddsOne(),
-                                        companyOddsEntity.getOddsThree(),
-                                        companyOddsEntity.getOddsTwo(),
-                                        companyOddsEntity.getHomeRedCard(),
-                                        companyOddsEntity.getAwayRedCard(),
-                                        companyOddsEntity.getOddsUpdateTime()), sbcUpdateManager.getHdcTag());
-                        return JsonResult.SUCCESS;
-                    } else if (oddsType == ODDS_TYPE_HILO) {//hilo
-                        sbcUpdateManager.update(
-                                new UpdateHiloOdds(win310.getCompetitionNum(),
-                                        companyOddsEntity.getGamingCompany(),
-                                        companyOddsEntity.getDurationTime(),
-                                        companyOddsEntity.getScore(),
-                                        companyOddsEntity.getOddsOne(),
-                                        companyOddsEntity.getOddsThree(),
-                                        companyOddsEntity.getOddsTwo(),
-                                        companyOddsEntity.getHomeRedCard(),
-                                        companyOddsEntity.getAwayRedCard(),
-                                        companyOddsEntity.getOddsUpdateTime()), sbcUpdateManager.getHiloTag());
-                        return JsonResult.SUCCESS;
-                    }
-                } catch (MqException e) {
-                    return new JsonResult(2, "mq error");
-                } catch (Exception e) {
-                    return new JsonResult(1, "no match found");//rtodo
-                }
+                logger.error("no win310 entity for this matchCode [" + matchCode + "]");
+                return new JsonResult(1, "no win310 entity for this matchCode [" + matchCode + "]");
             }
+            w500Entity = w500Repository.findByMatchCode(Integer.valueOf(matchCode));
+            if (w500Entity == null) {
+                logger.error("no w500 entity for this matchCode [" + matchCode + "]");
+                return new JsonResult(1, "no w500 entity for this matchCode [" + matchCode + "]");
+            }
+        } catch (Exception e) {
+            logger.error("mysql error", e);
+            return new JsonResult(1, "mysql error, " + e.getMessage());
         }
-        return new JsonResult(1, "unknow exception");
-    }
-
-    private void updateAllHdcOdds(TCrawlerWin310 win310) throws MqException {
-
-        CompanyOddsEntity lj = companyOddsRepository.findByEuropeIdAndOddsTypeAndGamingCompany(Integer.valueOf(win310.getWin310EuropeId()), ODDS_TYPE_HDC, GamingCompany.LiJi.getName());
-        if (lj != null) {
-            syncOdds(String.valueOf(lj.getId()));
-        }
-        CompanyOddsEntity jbb = companyOddsRepository.findByEuropeIdAndOddsTypeAndGamingCompany(Integer.valueOf(win310.getWin310EuropeId()), ODDS_TYPE_HDC, GamingCompany.JinBaoBo.getName());
-        if (jbb != null) {
-            syncOdds(String.valueOf(jbb.getId()));
-        }
-    }
-
-    private void updateAllHiloOdds(TCrawlerWin310 win310) throws MqException {
-
-        CompanyOddsEntity lj = companyOddsRepository
-                .findByEuropeIdAndOddsTypeAndGamingCompany(Integer.valueOf(win310.getWin310EuropeId()), ODDS_TYPE_HILO, GamingCompany.LiJi.getName());
-        if (lj != null) {
-            syncOdds(String.valueOf(lj.getId()));
-        }
-        CompanyOddsEntity jbb = companyOddsRepository
-                .findByEuropeIdAndOddsTypeAndGamingCompany(Integer.valueOf(win310.getWin310EuropeId()), ODDS_TYPE_HILO, GamingCompany.JinBaoBo.getName());
-        if (jbb != null) {
-            syncOdds(String.valueOf(jbb.getId()));
+        try {
+            Integer europeId = Integer.valueOf(win310.getWin310EuropeId());
+            updateSbcScoreAndHalf(w500Entity);
+            if (type == null) {
+                updateHiloAndHdcOdds(matchCode, europeId);
+            }
+            return JsonResult.SUCCESS;
+        } catch (UpdateException e) {
+            logger.error("update error", e);
+            return new JsonResult(2, "update error");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return new JsonResult(1, "unexpected error");
         }
     }
 
-    private void updateSbcScoreAndHalf(W500Entity w500, String matchCode) throws MqException {
+    private void updateHiloAndHdcOdds(String matchCode, Integer europeId) throws UpdateException {
+
+        List<CompanyOddsEntity> hdcHilos = companyOddsRepository.findHdcAndHilo(europeId);
+        for (CompanyOddsEntity odds : hdcHilos) {
+            doUpdateToMQ(matchCode, odds);
+        }
+    }
+
+    private void doUpdateToMQ(String matchCode, CompanyOddsEntity odds) throws UpdateException {
+
+        if (odds.getOddsType() == ODDS_TYPE_HILO) {
+            sbcUpdateManager.update(buildUpdateHiloOdds(odds, matchCode), sbcUpdateManager.getHiloTag());
+        } else {
+            sbcUpdateManager.update(buildUpdateHdcOdds(odds, matchCode), sbcUpdateManager.getHdcTag());
+        }
+    }
+
+    private UpdateHdcOdds buildUpdateHdcOdds(CompanyOddsEntity odds, String matchCode) {
+
+        return new UpdateHdcOdds(matchCode, odds.getGamingCompany(), odds.getDurationTime(), odds.getScore(),
+                odds.getOddsOne(), odds.getOddsThree(), odds.getOddsTwo(), odds.getHomeRedCard(),
+                odds.getAwayRedCard(), odds.getOddsUpdateTime());
+    }
+
+    private UpdateHiloOdds buildUpdateHiloOdds(CompanyOddsEntity odds, String matchCode) {
+
+        return new UpdateHiloOdds(matchCode, odds.getGamingCompany(), odds.getDurationTime(), odds.getScore(),
+                odds.getOddsOne(), odds.getOddsThree(), odds.getOddsTwo(),
+                odds.getHomeRedCard(), odds.getAwayRedCard(), odds.getOddsUpdateTime());
+    }
+
+    private void updateSbcScoreAndHalf(W500Entity w500) throws UpdateException {
 
         String score = w500.getScore();
         String half = w500.getHalf();
@@ -159,7 +171,7 @@ public class SbcServiceImpl implements SbcService {
         } catch (Exception e) {
             timeMinute = null;
         }
-        UpdateScoreAndHalf scoreAndHalf = new UpdateScoreAndHalf(matchCode, score, halfScore, half, homeRedCard, awayRedCard, timeMinute);
+        UpdateScoreAndHalf scoreAndHalf = new UpdateScoreAndHalf(w500.getMatchCode() + "", score, halfScore, half, homeRedCard, awayRedCard, timeMinute);
         sbcUpdateManager.update(scoreAndHalf, sbcUpdateManager.getScoreAndHalfTag(), sbcUpdateManager.getParameterTopic());
     }
 }

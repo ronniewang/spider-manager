@@ -1,6 +1,6 @@
 package com.spider.manager.sbc;
 
-import com.spider.exception.MqException;
+import com.spider.exception.UpdateException;
 import com.spider.utils.MessageSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,15 +34,23 @@ public class SbcUpdateManagerImpl implements SbcUpdateManager {
     private MessageSender messageSender;
 
     @Override
-    public <T> void update(T data, String tag) throws MqException {
+    public <T> void update(T data, String tag) throws UpdateException {
 
-        messageSender.sendObjectMessage(data, producerGroup, inplayTopic, tag);
+        try {
+            messageSender.sendObjectMessage(data, producerGroup, inplayTopic, tag);
+        } catch (Exception e) {
+            throw new UpdateException(e);
+        }
     }
 
     @Override
-    public <T> void update(T data, String tag, String topic) throws MqException {
+    public <T> void update(T data, String tag, String topic) throws UpdateException {
 
-        messageSender.sendObjectMessage(data, producerGroup, topic, tag);
+        try {
+            messageSender.sendObjectMessage(data, producerGroup, topic, tag);
+        } catch (Exception e) {
+            throw new UpdateException(e);
+        }
     }
 
     @Override

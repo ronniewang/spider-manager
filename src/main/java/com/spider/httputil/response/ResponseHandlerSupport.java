@@ -26,6 +26,7 @@ public abstract class ResponseHandlerSupport<T> implements org.apache.http.clien
 
     @Override
     public T handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
+
         if (logger.isDebugEnabled()) {
             logger.debug("Resposne status line: " + response.getStatusLine());
         }
@@ -40,14 +41,17 @@ public abstract class ResponseHandlerSupport<T> implements org.apache.http.clien
     }
 
     public int getStatusCode() {
+
         return this.statusCode;
     }
 
     public StatusLine getStatusLine() {
+
         return this.statusLine;
     }
 
     public List<Header> getHeaders() {
+
         if (headers != null) {
             return Arrays.asList(this.headers);
         }
@@ -56,6 +60,6 @@ public abstract class ResponseHandlerSupport<T> implements org.apache.http.clien
 
     abstract T parseResponse(HttpEntity httpEntity) throws ClientProtocolException, IOException;
 
-    public abstract String getRawResponse() ;
+    public abstract String getRawResponse();
 
 }

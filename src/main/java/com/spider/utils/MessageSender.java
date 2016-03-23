@@ -59,7 +59,8 @@ public class MessageSender {
                 throw new IllegalArgumentException("not implements Serivalizable");
             }
         } catch (IOException e) {
-            // ignored
+            infoLogger.error(e.getMessage(), e);
+            throw new IllegalStateException("io exception", e);
         }
         try {
             for (DefaultMQProducer defaultMQProducer : defaultMQProducers) {
@@ -69,6 +70,7 @@ public class MessageSender {
             }
         } catch (Exception e) {
             infoLogger.error("send " + object + " failed", e);
+            throw new IllegalStateException("mq exception", e);
         }
     }
 

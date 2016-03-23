@@ -15,7 +15,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class TCrawlerWin310History implements java.io.Serializable {
 
 
-
     private static final long serialVersionUID = 3188494558012592504L;
 
     private Long id;
@@ -80,6 +79,7 @@ public class TCrawlerWin310History implements java.io.Serializable {
 
         this.timeMinute = timeMinute;
     }
+
     public void setUniqueId(Long uniqueId) {
 
         this.uniqueId = uniqueId;

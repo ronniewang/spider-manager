@@ -2,7 +2,6 @@ package com.spider.exception;
 
 /**
  * @author wsy
- *
  */
 public class DownloadException extends Exception {
 

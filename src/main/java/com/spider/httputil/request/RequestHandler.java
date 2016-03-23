@@ -6,7 +6,7 @@ import org.apache.http.entity.ContentType;
 public interface RequestHandler<T> {
 
     HttpEntity parse(T body);
-    
+
     HttpEntity parse(T body, ContentType contentType);
 
 }

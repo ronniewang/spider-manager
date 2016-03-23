@@ -18,7 +18,7 @@ public class Win310Specifications {
             @Override
             public Predicate toPredicate(Root<TCrawlerWin310> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
-                return cb.between(root.<Date> get("startDateTime"), startDate, endDate);
+                return cb.between(root.<Date>get("startDateTime"), startDate, endDate);
             }
 
         };
@@ -31,7 +31,7 @@ public class Win310Specifications {
             @Override
             public Predicate toPredicate(Root<TCrawlerWin310> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 
-                return cb.equal(root.<String> get("competitionNum"), competitionNum);
+                return cb.equal(root.<String>get("competitionNum"), competitionNum);
             }
 
         };

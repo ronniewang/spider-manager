@@ -1,9 +1,7 @@
 package com.spider.global;
 
 /**
- * 
  * @author wsy
- *
  */
 public enum AbsenceState {
 

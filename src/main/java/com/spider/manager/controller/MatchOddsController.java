@@ -72,7 +72,7 @@ public class MatchOddsController {
         return matchOddsService.calcSupAndTtg(model);
     }
 
-    @RequestMapping(value = "/matchOddsExcel", produces = {MediaType.APPLICATION_JSON_VALUE},method = RequestMethod.POST)
+    @RequestMapping(value = "/matchOddsExcel", produces = {MediaType.APPLICATION_JSON_VALUE}, method = RequestMethod.POST)
     @ResponseBody
     public DownloadFileResult excel(@RequestParam String oddsModels) {
 

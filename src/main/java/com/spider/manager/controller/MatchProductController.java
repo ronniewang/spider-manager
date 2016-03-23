@@ -38,7 +38,7 @@ public class MatchProductController {
         binder.registerCustomEditor(Date.class, orderDateEditor);
     }
 
-    @RequestMapping(value = "/listProduct", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/listProduct", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public List<ProductModel> listProduct(@RequestParam Date startDate, @RequestParam Date endDate) {
 
@@ -51,7 +51,7 @@ public class MatchProductController {
         return "listProduct";
     }
 
-    @RequestMapping(value = "/matchProductExcel",produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "/matchProductExcel", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public DownloadFileResult excel(@RequestParam String productModels) {
 

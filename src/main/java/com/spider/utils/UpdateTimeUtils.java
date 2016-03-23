@@ -12,9 +12,8 @@ public class UpdateTimeUtils {
 
     /**
      * 获取更新时间到现在的差距，以易读的形式显示
-     * 
-     * @param updateTime
-     *            给定时间
+     *
+     * @param updateTime 给定时间
      * @return 5m ago，6h ago
      */
     public static String getReadableUpdateTimeFromNow(Date updateTime) {

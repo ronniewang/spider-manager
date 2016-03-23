@@ -8,18 +8,14 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 /**
- * 
  * @author wsy
- *
  */
 public class IoUtils {
 
     /**
-     * 
      * @param serializable
      * @return
-     * @throws IOException
-     *             写入失败抛出
+     * @throws IOException 写入失败抛出
      */
     public static byte[] objectToBtyeArray(Serializable serializable) throws IOException {
 

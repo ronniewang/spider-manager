@@ -60,8 +60,8 @@ public class HttpRequest {
     private HttpRequest(final String endpoint) {
 
         this.endpoint = endpoint;
-        this.parameters = new ArrayList<NameValuePair>();
-        this.headers = new ArrayList<Header>();
+        this.parameters = new ArrayList<>();
+        this.headers = new ArrayList<>();
         Builder requestConfigBuilder = RequestConfig.custom();
         requestConfigBuilder.setConnectionRequestTimeout(Constants.HTTP_UTIL_REQUEST_CONNECTION_TIMEOUT);
         requestConfigBuilder.setConnectTimeout(Constants.HTTP_UTIL_CONNECTION_TIMEOUT);

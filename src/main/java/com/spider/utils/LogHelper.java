@@ -1,6 +1,6 @@
 /**
  * @Description
- * @auth guowang  
+ * @auth guowang
  * @time 2014-7-23
  */
 package com.spider.utils;
@@ -45,8 +45,9 @@ public class LogHelper {
             logger.error(info);
         }
     }
+
     public static <T> void errorLog(Logger logger, Throwable e, String info, Object... params) {
-        
+
         if (params != null && params.length > 0) {
             info = MessageFormat.format(info, params);
         }
@@ -89,7 +90,7 @@ public class LogHelper {
 
         return Logger.getLogger("info_logger");
     }
-    
+
     public static Logger getPersistLogger() {
 
         return Logger.getLogger("persist_logger");

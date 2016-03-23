@@ -12,15 +12,15 @@ import java.util.Properties;
 
 /**
  * 加载配置文件中的所有配置，统一管理应用的属性，获取配置时调用静态的$方法获取属性值
- * 
- * @author wsy
  *
+ * @author wsy
  */
 public final class ConfigProperties {
 
     private static Logger logger = Logger.getLogger(ConfigProperties.class);
 
     private static Map<String, String> propertiesMap = new HashMap<>();
+
     static {
         Properties properties = new Properties();
         try {
@@ -38,7 +38,7 @@ public final class ConfigProperties {
 
     /**
      * 获取相应key值对应的属性值
-     * 
+     *
      * @param key
      * @return
      */

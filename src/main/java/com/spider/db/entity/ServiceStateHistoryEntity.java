@@ -22,6 +22,7 @@ public class ServiceStateHistoryEntity {
     private String errorMsg;
 
     public ServiceStateHistoryEntity() {
+
     }
 
     public ServiceStateHistoryEntity(ServiceStateEntity serviceStateEntity) {

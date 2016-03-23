@@ -18,6 +18,7 @@ import com.spider.utils.LotteryUtils;
 import org.apache.http.HttpException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,6 +29,9 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class MatchServiceImpl implements MatchService {
+
+    @Value("${endpoint.sbc.match_compare}")
+    private String ENDPOINT_SBC_MATCH_COMPARE;
 
     private static Logger logger = Logger.getLogger(MatchServiceImpl.class);
 
@@ -133,7 +137,7 @@ public class MatchServiceImpl implements MatchService {
         jsonArray.addAll(matchCodes);
         List<String> absenceMatchSet = new ArrayList<>();
         try {
-            HttpRequest httpRequest = HttpRequest.createRequest(Constants.ENDPOINT_SBC_MATCH_COMPARE);
+            HttpRequest httpRequest = HttpRequest.createRequest(ENDPOINT_SBC_MATCH_COMPARE);
             httpRequest.addParameter("matchCodes", jsonArray.toJSONString());
             List<String> absenceMatchList = Arrays.asList(httpRequest.POST("").replaceAll("\\[", "").replaceAll("\\]", "").split(","));
             for (String matchCode : absenceMatchList) {

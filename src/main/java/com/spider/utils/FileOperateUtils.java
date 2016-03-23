@@ -11,21 +11,16 @@ import java.io.*;
 
 /**
  * 文件下载工具类
- * 
- * @author wsy
  *
+ * @author wsy
  */
 @Component
 public class FileOperateUtils {
 
     /**
-     * 
-     * @param response
-     *            响应对象 ，用于获取输出流
-     * @param fileName
-     *            文件名
-     * @throws DownloadException
-     *             文件不存在或者io异常时抛出此异常
+     * @param response 响应对象 ，用于获取输出流
+     * @param fileName 文件名
+     * @throws DownloadException 文件不存在或者io异常时抛出此异常
      */
     public static void download(HttpServletResponse response, String fileName) throws DownloadException {
 
