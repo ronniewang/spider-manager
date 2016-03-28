@@ -1,5 +1,9 @@
 package com.spider;
 
+import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
+import com.alibaba.rocketmq.client.producer.MQProducer;
+import com.aliyun.openservices.ons.api.ONSFactory;
+import com.aliyun.openservices.ons.api.PropertyKeyConst;
 import com.spider.config.DatabaseConfig;
 import com.spider.config.WebSocketConfig;
 import com.spider.utils.MessageSender;
@@ -19,6 +23,8 @@ import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 import org.springframework.data.solr.server.support.EmbeddedSolrServerFactoryBean;
 import org.springframework.data.solr.server.support.HttpSolrServerFactoryBean;
+
+import java.util.Properties;
 //import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 //import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 //import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -60,7 +66,25 @@ public class SpiderManagerApplication extends SpringBootServletInitializer {
     @Bean
     public MessageSender messageSender() {
 
-        return new MessageSender(environment.getProperty("inplay.odds.group"), environment.getProperty("rocket.mq.addr"));
+        String isOns = environment.getProperty("mq.is.ons");
+        if (isOns.equals("no")) {
+            String producerGroup = environment.getProperty("inplay.odds.group");
+            String mqServerAddress = environment.getProperty("rocket.mq.addr");
+            DefaultMQProducer defaultMQProducer = new DefaultMQProducer();
+            defaultMQProducer.setProducerGroup(producerGroup);
+            defaultMQProducer.setNamesrvAddr(mqServerAddress);
+            return new MessageSender(defaultMQProducer);
+        } else if (isOns.equals("yes")) {
+            String produceId = environment.getProperty("mq.ons.producerId.inplayParameter");
+            String accessKey = environment.getProperty("mq.ons.accessKey.inplayParameter");
+            String secretKey = environment.getProperty("mq.ons.secretKey.inplayParameter");
+            Properties properties = new Properties();
+            properties.put(PropertyKeyConst.ProducerId, produceId);
+            properties.put(PropertyKeyConst.AccessKey, accessKey);
+            properties.put(PropertyKeyConst.SecretKey, secretKey);
+            return new MessageSender(ONSFactory.createProducer(properties));
+        }
+        throw new NullPointerException("no specified mq producer");
     }
 
     @Override

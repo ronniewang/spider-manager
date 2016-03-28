@@ -2,17 +2,17 @@ package com.spider.utils;
 
 import com.alibaba.rocketmq.client.exception.MQClientException;
 import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
+import com.alibaba.rocketmq.client.producer.MQProducer;
 import com.alibaba.rocketmq.client.producer.SendResult;
 import com.alibaba.rocketmq.common.message.Message;
+import com.aliyun.openservices.ons.api.Producer;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 向队列发送更新赔率信息
@@ -24,49 +24,69 @@ public class MessageSender {
 
     private static Logger infoLogger = LogHelper.getInfoLogger();
 
-    private static List<DefaultMQProducer> defaultMQProducers = new ArrayList<>();
+    MQProducer mqProducer = null;
 
-    public MessageSender(String mqGroup, String addr) {
+    Producer onsProducer = null;
 
-        String[] ROCKET_MQ_ADDRS = addr.split("\\|");
-        String[] ROCKET_MQ_GROUPS = mqGroup.split("\\|");
-        for (int i = 0; i < ROCKET_MQ_ADDRS.length; i++) {
-            DefaultMQProducer defaultMQProducer = new DefaultMQProducer();
-            defaultMQProducer.setProducerGroup(ROCKET_MQ_GROUPS[i]);
-            defaultMQProducer.setNamesrvAddr(ROCKET_MQ_ADDRS[i]);
-            defaultMQProducers.add(defaultMQProducer);
-        }
-        try {
-            for (DefaultMQProducer mqProducer : defaultMQProducers) {
+    public MessageSender(MQProducer mqProducer) {
+
+        this.mqProducer = mqProducer;
+    }
+
+    public MessageSender(Producer onsProducer) {
+
+        this.onsProducer = onsProducer;
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+
+        if (mqProducer != null) {
+            try {
                 mqProducer.start();
+            } catch (MQClientException e) {
+                throw new IllegalStateException("rocket mq producer start failed", e);
             }
-        } catch (MQClientException e) {
-            throw new IllegalStateException("rocket mq producer start failed", e);
+        } else {
+            onsProducer.start();
         }
     }
 
-    public <T> void sendObjectMessage(T object, String producerGroup, String topic, String tag) {
+    public <T> void sendObjectMessage(T object, String topic, String tag) {
 
-        Message message = new Message();
-        message.setTopic(topic);
-        message.setTags(tag);
+
         try {
-            if (object instanceof String) {
-                message.setBody(((String) object).getBytes());
-            } else if (object instanceof Serializable) {
-                message.setBody(IoUtils.objectToBtyeArray((Serializable) object));
+            if (mqProducer != null) {
+                Message message = new Message();
+                message.setTopic(topic);
+                message.setTags(tag);
+                try {
+                    if (object instanceof String) {
+                        message.setBody(((String) object).getBytes());
+                    } else if (object instanceof Serializable) {
+                        message.setBody(IoUtils.objectToBtyeArray((Serializable) object));
+                    } else {
+                        throw new IllegalArgumentException("not implements Serivalizable");
+                    }
+                } catch (IOException e) {
+                    infoLogger.error(e.getMessage(), e);
+                    throw new IllegalStateException("io exception", e);
+                }
+                SendResult sendResult = mqProducer.send(message);
+                infoLogger.info("send " + object + sendResult);
             } else {
-                throw new IllegalArgumentException("not implements Serivalizable");
-            }
-        } catch (IOException e) {
-            infoLogger.error(e.getMessage(), e);
-            throw new IllegalStateException("io exception", e);
-        }
-        try {
-            for (DefaultMQProducer defaultMQProducer : defaultMQProducers) {
-                defaultMQProducer.setProducerGroup(producerGroup);
-                SendResult sendResult = defaultMQProducer.send(message);
-                infoLogger.info("send " + object + " to " + defaultMQProducer.getNamesrvAddr() + ", " + sendResult);
+                com.aliyun.openservices.ons.api.Message messageOns = new com.aliyun.openservices.ons.api.Message();
+                messageOns.setTopic(topic);
+                messageOns.setTag(tag);
+                if (object instanceof String) {
+                    messageOns.setBody(((String) object).getBytes());
+                } else if (object instanceof Serializable) {
+                    messageOns.setBody(IoUtils.objectToBtyeArray((Serializable) object));
+                } else {
+                    throw new IllegalArgumentException("not implements Serivalizable");
+                }
+                com.aliyun.openservices.ons.api.SendResult sendResultOns = onsProducer.send(messageOns);
+                infoLogger.info("send " + object + sendResultOns);
             }
         } catch (Exception e) {
             infoLogger.error("send " + object + " failed", e);
@@ -77,8 +97,6 @@ public class MessageSender {
     @PreDestroy
     public void preDestroy() {
 
-        for (DefaultMQProducer defaultMQProducer : defaultMQProducers) {
-            defaultMQProducer.shutdown();
-        }
+        mqProducer.shutdown();
     }
 }

@@ -12,9 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class SbcUpdateManagerImpl implements SbcUpdateManager {
 
-    @Value("${inplay.odds.group}")
-    private String producerGroup;
-
     @Value("${inplay.odds.topic}")
     private String inplayTopic;
 
@@ -37,7 +34,7 @@ public class SbcUpdateManagerImpl implements SbcUpdateManager {
     public <T> void update(T data, String tag) throws UpdateException {
 
         try {
-            messageSender.sendObjectMessage(data, producerGroup, inplayTopic, tag);
+            messageSender.sendObjectMessage(data, inplayTopic, tag);
         } catch (Exception e) {
             throw new UpdateException(e);
         }
@@ -47,7 +44,7 @@ public class SbcUpdateManagerImpl implements SbcUpdateManager {
     public <T> void update(T data, String tag, String topic) throws UpdateException {
 
         try {
-            messageSender.sendObjectMessage(data, producerGroup, topic, tag);
+            messageSender.sendObjectMessage(data, topic, tag);
         } catch (Exception e) {
             throw new UpdateException(e);
         }
