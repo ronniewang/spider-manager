@@ -17,5 +17,7 @@ public interface SbcUpdateManager {
 
     String getScoreAndHalfTag();
 
-    String getParameterTopic();
+    String getInplayParameterTopic();
+
+    String getInplayOddsTopic();
 }

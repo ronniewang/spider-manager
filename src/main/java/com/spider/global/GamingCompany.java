@@ -7,7 +7,7 @@ package com.spider.global;
  */
 public enum GamingCompany {
 
-    JinBaoBo("23", "金宝博"), LiJi("31", "利记"), Sporttery("0", "官网");
+    JinBaoBo("23", "金宝博"), LiJi("31", "利记");
 
     GamingCompany(String id, String name) {
 

@@ -13,10 +13,10 @@ import org.springframework.stereotype.Component;
 public class SbcUpdateManagerImpl implements SbcUpdateManager {
 
     @Value("${inplay.odds.topic}")
-    private String inplayTopic;
+    private String inplayOddsTopic;
 
     @Value("${inplay.odds.topic.parameter}")
-    private String parameterTopic;
+    private String inplayParameterTopic;
 
     @Value("${inplay.odds.hdc.tag}")
     private String hdcTag;
@@ -34,7 +34,7 @@ public class SbcUpdateManagerImpl implements SbcUpdateManager {
     public <T> void update(T data, String tag) throws UpdateException {
 
         try {
-            messageSender.sendObjectMessage(data, inplayTopic, tag);
+            messageSender.sendObjectMessage(data, inplayOddsTopic, tag);
         } catch (Exception e) {
             throw new UpdateException(e);
         }
@@ -69,9 +69,15 @@ public class SbcUpdateManagerImpl implements SbcUpdateManager {
     }
 
     @Override
-    public String getParameterTopic() {
+    public String getInplayParameterTopic() {
 
-        return parameterTopic;
+        return inplayParameterTopic;
+    }
+
+    @Override
+    public String getInplayOddsTopic() {
+
+        return inplayOddsTopic;
     }
 
 }

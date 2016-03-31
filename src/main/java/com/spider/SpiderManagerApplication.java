@@ -3,6 +3,7 @@ package com.spider;
 import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
 import com.alibaba.rocketmq.client.producer.MQProducer;
 import com.aliyun.openservices.ons.api.ONSFactory;
+import com.aliyun.openservices.ons.api.Producer;
 import com.aliyun.openservices.ons.api.PropertyKeyConst;
 import com.spider.config.DatabaseConfig;
 import com.spider.config.WebSocketConfig;
@@ -23,7 +24,11 @@ import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 import org.springframework.data.solr.server.support.EmbeddedSolrServerFactoryBean;
 import org.springframework.data.solr.server.support.HttpSolrServerFactoryBean;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 //import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 //import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -64,25 +69,50 @@ public class SpiderManagerApplication extends SpringBootServletInitializer {
     }
 
     @Bean
+    public static JavaMailSender javaMailSender() {
+
+        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
+        javaMailSender.setHost("smtp-mail.outlook.com");
+        javaMailSender.setPort(587);
+        javaMailSender.setUsername("ronniewang1993@outlook.com");
+        javaMailSender.setPassword("1b3456789!");
+        Properties javaMailProperties = new Properties();
+        javaMailProperties.put("mail.smtp.auth", true);
+        javaMailProperties.put("mail.smtp.starttls.enable", true);
+        javaMailSender.setJavaMailProperties(javaMailProperties);
+        return javaMailSender;
+    }
+
+    @Bean
     public MessageSender messageSender() {
 
         String isOns = environment.getProperty("mq.is.ons");
-        if (isOns.equals("no")) {
+        if ("no".equals(isOns)) {
             String producerGroup = environment.getProperty("inplay.odds.group");
             String mqServerAddress = environment.getProperty("rocket.mq.addr");
             DefaultMQProducer defaultMQProducer = new DefaultMQProducer();
             defaultMQProducer.setProducerGroup(producerGroup);
             defaultMQProducer.setNamesrvAddr(mqServerAddress);
             return new MessageSender(defaultMQProducer);
-        } else if (isOns.equals("yes")) {
-            String produceId = environment.getProperty("mq.ons.producerId.inplayParameter");
-            String accessKey = environment.getProperty("mq.ons.accessKey.inplayParameter");
-            String secretKey = environment.getProperty("mq.ons.secretKey.inplayParameter");
-            Properties properties = new Properties();
-            properties.put(PropertyKeyConst.ProducerId, produceId);
-            properties.put(PropertyKeyConst.AccessKey, accessKey);
-            properties.put(PropertyKeyConst.SecretKey, secretKey);
-            return new MessageSender(ONSFactory.createProducer(properties));
+        } else if ("yes".equals(isOns)) {
+            String accessKey = environment.getProperty("mq.ons.accessKey");
+            String secretKey = environment.getProperty("mq.ons.secretKey");
+
+            String produceOddsId = environment.getProperty("mq.ons.producerId.odds");
+            Properties oddsProperties = new Properties();
+            oddsProperties.put(PropertyKeyConst.ProducerId, produceOddsId);
+            oddsProperties.put(PropertyKeyConst.AccessKey, accessKey);
+            oddsProperties.put(PropertyKeyConst.SecretKey, secretKey);
+            Producer onsOddsProducer = ONSFactory.createProducer(oddsProperties);
+
+            String produceParamterId = environment.getProperty("mq.ons.producerId.inplayParameter");
+            Properties parameterProperties = new Properties();
+            parameterProperties.put(PropertyKeyConst.ProducerId, produceParamterId);
+            parameterProperties.put(PropertyKeyConst.AccessKey, accessKey);
+            parameterProperties.put(PropertyKeyConst.SecretKey, secretKey);
+            Producer onsParameterProducer = ONSFactory.createProducer(parameterProperties);
+
+            return new MessageSender(onsOddsProducer, onsParameterProducer);
         }
         throw new NullPointerException("no specified mq producer");
     }
@@ -94,6 +124,14 @@ public class SpiderManagerApplication extends SpringBootServletInitializer {
     }
 
     public static void main(String[] args) throws Exception {
+
+//        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+//
+//        simpleMailMessage.setFrom("ronniewang1993@outlook.com");
+//        simpleMailMessage.setTo("wangshengyu@caiex.com");
+//        simpleMailMessage.setSubject("learn");
+//        simpleMailMessage.setText("learn");
+//        javaMailSender().send(simpleMailMessage);
 
         SpringApplication.run(SpiderManagerApplication.class, args);
     }

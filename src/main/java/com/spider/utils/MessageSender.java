@@ -1,12 +1,13 @@
 package com.spider.utils;
 
 import com.alibaba.rocketmq.client.exception.MQClientException;
-import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
 import com.alibaba.rocketmq.client.producer.MQProducer;
 import com.alibaba.rocketmq.client.producer.SendResult;
 import com.alibaba.rocketmq.common.message.Message;
 import com.aliyun.openservices.ons.api.Producer;
+import com.spider.manager.sbc.SbcUpdateManager;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -24,18 +25,24 @@ public class MessageSender {
 
     private static Logger infoLogger = LogHelper.getInfoLogger();
 
-    MQProducer mqProducer = null;
+    private MQProducer mqProducer = null;
 
-    Producer onsProducer = null;
+    private Producer onsOddsProducer = null;
+
+    private Producer onsParameterProducer = null;
+
+    @Autowired
+    private SbcUpdateManager sbcUpdateManager;
 
     public MessageSender(MQProducer mqProducer) {
 
         this.mqProducer = mqProducer;
     }
 
-    public MessageSender(Producer onsProducer) {
+    public MessageSender(Producer onsOddsProducer, Producer onsParameterProducer) {
 
-        this.onsProducer = onsProducer;
+        this.onsOddsProducer = onsOddsProducer;
+        this.onsParameterProducer = onsParameterProducer;
     }
 
     @PostConstruct
@@ -48,12 +55,12 @@ public class MessageSender {
                 throw new IllegalStateException("rocket mq producer start failed", e);
             }
         } else {
-            onsProducer.start();
+            onsParameterProducer.start();
+            onsOddsProducer.start();
         }
     }
 
     public <T> void sendObjectMessage(T object, String topic, String tag) {
-
 
         try {
             if (mqProducer != null) {
@@ -85,7 +92,12 @@ public class MessageSender {
                 } else {
                     throw new IllegalArgumentException("not implements Serivalizable");
                 }
-                com.aliyun.openservices.ons.api.SendResult sendResultOns = onsProducer.send(messageOns);
+                com.aliyun.openservices.ons.api.SendResult sendResultOns;
+                if (topic.equals(sbcUpdateManager.getInplayOddsTopic())) {
+                    sendResultOns = onsOddsProducer.send(messageOns);
+                } else {
+                    sendResultOns = onsParameterProducer.send(messageOns);
+                }
                 infoLogger.info("send " + object + sendResultOns);
             }
         } catch (Exception e) {
