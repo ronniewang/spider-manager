@@ -3,9 +3,11 @@ package com.spider.manager.controller;
 import com.spider.solr.Todo;
 import com.spider.solr.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -30,6 +32,20 @@ public class HomeController {
     public String index() {
 
         return "index";
+    }
+
+    @RequestMapping(value = "/testPerformance", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String testPerformance(HttpSession httpSession) {
+
+        Integer times = (Integer) httpSession.getAttribute("times");
+        if (times == null) {
+            httpSession.setAttribute("times", 0);
+        } else {
+            System.out.println("times is " + times);
+            httpSession.setAttribute("times", ++times);
+        }
+        return "{\"value\":true}";
     }
 
     @RequestMapping("/login")

@@ -34,6 +34,9 @@ import java.util.Properties;
 //import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 //import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+/**
+ * @author wsy
+ */
 @SpringBootApplication
 @Import(value = {DatabaseConfig.class, WebSocketConfig.class})
 @EnableSolrRepositories("com.spider.solr.repository")
