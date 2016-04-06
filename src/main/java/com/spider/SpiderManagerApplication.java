@@ -108,9 +108,9 @@ public class SpiderManagerApplication extends SpringBootServletInitializer {
             oddsProperties.put(PropertyKeyConst.SecretKey, secretKey);
             Producer onsOddsProducer = ONSFactory.createProducer(oddsProperties);
 
-            String produceParamterId = environment.getProperty("mq.ons.producerId.inplayParameter");
+            String produceParameterId = environment.getProperty("mq.ons.producerId.inplayParameter");
             Properties parameterProperties = new Properties();
-            parameterProperties.put(PropertyKeyConst.ProducerId, produceParamterId);
+            parameterProperties.put(PropertyKeyConst.ProducerId, produceParameterId);
             parameterProperties.put(PropertyKeyConst.AccessKey, accessKey);
             parameterProperties.put(PropertyKeyConst.SecretKey, secretKey);
             Producer onsParameterProducer = ONSFactory.createProducer(parameterProperties);
