@@ -123,35 +123,9 @@ public class MatchController {
             setPlayerSheetData(matchList, playerSheet);
 
             WritableSheet sheet2 = workbook.createSheet("sheet2", 1);
-            int i2 = 0;
-            sheet2.addCell(new Label(0, i2, "日期"));
-            sheet2.addCell(new Label(1, i2, "主队"));
-            sheet2.addCell(new Label(2, i2, "客队"));
-            sheet2.addCell(new Label(3, i2, "半场比分"));
-            sheet2.addCell(new Label(4, i2, "比分"));
-            for (int j = 0; j < matchList.size(); j++) {
-                int row = j + 1;
-                sheet2.addCell(new Label(0, row, matchList.get(j).getDate()));
-                sheet2.addCell(new Label(1, row, matchList.get(j).getHomeTeam()));
-                sheet2.addCell(new Label(2, row, matchList.get(j).getAwayTeam()));
-                sheet2.addCell(new Label(3, row, matchList.get(j).getHalfScore()));
-                sheet2.addCell(new Label(4, row, matchList.get(j).getScore()));
-            }
+            fillMatchInfoToSheet(matchList, sheet2);
             WritableSheet sheet3 = workbook.createSheet("sheet3", 2);
-            int i3 = 0;
-            sheet3.addCell(new Label(0, i3, "日期"));
-            sheet3.addCell(new Label(1, i3, "主队"));
-            sheet3.addCell(new Label(2, i3, "客队"));
-            sheet3.addCell(new Label(3, i3, "半场比分"));
-            sheet3.addCell(new Label(4, i3, "比分"));
-            for (int j = 0; j < matchList.size(); j++) {
-                int row = j + 1;
-                sheet3.addCell(new Label(0, row, matchList.get(j).getDate()));
-                sheet3.addCell(new Label(1, row, matchList.get(j).getHomeTeam()));
-                sheet3.addCell(new Label(2, row, matchList.get(j).getAwayTeam()));
-                sheet3.addCell(new Label(3, row, matchList.get(j).getHalfScore()));
-                sheet3.addCell(new Label(4, row, matchList.get(j).getScore()));
-            }
+            fillMatchInfoToSheet(matchList, sheet3);
             workbook.write();
         } catch (Exception e) {
             e.printStackTrace();
@@ -160,6 +134,25 @@ public class MatchController {
             ExcelUtils.close(workbook);
         }
         return new DownloadFileResult(fileName);
+    }
+
+    private void fillMatchInfoToSheet(List<MatchPlayerInfoModel> matchList, WritableSheet sheet) throws WriteException {
+
+        int i = 0;
+        sheet.addCell(new Label(0, i, "日期"));
+        sheet.addCell(new Label(1, i, "主队"));
+        sheet.addCell(new Label(2, i, "客队"));
+        sheet.addCell(new Label(3, i, "半场比分"));
+        sheet.addCell(new Label(4, i, "比分"));
+
+        for (int j = 0; j < matchList.size(); j++) {
+            int row = j + 1;
+            sheet.addCell(new Label(0, row, matchList.get(j).getDate()));
+            sheet.addCell(new Label(1, row, matchList.get(j).getHomeTeam()));
+            sheet.addCell(new Label(2, row, matchList.get(j).getAwayTeam()));
+            sheet.addCell(new Label(3, row, matchList.get(j).getHalfScore()));
+            sheet.addCell(new Label(4, row, matchList.get(j).getScore()));
+        }
     }
 
     private void setPlayerSheetData(List<MatchPlayerInfoModel> matchList, WritableSheet playerSheet) throws WriteException {

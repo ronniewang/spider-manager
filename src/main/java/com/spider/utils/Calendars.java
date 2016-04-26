@@ -28,7 +28,7 @@ public class Calendars {
      * @param second   0-59
      * @return
      */
-    public static Calendar set(Calendar calendar, int day, int hour, int minute, int second) {
+    private static Calendar set(Calendar calendar, int day, int hour, int minute, int second) {
 
         Preconditions.checkNotNull(calendar);
         Preconditions.checkArgument(0 <= hour && hour < 24);
