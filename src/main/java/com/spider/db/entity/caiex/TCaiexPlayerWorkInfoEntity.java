@@ -4,62 +4,58 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * Created by ronnie on 2016/4/26.
+ * Created by ronnie on 2016/4/27.
  */
 @Entity
-@Table(name = "t_caiex_match_player")
-public class TCaiexMatchPlayerEntity {
+@Table(name = "t_caiex_player_work_info", schema = "crawler", catalog = "")
+public class TCaiexPlayerWorkInfoEntity {
 
-    private Long id;
+    private long id;
 
-    private Long matchId;
+    private long playerId;
 
-    private Long playerId;
+    private long currentWorkTeamId;
 
     private Integer number;
 
     private String position;
 
-    private String name;
-
-    private String state;
-
     private Date updateTime;
 
     @Id
     @Column(name = "id", nullable = false)
-    public Long getId() {
+    public long getId() {
 
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
 
         this.id = id;
     }
 
     @Basic
-    @Column(name = "match_id", nullable = false)
-    public Long getMatchId() {
-
-        return matchId;
-    }
-
-    public void setMatchId(Long matchId) {
-
-        this.matchId = matchId;
-    }
-
-    @Basic
-    @Column(name = "player_id", nullable = true)
-    public Long getPlayerId() {
+    @Column(name = "player_id", nullable = false)
+    public long getPlayerId() {
 
         return playerId;
     }
 
-    public void setPlayerId(Long playerId) {
+    public void setPlayerId(long playerId) {
 
         this.playerId = playerId;
+    }
+
+    @Basic
+    @Column(name = "current_work_team_id", nullable = false)
+    public long getCurrentWorkTeamId() {
+
+        return currentWorkTeamId;
+    }
+
+    public void setCurrentWorkTeamId(long currentWorkTeamId) {
+
+        this.currentWorkTeamId = currentWorkTeamId;
     }
 
     @Basic
@@ -87,30 +83,6 @@ public class TCaiexMatchPlayerEntity {
     }
 
     @Basic
-    @Column(name = "name", nullable = true, length = 255)
-    public String getName() {
-
-        return name;
-    }
-
-    public void setName(String name) {
-
-        this.name = name;
-    }
-
-    @Basic
-    @Column(name = "state", nullable = true, length = 255)
-    public String getState() {
-
-        return state;
-    }
-
-    public void setState(String state) {
-
-        this.state = state;
-    }
-
-    @Basic
     @Column(name = "update_time", nullable = true)
     public Date getUpdateTime() {
 
@@ -128,15 +100,13 @@ public class TCaiexMatchPlayerEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TCaiexMatchPlayerEntity that = (TCaiexMatchPlayerEntity) o;
+        TCaiexPlayerWorkInfoEntity that = (TCaiexPlayerWorkInfoEntity) o;
 
         if (id != that.id) return false;
-        if (matchId != that.matchId) return false;
-        if (playerId != null ? !playerId.equals(that.playerId) : that.playerId != null) return false;
+        if (playerId != that.playerId) return false;
+        if (currentWorkTeamId != that.currentWorkTeamId) return false;
         if (number != null ? !number.equals(that.number) : that.number != null) return false;
         if (position != null ? !position.equals(that.position) : that.position != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (state != null ? !state.equals(that.state) : that.state != null) return false;
         if (updateTime != null ? !updateTime.equals(that.updateTime) : that.updateTime != null) return false;
 
         return true;
@@ -146,12 +116,10 @@ public class TCaiexMatchPlayerEntity {
     public int hashCode() {
 
         int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (int) (matchId ^ (matchId >>> 32));
-        result = 31 * result + (playerId != null ? playerId.hashCode() : 0);
+        result = 31 * result + (int) (playerId ^ (playerId >>> 32));
+        result = 31 * result + (int) (currentWorkTeamId ^ (currentWorkTeamId >>> 32));
         result = 31 * result + (number != null ? number.hashCode() : 0);
         result = 31 * result + (position != null ? position.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (state != null ? state.hashCode() : 0);
         result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
         return result;
     }

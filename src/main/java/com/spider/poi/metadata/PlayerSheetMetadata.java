@@ -27,7 +27,7 @@ public interface PlayerSheetMetadata {
      * 客队列
      * @return
      */
-    int awayTeam();
+    int opponentTeam();
 
     /**
      * 主客队标志
@@ -69,4 +69,6 @@ public interface PlayerSheetMetadata {
     int possession();
 
     int opponentPossession();
+
+    int league();
 }

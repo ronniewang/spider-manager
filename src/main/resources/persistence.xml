@@ -5,7 +5,12 @@
         <class>com.spider.db.entity.caiex.TCaiexMatchEntity</class>
         <class>com.spider.db.entity.caiex.TCaiexMatchPlayerEntity</class>
         <class>com.spider.db.entity.caiex.TCaiexMatchStatisticEntity</class>
-        <class>com.spider.db.entity.caiex.TMatchIdEntity</class>
+        <class>com.spider.db.entity.caiex.TCaiexTableIdEntity</class>
+        <class>com.spider.db.entity.caiex.TCaiexPlayerBasicInfoEntity</class>
+        <class>com.spider.db.entity.caiex.TCaiexPlayerTransferInfoEntity</class>
+        <class>com.spider.db.entity.caiex.TCaiexPlayerWorkInfoEntity</class>
+        <class>com.spider.db.entity.caiex.TCaiexTeamEntity</class>
+        <class>com.spider.db.entity.caiex.TCaiexLeagueEntity</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
             <property name="hibernate.connection.driver_class"

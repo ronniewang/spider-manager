@@ -7,6 +7,7 @@ import com.aliyun.openservices.ons.api.Producer;
 import com.aliyun.openservices.ons.api.PropertyKeyConst;
 import com.spider.config.DatabaseConfig;
 import com.spider.config.WebSocketConfig;
+import com.spider.poi.PoiUtil;
 import com.spider.utils.MessageSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -136,6 +137,11 @@ public class SpiderManagerApplication extends SpringBootServletInitializer {
 //        simpleMailMessage.setText("learn");
 //        javaMailSender().send(simpleMailMessage);
 
+        if (args[1].contains("-i")) {
+            String path = "C:\\workspace\\spider-manager\\CSL_playersheet2016.xlsm";
+            PoiUtil.executeImport(path);
+            return;
+        }
         SpringApplication.run(SpiderManagerApplication.class, args);
     }
 

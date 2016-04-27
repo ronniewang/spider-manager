@@ -28,7 +28,7 @@ public class DefaultPlayerSheetMetadata implements PlayerSheetMetadata {
     }
 
     @Override
-    public int awayTeam() {
+    public int opponentTeam() {
 
         return 7;
     }
@@ -97,6 +97,12 @@ public class DefaultPlayerSheetMetadata implements PlayerSheetMetadata {
     public int opponentPossession() {
 
         return 27;
+    }
+
+    @Override
+    public int league() {
+
+        return 9;
     }
 
     public void setHomeTeam(CellIndex homeTeam) {
