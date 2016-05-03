@@ -155,4 +155,19 @@ public class TCaiexMatchPlayerEntity {
         result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+
+        return "TCaiexMatchPlayerEntity{" +
+                "id=" + id +
+                ", matchId=" + matchId +
+                ", playerId=" + playerId +
+                ", number=" + number +
+                ", position='" + position + '\'' +
+                ", name='" + name + '\'' +
+                ", state='" + state + '\'' +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

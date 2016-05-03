@@ -14,8 +14,12 @@ public interface TCrawlerWin310Repository extends JpaRepository<TCrawlerWin310, 
     @Query("select s from TCrawlerWin310 s where START_DATE_TIME = :startDateTime and COMPETITION_NUM = :competitionNum")
     TCrawlerWin310 findByStartDateTimeAndCompetitionNum(@Param("startDateTime") Date startDateTime, @Param("competitionNum") String competitionNum);
 
-    @Query(nativeQuery = true, value = "select * from t_crawler_win310 where COMPETITION_NUM = :competitionNum order by start_date_time desc limit 0,1")
-    TCrawlerWin310 findByCompetitionNum(@Param("competitionNum") String competitionNum);
+    /**
+     * @param uniqueId 需求改为按照unique_id查询 2016-05-03
+     * @return
+     */
+    @Query(nativeQuery = true, value = "select * from t_crawler_win310 where unique_id = :uniqueId order by start_date_time desc limit 0,1")
+    TCrawlerWin310 findByMatchCode(@Param("uniqueId") String uniqueId);
 
     TCrawlerWin310 findByWin310EuropeId(String europeId);
 

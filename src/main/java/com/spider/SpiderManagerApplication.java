@@ -137,11 +137,12 @@ public class SpiderManagerApplication extends SpringBootServletInitializer {
 //        simpleMailMessage.setText("learn");
 //        javaMailSender().send(simpleMailMessage);
 
-        if (args[1].contains("-i")) {
-            String path = "C:\\workspace\\spider-manager\\CSL_playersheet2016.xlsm";
-            PoiUtil.executeImport(path);
-            return;
-        }
+//        if (args[1].contains("-i")) {
+//            String path = "C:\\workspace\\spider-manager\\CSL_playersheet2016.xlsm";
+//            String sheetName = "广州恒大";
+//            PoiUtil.executeImport(path, sheetName);
+//            return;
+//        }
         SpringApplication.run(SpiderManagerApplication.class, args);
     }
 

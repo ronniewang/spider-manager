@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class MatchOddsServiceImpl implements MatchOddsServcie {
@@ -82,8 +81,12 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
         List<String> matchCodes = LotteryUtils.getMatchCodes(sportteryList);
         List<String> absenceMatchSet = matchService.getAbsenceMatchCodes(matchCodes);
         for (TCrawlerSporttery sporttery : sportteryList) {
-            TCrawlerWin310 win310 = win310Repository.findByCompetitionNum(sporttery.getCompetitionNum());
+            TCrawlerWin310 win310 = win310Repository.findByMatchCode(sporttery.getCompetitionNum());
 
+            if (win310 == null) {
+                System.out.println("win310 doesn't exist, match code is " + sporttery.getCompetitionNum());
+                continue;
+            }
             OddsModel oddsModel = oddsModelRepository.findByEuropeId(Integer.valueOf(win310.getWin310EuropeId()));
             if (oddsModel == null) {
                 continue;

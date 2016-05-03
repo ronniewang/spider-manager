@@ -97,12 +97,12 @@ public class SbcServiceImpl implements SbcService {
         TCrawlerWin310 win310;
         W500Entity w500Entity;
         try {
-            win310 = win310Repository.findByCompetitionNum(matchCode);
+            win310 = win310Repository.findByMatchCode(matchCode);
             if (win310 == null) {
                 logger.error("no win310 entity for this matchCode [" + matchCode + "]");
                 return new JsonResult(1, "no win310 entity for this matchCode [" + matchCode + "]");
             }
-            w500Entity = w500Repository.findByMatchCode(Integer.valueOf(matchCode));
+            w500Entity = w500Repository.findByMatchCode(matchCode);
             if (w500Entity == null) {
                 logger.error("no w500 entity for this matchCode [" + matchCode + "]");
                 return new JsonResult(1, "no w500 entity for this matchCode [" + matchCode + "]");

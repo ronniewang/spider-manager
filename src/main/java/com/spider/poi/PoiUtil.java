@@ -2,7 +2,6 @@ package com.spider.poi;
 
 import com.spider.db.entity.caiex.*;
 import com.spider.poi.metadata.*;
-import com.sun.org.apache.regexp.internal.RE;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -35,11 +34,13 @@ public class PoiUtil {
 
     private static final String T_CAIEX_MATCH_STATISTIC = "t_caiex_match_statistic";
 
-    public static void main(String[] args) throws IOException {
+    private static final String T_CAIEX_MATCH_PLAYER = "t_caiex_match_player";
 
-        String path = "C:\\workspace\\spider-manager\\CSL_playersheet2016.xlsm";
-        executeImport(path);
-    }
+    private static final int HOME_TEAM_TPYE = 1;
+
+    private static final int AWAY_TEAM_TYPE = 2;
+
+    private static PlayerSheetMetadata metadata = new DefaultPlayerSheetMetadata();
 
     private static DataSource dataSource;
 
@@ -48,34 +49,50 @@ public class PoiUtil {
         basicDataSource.setUrl("jdbc:mysql://182.92.148.240:3306/crawler?useUnicode=true&characterEncoding=utf8");
         basicDataSource.setUsername("caiex");
         basicDataSource.setPassword("12345678");
+//        basicDataSource.setUrl("jdbc:mysql://localhost:3306/base_data?useUnicode=true&characterEncoding=utf8");
+//        basicDataSource.setUsername("root");
+//        basicDataSource.setPassword("root");
         basicDataSource.setDriverClassName("com.mysql.jdbc.Driver");
         basicDataSource.setInitialSize(100);
         dataSource = basicDataSource;
     }
 
-    private static PlayerSheetMetadata metadata = new DefaultPlayerSheetMetadata();
-
     private static JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
-    public static void executeImport(String path) throws IOException {
+//    public static void main(String[] args) throws IOException {
+//
+//        String path = "C:\\workspace\\spider-manager\\CSL_playersheet2016.xlsm";
+//        String sheetName = "江苏苏宁";
+//        String sheetName = "天津泰达";
+//        String sheetName = "上海上港";
+//        String sheetName = "山东鲁能";
+//        String sheetName = "广州富力";
+//        String sheetName = "延边富德";
+//        String sheetName = "北京国安";
+//        XSSFSheet sheet = getSheet(path, sheetName);
+//        long start = System.currentTimeMillis();
+//        executeImport(sheet);
+//
+//        long end = System.currentTimeMillis();
+//        System.out.println((end - start) / 1000 + "s");
+//    }
 
-        long start = System.currentTimeMillis();
-        FileInputStream fileInputStream = new FileInputStream(path);
-        XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
-        String sheetName = "广州恒大";
-        XSSFSheet sheet = workbook.getSheet(sheetName);
+
+    public static void executeImport(XSSFSheet sheet) throws IOException {
+
         RangeRowIndex contentRangeRowIndex = metadata.content();
-        TCaiexTeamEntity currentTeamEntity = buildCurrentTeamEntity(sheet);//应在循环外
+        TCaiexTeamEntity currentTeamEntity = buildCurrentTeamEntity(sheet);
         persistTeamEntity(currentTeamEntity);
+
+        Map<Integer/*column*/, TCaiexMatchPlayerEntity> playerEntitiesWithoutState = buildMatchPlayersWithoutState(sheet);
+
         for (int r = contentRangeRowIndex.getStartRow(); r <= contentRangeRowIndex.getEndRow(); r++) {
             XSSFRow row = sheet.getRow(r);
             TCaiexTeamEntity teamEntity = buildTeamEntity(row);
+            if (teamEntity == null) {
+                return;
+            }
             persistTeamEntity(teamEntity);
-
-            Map<Integer, TCaiexMatchPlayerEntity> playerEntitiesWithoutState = buildMatchPlayersWithoutState(sheet);
-            List<TCaiexMatchPlayerEntity> playerEntitiesWithState = buildMatchPlayers(row, playerEntitiesWithoutState);
-            List<TCaiexPlayerBasicInfoEntity> basicInfoEntities = buildPlayerBasicInfos(playerEntitiesWithState);
-            persistBasicInfos(basicInfoEntities);
 
             TCaiexLeagueEntity leagueEntity = buildLeagueEntity(row);
             persistLeagueEntity(leagueEntity);
@@ -83,27 +100,69 @@ public class PoiUtil {
             TCaiexMatchEntity matchEntity = buildMatchInfo(row, currentTeamEntity);
             Long matchId = persistMatchEntity(matchEntity);
 
+            List<TCaiexMatchPlayerEntity> playerEntitiesWithState = buildMatchPlayers(row, playerEntitiesWithoutState);
+            List<TCaiexPlayerBasicInfoEntity> basicInfoEntities = buildPlayerBasicInfos(playerEntitiesWithState, currentTeamEntity);
+            persistBasicInfos(basicInfoEntities);
+            setPlayerIdAndMatchIdForMatchPlayers(playerEntitiesWithState, matchId);
+            persistMatchPlayerEntities(playerEntitiesWithState);
+
             List<TCaiexMatchStatisticEntity> statisticEntities = buildMatchStatistics(row, matchId);
             persistStatisticEntites(statisticEntities);
 
-            setMatchId(matchId, matchEntity, playerEntitiesWithState);
         }
-        long end = System.currentTimeMillis();
-        System.out.println((end - start) / 1000 + "s");
+    }
+
+    private static void setPlayerIdAndMatchIdForMatchPlayers(List<TCaiexMatchPlayerEntity> playerEntitiesWithState, Long matchId) {
+
+        for (TCaiexMatchPlayerEntity playerEntity : playerEntitiesWithState) {
+            playerEntity.setMatchId(matchId);
+            try {
+                Long playerId = jdbcTemplate.queryForObject(
+                        "SELECT id FROM t_caiex_player_basic_info WHERE name = ?", new Object[]{playerEntity.getName()}, Long.class);
+                playerEntity.setPlayerId(playerId);
+            } catch (EmptyResultDataAccessException e) {
+                throw new IllegalStateException("");
+            }
+        }
+
+    }
+
+    private static void persistMatchPlayerEntities(List<TCaiexMatchPlayerEntity> playerEntitiesWithState) {
+
+        for (TCaiexMatchPlayerEntity mpe : playerEntitiesWithState) {
+            try {
+                jdbcTemplate.queryForObject(
+                        "SELECT id FROM " + T_CAIEX_MATCH_PLAYER + " WHERE match_id = ? AND player_id = ?", new Object[]{mpe.getMatchId(), mpe.getPlayerId()}, Long.class);
+            } catch (EmptyResultDataAccessException e) {
+                jdbcTemplate.update(
+                        "INSERT INTO " + T_CAIEX_MATCH_PLAYER + " (match_id, player_id, number, position, name, state, update_time) " +
+                                "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                        mpe.getMatchId(), mpe.getPlayerId(), mpe.getNumber(), mpe.getPosition(), mpe.getName(), mpe.getState(), mpe.getUpdateTime());
+                System.out.println("insert into " + T_CAIEX_MATCH_PLAYER + mpe + " success");
+            }
+        }
+
+    }
+
+    private static XSSFSheet getSheet(String path, String sheetName) throws IOException {
+
+        FileInputStream fileInputStream = new FileInputStream(path);
+        XSSFWorkbook workbook = new XSSFWorkbook(fileInputStream);
+        return workbook.getSheet(sheetName);
     }
 
     private static void persistStatisticEntites(List<TCaiexMatchStatisticEntity> statisticEntities) {
 
         for (TCaiexMatchStatisticEntity se : statisticEntities) {
             try {
-                //如果统计信息有变化，这里检测不出来，看需求吧
-                jdbcTemplate.queryForObject("select match_id from " + T_CAIEX_MATCH_STATISTIC + " where match_id = ? AND item = ?",
+                //import 如果统计信息有变化，这里检测不出来，看需求吧
+                jdbcTemplate.queryForObject("SELECT match_id FROM " + T_CAIEX_MATCH_STATISTIC + " WHERE match_id = ? AND item = ?",
                         new Object[]{se.getMatchId(), se.getItem()}, Long.class);
             } catch (EmptyResultDataAccessException e) {
                 jdbcTemplate.update(
                         "INSERT INTO " + T_CAIEX_MATCH_STATISTIC + " (match_id, team, item, `count`, update_time) " +
                                 "VALUES (?, ?, ?, ?, ?)",
-                        new Object[]{se.getMatchId(), se.getTeam(), se.getItem(), se.getCount(), se.getUpdateTime()});
+                        se.getMatchId(), se.getTeam(), se.getItem(), se.getCount(), se.getUpdateTime());
                 System.out.println("insert into " + T_CAIEX_MATCH_STATISTIC + " " + se.getMatchId() + " success");
             }
         }
@@ -145,6 +204,9 @@ public class PoiUtil {
 
         TCaiexTeamEntity teamEntity = new TCaiexTeamEntity();
         String awayTeamName = row.getCell(metadata.opponentTeam()).getStringCellValue();
+        if (awayTeamName.trim().equals("")) {
+            return null;
+        }
         teamEntity.setName(awayTeamName);
         teamEntity.setUpdateTime(new Date());
         return teamEntity;
@@ -158,7 +220,7 @@ public class PoiUtil {
             teamEntity.setId(generateId(T_CAIEX_TEAM));
             jdbcTemplate.update(
                     "INSERT INTO " + T_CAIEX_TEAM + "(id, name, update_time) VALUES (?, ?, ?)",
-                    new Object[]{teamEntity.getId(), teamEntity.getName(), teamEntity.getUpdateTime()});
+                    teamEntity.getId(), teamEntity.getName(), teamEntity.getUpdateTime());
             System.out.println("insert " + teamEntity.getName() + " success");
         }
     }
@@ -170,21 +232,25 @@ public class PoiUtil {
                 jdbcTemplate.queryForObject(
                         "SELECT id FROM " + T_CAIEX_PLAYER_BASIC_INFO + " WHERE name = ?", new Object[]{basicInfoEntity.getName()}, Long.class);
             } catch (EmptyResultDataAccessException e) {
+                Long id = generateId(T_CAIEX_PLAYER_BASIC_INFO);
                 jdbcTemplate.update(
-                        "INSERT INTO " + T_CAIEX_PLAYER_BASIC_INFO + " (name, update_time) VALUES (?, ?)", basicInfoEntity.getName(), basicInfoEntity.getUpdateTime());
+                        "INSERT INTO " + T_CAIEX_PLAYER_BASIC_INFO + " (id, current_work_team_id, name, update_time) VALUES (?, ?, ?, ?)",
+                        id, basicInfoEntity.getCurrentWorkTeamId(), basicInfoEntity.getName(), basicInfoEntity.getUpdateTime());
                 System.out.println("insert " + basicInfoEntity.getName() + " success");
             }
         }
     }
 
-    private static List<TCaiexPlayerBasicInfoEntity> buildPlayerBasicInfos(List<TCaiexMatchPlayerEntity> playerEntities) {
+    private static List<TCaiexPlayerBasicInfoEntity> buildPlayerBasicInfos(List<TCaiexMatchPlayerEntity> playerEntities, TCaiexTeamEntity currentTeamEntity) {
 
         List<TCaiexPlayerBasicInfoEntity> basicInfoEntities = new ArrayList<>(playerEntities.size());
 
+        Long id = jdbcTemplate.queryForObject("SELECT id FROM t_caiex_team WHERE name = ?", new Object[]{currentTeamEntity.getName()}, Long.class);
         for (TCaiexMatchPlayerEntity playerEntity : playerEntities) {
             TCaiexPlayerBasicInfoEntity entity = new TCaiexPlayerBasicInfoEntity();
             entity.setName(playerEntity.getName());
             entity.setUpdateTime(new Date());
+            entity.setCurrentWorkTeamId(id);
             basicInfoEntities.add(entity);
         }
         return basicInfoEntities;
@@ -196,10 +262,9 @@ public class PoiUtil {
         try {
             currentId = jdbcTemplate.queryForObject("SELECT table_id FROM " + T_CAIEX_TABLE_ID + " WHERE table_name = ?", new Object[]{tableName}, Long.class);
             if (currentId != null) {
-                currentId += 1;
-                jdbcTemplate.update("UPDATE " + T_CAIEX_TABLE_ID + " SET table_id = ? WHERE table_name = ?", new Object[]{currentId, tableName});
+                currentId += HOME_TEAM_TPYE;
+                jdbcTemplate.update("UPDATE " + T_CAIEX_TABLE_ID + " SET table_id = ? WHERE table_name = ?", currentId, tableName);
                 System.out.println("update " + tableName + " id success");
-                return currentId;
             }
         } catch (EmptyResultDataAccessException e) {
             throw new IllegalStateException("尚无" + tableName + "的id信息");
@@ -207,31 +272,19 @@ public class PoiUtil {
         return currentId;
     }
 
-    private static void setMatchId(long matchId, TCaiexMatchEntity matchEntity, List<TCaiexMatchPlayerEntity> playerEntities) {
-
-//        matchEntity.setId(matchId);
-//        statisticEntity.setMatchId(matchId);
-//        for (TCaiexMatchPlayerEntity playerEntity : playerEntities) {
-//            playerEntity.setMatchId(matchId);
-//        }
-    }
-
     private static Map<Integer, TCaiexMatchPlayerEntity> buildMatchPlayersWithoutState(XSSFSheet sheet) {
 
         Map<Integer, TCaiexMatchPlayerEntity> result = new HashMap<>();
         RangeColumnRowIndex playerIndex = metadata.playerIndex();
 
-        List<XSSFRow> playerRows = new ArrayList<>();
         int startRow = playerIndex.getStartRow();
         int endRow = playerIndex.getEndRow();
-        for (int row = startRow; row <= endRow; row++) {//理论上只有三行
-            playerRows.add(sheet.getRow(row));
-        }
         for (int col = playerIndex.getStartColumn(); col <= playerIndex.getEndColumn(); col++) {
             TCaiexMatchPlayerEntity playerEntity = new TCaiexMatchPlayerEntity();
             playerEntity.setPosition(sheet.getRow(startRow).getCell(col).getStringCellValue());
-            playerEntity.setNumber((int) sheet.getRow(startRow + 1).getCell(col).getNumericCellValue());
+            playerEntity.setNumber((int) sheet.getRow(startRow + HOME_TEAM_TPYE).getCell(col).getNumericCellValue());
             playerEntity.setName(sheet.getRow(endRow).getCell(col).getStringCellValue());
+            playerEntity.setUpdateTime(new Date());
             result.put(col, playerEntity);
         }
         return result;
@@ -255,7 +308,7 @@ public class PoiUtil {
         shootingAttempt.setItem(StatisticItem.ShootingAttempt);
         shootingAttempt.setMatchId(matchId);
         shootingAttempt.setCount((int) row.getCell(metadata.shootingAttempt()).getNumericCellValue());
-        shootingAttempt.setTeam(1);
+        shootingAttempt.setTeam(HOME_TEAM_TPYE);
         shootingAttempt.setUpdateTime(new Date());
         statisticEntities.add(shootingAttempt);
 
@@ -263,7 +316,7 @@ public class PoiUtil {
         opponentShootingAttempt.setItem(StatisticItem.OpponentShootingAttempt);
         opponentShootingAttempt.setMatchId(matchId);
         opponentShootingAttempt.setCount((int) row.getCell(metadata.opponentShootingAttempt()).getNumericCellValue());
-        opponentShootingAttempt.setTeam(2);
+        opponentShootingAttempt.setTeam(AWAY_TEAM_TYPE);
         opponentShootingAttempt.setUpdateTime(new Date());
         statisticEntities.add(opponentShootingAttempt);
 
@@ -271,7 +324,7 @@ public class PoiUtil {
         shootingOnTarget.setItem(StatisticItem.ShootingOnTarget);
         shootingOnTarget.setMatchId(matchId);
         shootingOnTarget.setCount((int) row.getCell(metadata.shootingOnTarget()).getNumericCellValue());
-        shootingOnTarget.setTeam(1);
+        shootingOnTarget.setTeam(HOME_TEAM_TPYE);
         shootingOnTarget.setUpdateTime(new Date());
         statisticEntities.add(shootingOnTarget);
 
@@ -279,7 +332,7 @@ public class PoiUtil {
         opponentShootingOnTarget.setItem(StatisticItem.OpponentShootingOnTarget);
         opponentShootingOnTarget.setMatchId(matchId);
         opponentShootingOnTarget.setCount((int) row.getCell(metadata.opponentShootingOnTarget()).getNumericCellValue());
-        opponentShootingOnTarget.setTeam(2);
+        opponentShootingOnTarget.setTeam(AWAY_TEAM_TYPE);
         opponentShootingOnTarget.setUpdateTime(new Date());
         statisticEntities.add(opponentShootingOnTarget);
 
@@ -287,7 +340,7 @@ public class PoiUtil {
         possession.setItem(StatisticItem.Possession);
         possession.setMatchId(matchId);
         possession.setCount((int) row.getCell(metadata.possession()).getNumericCellValue());
-        possession.setTeam(1);
+        possession.setTeam(HOME_TEAM_TPYE);
         possession.setUpdateTime(new Date());
         statisticEntities.add(possession);
 
@@ -295,7 +348,7 @@ public class PoiUtil {
         opponentPossession.setItem(StatisticItem.OpponentPossession);
         opponentPossession.setMatchId(matchId);
         opponentPossession.setCount((int) row.getCell(metadata.opponentPossession()).getNumericCellValue());
-        opponentPossession.setTeam(2);
+        opponentPossession.setTeam(AWAY_TEAM_TYPE);
         opponentPossession.setUpdateTime(new Date());
         statisticEntities.add(opponentPossession);
 
@@ -340,8 +393,10 @@ public class PoiUtil {
         } else if (homeOrAway.equals("A")) {
             matchEntity.setHomeTeamId(currentTeamId);
             matchEntity.setAwayTeamId(opponentTeamId);
+        } else if (homeOrAway.equals("N")) {
+            //import 不知道这是干嘛的
         } else {
-            throw new IllegalStateException("主客队标志位既不是H也不是A");
+            throw new IllegalStateException("主客队标志位不在H/N/A中");
         }
         matchEntity.setMatchDate(infoRow.getCell(metadata.matchDate()).getDateCellValue());
         matchEntity.setHomeScore((int) infoRow.getCell(metadata.homeScore()).getNumericCellValue());
@@ -350,20 +405,20 @@ public class PoiUtil {
         return matchEntity;
     }
 
-    private static Long persistMatchEntity(TCaiexMatchEntity matchEntity) {
+    private static Long persistMatchEntity(TCaiexMatchEntity match) {
 
         Long matchId;
         try {
             matchId = jdbcTemplate.queryForObject(
-                    "SELECT id FROM " + T_CAIEX_MATCH + " WHERE league_id = ? and home_team_id = ? and away_team_id = ?",
-                    new Object[]{matchEntity.getLeagueId(), matchEntity.getHomeTeamId(), matchEntity.getAwayTeamId()}, Long.class);
+                    "SELECT id FROM " + T_CAIEX_MATCH + " WHERE league_id = ? AND home_team_id = ? AND away_team_id = ?",
+                    new Object[]{match.getLeagueId(), match.getHomeTeamId(), match.getAwayTeamId()}, Long.class);
         } catch (EmptyResultDataAccessException e) {
             matchId = generateId(T_CAIEX_MATCH);
-            matchEntity.setId(matchId);
+            match.setId(matchId);
             jdbcTemplate.update(
                     "INSERT INTO t_caiex_match (id, league_id, home_team_id, away_team_id, match_date, home_score, away_score, update_time) " +
                             "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                    new Object[]{matchEntity.getId(), matchEntity.getLeagueId(), matchEntity.getHomeTeamId(), matchEntity.getAwayTeamId(), matchEntity.getMatchDate(), matchEntity.getHomeScore(), matchEntity.getAwayScore(), matchEntity.getUpdateTime()});
+                    match.getId(), match.getLeagueId(), match.getHomeTeamId(), match.getAwayTeamId(), match.getMatchDate(), match.getHomeScore(), match.getAwayScore(), match.getUpdateTime());
         }
         return matchId;
     }
