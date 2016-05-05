@@ -3,7 +3,7 @@ package com.spider.global;
 /**
  * 关注的博彩公司
  *
- * @author wsy
+ * @author ronnie
  */
 public enum GamingCompany {
 

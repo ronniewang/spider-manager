@@ -3,7 +3,7 @@ package com.spider.global;
 /**
  * 毫秒数
  *
- * @author wsy
+ * @author ronnie
  */
 public class Mills {
 

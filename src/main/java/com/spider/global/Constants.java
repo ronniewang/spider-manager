@@ -3,7 +3,7 @@ package com.spider.global;
 /**
  * 全局的常量
  *
- * @author wsy
+ * @author ronnie
  */
 public final class Constants {
 

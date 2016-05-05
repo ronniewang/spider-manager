@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * 修改队名匹配表
  *
- * @author wsy
+ * @author ronnie
  */
 @Controller
 public class MatchTeamController {

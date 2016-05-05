@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 /**
  * Created by wsy on 2015/10/13.
  *
- * @author wsy
+ * @author ronnie
  */
 @Component
 public class SbcUpdateManagerImpl implements SbcUpdateManager {

@@ -13,7 +13,7 @@ import java.util.Properties;
 /**
  * 加载配置文件中的所有配置，统一管理应用的属性，获取配置时调用静态的$方法获取属性值
  *
- * @author wsy
+ * @author ronnie
  */
 public final class ConfigProperties {
 

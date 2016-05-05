@@ -3,7 +3,7 @@ package com.spider.manager.model;
 /**
  * Created by wsy on 2015/9/1.
  *
- * @author wsy
+ * @author ronnie
  */
 public class JsonResult {
 

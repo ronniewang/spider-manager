@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 /**
  * 赔率工具类
  *
- * @author wsy
+ * @author ronnie
  */
 public class LotteryUtils {
 

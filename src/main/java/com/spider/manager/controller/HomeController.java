@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 
 /**
- * @author wsy
+ * @author ronnie
  */
 @Controller
 public class HomeController {

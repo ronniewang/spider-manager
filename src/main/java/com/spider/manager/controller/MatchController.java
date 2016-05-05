@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * 导出赛程的Controller
  *
- * @author wsy
+ * @author ronnie
  */
 @Controller
 public class MatchController {

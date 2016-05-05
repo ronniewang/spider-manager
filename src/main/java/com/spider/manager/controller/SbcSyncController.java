@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * 导出赛程的Controller
  *
- * @author wsy
+ * @author ronnie
  */
 @Controller
 public class SbcSyncController {

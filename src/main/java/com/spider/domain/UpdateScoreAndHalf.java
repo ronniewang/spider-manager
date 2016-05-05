@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author wsy
+ * @author ronnie
  *         该类用于更新比分和比赛进行阶段
  *         两者有一个变化时即进行推送
  *         比分默认为“0-0”

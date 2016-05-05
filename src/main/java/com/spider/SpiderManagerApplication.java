@@ -36,7 +36,7 @@ import java.util.Properties;
 //import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 /**
- * @author wsy
+ * @author ronnie
  */
 @SpringBootApplication
 @Import(value = {DatabaseConfig.class, WebSocketConfig.class})

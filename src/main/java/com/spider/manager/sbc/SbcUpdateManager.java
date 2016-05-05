@@ -5,7 +5,7 @@ import com.spider.exception.UpdateException;
 /**
  * Created by wsy on 2015/10/14.
  *
- * @author wsy
+ * @author ronnie
  */
 public interface SbcUpdateManager {
 

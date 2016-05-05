@@ -1,7 +1,7 @@
 package com.spider.exception;
 
 /**
- * @author wsy
+ * @author ronnie
  */
 public class UpdateException extends Exception {
 

@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created on 2016/3/29-14:28.
  *
- * @author wsy
+ * @author ronnie
  */
 public class TestOnsMq {
 

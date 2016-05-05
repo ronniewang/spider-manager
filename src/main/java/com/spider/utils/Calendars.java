@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * Calendar utils
  *
- * @author wsy
+ * @author ronnie
  */
 public class Calendars {
 

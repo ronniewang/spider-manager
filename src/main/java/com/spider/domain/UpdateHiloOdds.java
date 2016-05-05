@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * 用于向sbc推送hilo赔率的变化情况
  *
- * @author wsy
+ * @author ronnie
  */
 public class UpdateHiloOdds implements Serializable {
 

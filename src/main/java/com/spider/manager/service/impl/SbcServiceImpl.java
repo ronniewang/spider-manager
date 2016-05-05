@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by wsy on 2015/10/21.
  *
- * @author wsy
+ * @author ronnie
  */
 @Service
 public class SbcServiceImpl implements SbcService {
@@ -29,10 +29,10 @@ public class SbcServiceImpl implements SbcService {
     private Logger logger = Logger.getLogger("info_logger");
 
     @Autowired
-    private TCrawlerWin310Repository win310Repository;
+    private SbcUpdateManager sbcUpdateManager;
 
     @Autowired
-    private SbcUpdateManager sbcUpdateManager;
+    private TCrawlerWin310Repository win310Repository;
 
     @Autowired
     private W500Repository w500Repository;
@@ -82,7 +82,7 @@ public class SbcServiceImpl implements SbcService {
      * 如果type是null，全量同步到sbc，同步内容包括比赛进程信息和两家博彩公司的赔率
      * 否则，只同步比赛进程信息
      *
-     * @param matchCode not null
+     * @param uniqueId not null 需求由原来的match_code改为unique_id，2016-05-05
      * @param type
      * @return
      * @see UpdateScoreAndHalf
@@ -90,22 +90,22 @@ public class SbcServiceImpl implements SbcService {
      * @see UpdateHdcOdds
      */
     @Override
-    public JsonResult sync(String matchCode, Integer type) {
+    public JsonResult sync(String uniqueId, Integer type) {
 
-        Preconditions.checkArgument(matchCode != null);
+        Preconditions.checkArgument(uniqueId != null);
 
         TCrawlerWin310 win310;
         W500Entity w500Entity;
         try {
-            win310 = win310Repository.findByMatchCode(matchCode);
+            win310 = win310Repository.findByMatchCode(uniqueId);
             if (win310 == null) {
-                logger.error("no win310 entity for this matchCode [" + matchCode + "]");
-                return new JsonResult(1, "no win310 entity for this matchCode [" + matchCode + "]");
+                logger.error("no win310 entity for this uniqueId [" + uniqueId + "]");
+                return new JsonResult(1, "no win310 entity for this uniqueId [" + uniqueId + "]");
             }
-            w500Entity = w500Repository.findByMatchCode(matchCode);
+            w500Entity = w500Repository.findByMatchCode(uniqueId);
             if (w500Entity == null) {
-                logger.error("no w500 entity for this matchCode [" + matchCode + "]");
-                return new JsonResult(1, "no w500 entity for this matchCode [" + matchCode + "]");
+                logger.error("no w500 entity for this uniqueId [" + uniqueId + "]");
+                return new JsonResult(1, "no w500 entity for this uniqueId [" + uniqueId + "]");
             }
         } catch (Exception e) {
             logger.error("mysql error", e);
@@ -115,7 +115,7 @@ public class SbcServiceImpl implements SbcService {
             Integer europeId = Integer.valueOf(win310.getWin310EuropeId());
             updateSbcScoreAndHalf(w500Entity);
             if (type == null) {
-                updateHiloAndHdcOdds(matchCode, europeId);
+                updateHiloAndHdcOdds(uniqueId, europeId);
             }
             return JsonResult.SUCCESS;
         } catch (UpdateException e) {
@@ -127,8 +127,9 @@ public class SbcServiceImpl implements SbcService {
         }
     }
 
-    private void updateHiloAndHdcOdds(String matchCode, Integer europeId) throws UpdateException {
+    private void updateHiloAndHdcOdds(String uniqueId, Integer europeId) throws UpdateException {
 
+        String matchCode = uniqueId.substring(8);
         List<CompanyOddsEntity> hdcHilos = companyOddsRepository.findHdcAndHilo(europeId);
         for (CompanyOddsEntity odds : hdcHilos) {
             doUpdateToMQ(matchCode, odds);
