@@ -7,7 +7,6 @@ import com.spider.manager.model.ExcelOddsModel;
 import com.spider.manager.model.SportteryAllModel;
 import com.spider.manager.model.SupAndTtgModel;
 import com.spider.db.repository.*;
-import com.spider.db.repository.specifications.Win310Specifications;
 import com.spider.manager.service.MatchOddsServcie;
 import com.spider.manager.service.MatchService;
 import com.spider.manager.service.SbcLeagueService;
@@ -119,9 +118,9 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
 
         List<TCrawlerSporttery> sportteries = sportteryRepository.findByCompetitionNum(matchCode);
         if (CollectionUtils.isNotEmpty(sportteries)) {
-            List<TCrawlerWin310> win310s = win310Repository.findAll(Win310Specifications.equalsCompetitionNum(matchCode));
-            if (CollectionUtils.isNotEmpty(win310s)) {
-                return getOddsModel(sportteries.get(0), win310s.get(0));
+            TCrawlerWin310 win310 = win310Repository.findTop1ByCompetitionNumOrderByStartDateTimeDesc(matchCode);
+            if (win310 != null) {
+                return getOddsModel(sportteries.get(0), win310);
             }
         }
         return null;

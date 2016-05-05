@@ -7,7 +7,6 @@ import com.spider.manager.model.ExcelMatchStatisticModel;
 import com.spider.manager.model.MatchModel;
 import com.spider.manager.model.MatchPlayerInfoModel;
 import com.spider.db.repository.*;
-import com.spider.db.repository.specifications.Win310Specifications;
 import com.spider.manager.service.MatchService;
 import com.spider.manager.service.SbcLeagueService;
 import com.spider.utils.DateUtils;
@@ -176,12 +175,6 @@ public class MatchServiceImpl implements MatchService {
         // }
         // return flag;
         return true;// FIXME 暂时不处理
-    }
-
-    @Override
-    public TCrawlerWin310 getWin310MatchByMatchCode(String matchCode) {
-
-        return win310Repository.findOne(Win310Specifications.equalsCompetitionNum(matchCode));
     }
 
     @Override

@@ -9,6 +9,12 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.Date;
 
+/**
+ * 此类已无用，留作事例，如果需要Specification可以参照，注意Repository实现{@link org.springframework.data.jpa.repository.JpaSpecificationExecutor}
+ *
+ * @author ronnie
+ */
+@Deprecated
 public class Win310Specifications {
 
     public static Specification<TCrawlerWin310> startDateTimeBetween(final Date startDate, final Date endDate) {
