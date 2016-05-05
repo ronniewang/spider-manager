@@ -1,8 +1,5 @@
 package com.spider.manager.controller;
 
-import com.spider.solr.Todo;
-import com.spider.solr.repository.TodoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,16 +14,6 @@ import javax.servlet.http.HttpSession;
  */
 @Controller
 public class HomeController {
-
-    @Autowired
-    private TodoRepository todoRepository;
-
-    @RequestMapping("/")
-    public String home() {
-
-        todoRepository.save(new Todo("1", "desc", "title"));
-        return "index";
-    }
 
     @RequestMapping("/index")
     public String index() {

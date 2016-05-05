@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 /**
+ * 关于爬虫运行情况的Controller
+ *
  * @author ronnie
  */
 @Controller
