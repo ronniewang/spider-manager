@@ -8,7 +8,6 @@ import com.spider.manager.model.ProductModel;
 import com.spider.db.repository.SportteryAllRepository;
 import com.spider.db.repository.TCrawlerSportteryRepository;
 import com.spider.db.repository.TCrawlerWin310Repository;
-import com.spider.db.repository.specifications.SpotterySpecifications;
 import com.spider.manager.service.MatchProductService;
 import com.spider.manager.service.MatchService;
 import com.spider.manager.service.SbcLeagueService;
@@ -43,7 +42,7 @@ public class MatchProductServiceImpl implements MatchProductService {
     public List<ProductModel> listMatchProduct(Date startDate, Date endDate) {
 
         List<ProductModel> productlist = new ArrayList<>();
-        List<TCrawlerSporttery> sportteryList = sportteryRepository.findAll(SpotterySpecifications.startDateTimeBetween(startDate, endDate));
+        List<TCrawlerSporttery> sportteryList = sportteryRepository.findByStartDateTimeBetween(startDate, endDate);
         if (sportteryList == null) {
             return productlist;
         }

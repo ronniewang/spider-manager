@@ -183,7 +183,6 @@ public class MatchOddsController {
             }
             workbook.write();
         } catch (Exception e) {
-
             e.printStackTrace();
         } finally {
             ExcelUtils.close(workbook);
@@ -193,6 +192,7 @@ public class MatchOddsController {
 
     private void buildHeader(WritableSheet sheet) throws WriteException {
 
+        //表头第一行有的单元格需要合并
         sheet.addCell(new Label(0, 0, "League"));
         sheet.mergeCells(0, 0, 4, 0);
         sheet.addCell(new Label(5, 0, "HAD"));
@@ -223,6 +223,7 @@ public class MatchOddsController {
         sheet.addCell(new Label(30, 0, "Time"));
         sheet.mergeCells(30, 0, 31, 0);
 
+        //表头第二行
         String[] headers = {
                 "Date", "Home Team", "Score", "Half Score", "Away Team",
                 "Bookmaker", "Start", "Close", "Start", "Close", "Start", "Close", "Start", "Close",
@@ -233,6 +234,4 @@ public class MatchOddsController {
             sheet.addCell(new Label(i, 1, headers[i]));
         }
     }
-
-
 }

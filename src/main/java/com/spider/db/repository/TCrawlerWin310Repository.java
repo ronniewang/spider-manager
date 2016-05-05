@@ -11,20 +11,28 @@ import java.util.List;
 
 public interface TCrawlerWin310Repository extends JpaRepository<TCrawlerWin310, Long>, JpaSpecificationExecutor<TCrawlerWin310> {
 
-    @Query("select s from TCrawlerWin310 s where START_DATE_TIME = :startDateTime and COMPETITION_NUM = :competitionNum")
-    TCrawlerWin310 findByStartDateTimeAndCompetitionNum(@Param("startDateTime") Date startDateTime, @Param("competitionNum") String competitionNum);
+    TCrawlerWin310 findByStartDateTimeAndCompetitionNum(Date startDateTime, String competitionNum);
 
-    /**
-     * @param uniqueId 需求改为按照unique_id查询 2016-05-03
-     * @return
-     */
-    @Query(nativeQuery = true, value = "select * from t_crawler_win310 where unique_id = :uniqueId order by start_date_time desc limit 0,1")
-    TCrawlerWin310 findByMatchCode(@Param("uniqueId") String uniqueId);
+    TCrawlerWin310 findByUniqueId(@Param("uniqueId") String uniqueId);
 
     TCrawlerWin310 findByWin310EuropeId(String europeId);
 
+    /**
+     * 查询所有联赛
+     *
+     * @return
+     */
     @Query(nativeQuery = true, value = "select DISTINCT matchs FROM t_crawler_win310 order by matchs")
     List<String> findMatchsDistinct();
 
     List<TCrawlerWin310> findByMatchsAndUpdateTimeBetween(String league, Date startDate, Date endDate);
+
+    /**
+     * 查找最新的彩客网赛事
+     * 每次排序可能会有性能问题，待优化
+     *
+     * @param competitionNum
+     * @return
+     */
+    TCrawlerWin310 findTop1ByCompetitionNumOrderByStartDateTimeDesc(String competitionNum);
 }

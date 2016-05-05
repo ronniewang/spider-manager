@@ -2,17 +2,14 @@ package com.spider.manager.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.spider.db.entity.*;
-import com.spider.global.Constants;
 import com.spider.httputil.HttpRequest;
 import com.spider.manager.model.ExcelMatchStatisticModel;
 import com.spider.manager.model.MatchModel;
 import com.spider.manager.model.MatchPlayerInfoModel;
 import com.spider.db.repository.*;
-import com.spider.db.repository.specifications.SpotterySpecifications;
 import com.spider.db.repository.specifications.Win310Specifications;
 import com.spider.manager.service.MatchService;
 import com.spider.manager.service.SbcLeagueService;
-import com.spider.utils.Calendars;
 import com.spider.utils.DateUtils;
 import com.spider.utils.LotteryUtils;
 import org.apache.http.HttpException;
@@ -25,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class MatchServiceImpl implements MatchService {
@@ -63,7 +59,7 @@ public class MatchServiceImpl implements MatchService {
     public List<MatchModel> listMatch(Date startDate, Date endDate) {
 
         List<MatchModel> matchList = new ArrayList<>();
-        List<TCrawlerSporttery> sportteryList = sportteryRepository.findAll(SpotterySpecifications.startDateTimeBetween(startDate, endDate));
+        List<TCrawlerSporttery> sportteryList = sportteryRepository.findByStartDateTimeBetween(startDate, endDate);
         if (sportteryList == null) {
             return matchList;
         }

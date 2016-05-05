@@ -97,7 +97,7 @@ public class SbcServiceImpl implements SbcService {
         TCrawlerWin310 win310;
         W500Entity w500Entity;
         try {
-            win310 = win310Repository.findByMatchCode(uniqueId);
+            win310 = win310Repository.findByUniqueId(uniqueId);
             if (win310 == null) {
                 logger.error("no win310 entity for this uniqueId [" + uniqueId + "]");
                 return new JsonResult(1, "no win310 entity for this uniqueId [" + uniqueId + "]");

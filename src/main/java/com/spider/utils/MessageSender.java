@@ -28,8 +28,14 @@ public class MessageSender {
 
     private static Logger infoLogger = LogHelper.getInfoLogger();
 
+    /**
+     * rocketmq的Producer可以向多个topic发送消息，只用一个即可
+     */
     private MQProducer mqProducer = null;
 
+    /**
+     * ons的Producer只能向特定的topic发送消息，这里用到了两个topic，所以需要两个Producer
+     */
     private Producer onsOddsProducer = null;
 
     private Producer onsParameterProducer = null;

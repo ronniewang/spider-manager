@@ -7,7 +7,6 @@ import com.spider.manager.model.ExcelOddsModel;
 import com.spider.manager.model.SportteryAllModel;
 import com.spider.manager.model.SupAndTtgModel;
 import com.spider.db.repository.*;
-import com.spider.db.repository.specifications.SpotterySpecifications;
 import com.spider.db.repository.specifications.Win310Specifications;
 import com.spider.manager.service.MatchOddsServcie;
 import com.spider.manager.service.MatchService;
@@ -29,6 +28,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 关于赔率的Service，包含较多业务逻辑
+ *
+ * @author ronnie
+ */
 @Service
 public class MatchOddsServiceImpl implements MatchOddsServcie {
 
@@ -42,7 +46,7 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
 
     public static final int ODDS_TYPE_HILO = 2;
 
-    public static final int ODDS_TYPE_HDC = 2;
+    public static final int ODDS_TYPE_HDC = 1;
 
     public static final int ODDS_TYPE_HAD = 0;
 
@@ -74,14 +78,14 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
     public List<OddsModel> listOdds(Date startDate, Date endDate) {
 
         List<OddsModel> oddslist = Lists.newArrayList();
-        List<TCrawlerSporttery> sportteryList = sportteryRepository.findByStartDateAndEndDate(startDate, endDate);
+        List<TCrawlerSporttery> sportteryList = sportteryRepository.findByStartDateTimeBetween(startDate, endDate);
         if (sportteryList == null) {
             return oddslist;
         }
         List<String> matchCodes = LotteryUtils.getMatchCodes(sportteryList);
         List<String> absenceMatchSet = matchService.getAbsenceMatchCodes(matchCodes);
         for (TCrawlerSporttery sporttery : sportteryList) {
-            TCrawlerWin310 win310 = win310Repository.findByMatchCode(sporttery.getCompetitionNum());
+            TCrawlerWin310 win310 = win310Repository.findTop1ByCompetitionNumOrderByStartDateTimeDesc(sporttery.getCompetitionNum());
 
             if (win310 == null) {
                 System.out.println("win310 doesn't exist, match code is " + sporttery.getCompetitionNum());
@@ -113,11 +117,11 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
     @Override
     public OddsModel refreshOdds(String matchCode) {
 
-        List<TCrawlerSporttery> sportteries = sportteryRepository.findAll(SpotterySpecifications.equalsCompetitionNum(matchCode));
+        List<TCrawlerSporttery> sportteries = sportteryRepository.findByCompetitionNum(matchCode);
         if (CollectionUtils.isNotEmpty(sportteries)) {
             List<TCrawlerWin310> win310s = win310Repository.findAll(Win310Specifications.equalsCompetitionNum(matchCode));
             if (CollectionUtils.isNotEmpty(win310s)) {
-                return getOddsModel(sportteries.get(ODDS_TYPE_HAD), win310s.get(ODDS_TYPE_HAD));
+                return getOddsModel(sportteries.get(0), win310s.get(0));
             }
         }
         return null;
@@ -257,7 +261,7 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
     @Override
     public Map<String, SupAndTtgModel> calcSupAndTtg(OddsModel oddsModel) {
 
-        Map<String, SupAndTtgModel> map = Maps.newHashMap();
+        Map<String/*liji, jbb*/, SupAndTtgModel> map = Maps.newHashMap();
         LogHelper.infoLog(infoLogger, null, "start calc sup and ttg, oddsModel={0} ", oddsModel);
         double duration = 0.0;
         String durationTime = oddsModel.getDurationTime();
@@ -312,8 +316,9 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
             LogHelper.errorLog(errorLogger, e, "calc sup and ttg runtime error");
             return null;
         }
-        map.put("liji", new SupAndTtgModel(new BigDecimal(supAndTtg[ODDS_TYPE_HAD][ODDS_TYPE_HAD]).setScale(2, RoundingMode.HALF_DOWN).toString(), new BigDecimal(supAndTtg[ODDS_TYPE_HAD][1]).setScale(2,
-                RoundingMode.HALF_DOWN).toString()));
+        map.put("liji", new SupAndTtgModel(
+                new BigDecimal(supAndTtg[0][0]).setScale(2, RoundingMode.HALF_DOWN).toString(),
+                new BigDecimal(supAndTtg[0][1]).setScale(2, RoundingMode.HALF_DOWN).toString()));
         //~~~~~~~~~~~~~~~~~~~~~~jinbaobo~~~~~~~~~~~~~~~~~~~~~~~
         double[][] supAndTtg1;
         try {
@@ -341,8 +346,9 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
             LogHelper.errorLog(errorLogger, e, "calc sup and ttg runtime error");
             return null;
         }
-        map.put("jinbaobo", new SupAndTtgModel(new BigDecimal(supAndTtg1[ODDS_TYPE_HAD][ODDS_TYPE_HAD]).setScale(2, RoundingMode.HALF_DOWN).toString(), new BigDecimal(supAndTtg1[ODDS_TYPE_HAD][1]).setScale(2,
-                RoundingMode.HALF_DOWN).toString()));
+        map.put("jinbaobo", new SupAndTtgModel(
+                new BigDecimal(supAndTtg1[0][0]).setScale(2, RoundingMode.HALF_DOWN).toString(),
+                new BigDecimal(supAndTtg1[0][1]).setScale(2, RoundingMode.HALF_DOWN).toString()));
         return map;
     }
 
