@@ -38,7 +38,6 @@ public class MatchController {
     @Autowired
     private MatchService matchService;
 
-
     private CellView cellView = new CellView();
 
     {
@@ -53,6 +52,14 @@ public class MatchController {
         binder.registerCustomEditor(Date.class, orderDateEditor);
     }
 
+    /**
+     * 列出日期区间所有比赛
+     *
+     * @param startDate 11点起
+     * @param endDate   11点结束
+     * @return
+     * @see com.spider.aspect.SearchDateAspect
+     */
     @RequestMapping(value = "/listMatch", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public List<MatchModel> listMatch(@RequestParam Date startDate, @RequestParam Date endDate) {
@@ -72,6 +79,12 @@ public class MatchController {
         return "exportMatchInfo";
     }
 
+    /**
+     * 生成需要导出的比赛excel
+     *
+     * @param matchModels
+     * @return
+     */
     @RequestMapping(value = "/matchExcel", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public DownloadFileResult excel(@RequestParam String matchModels) {
@@ -107,11 +120,17 @@ public class MatchController {
         return new DownloadFileResult(fileName);
     }
 
-
+    /**
+     * genuine联赛和日期区间获取比赛信息
+     *
+     * @param startDate
+     * @param endDate
+     * @param league
+     * @return
+     */
     @RequestMapping(value = "/listMatchByLeague", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public DownloadFileResult listMatchByLeague(@RequestParam Date startDate, @RequestParam Date endDate, @RequestParam String league) {
-
 
         List<MatchPlayerInfoModel> matchList = matchService.listMatchByLeague(startDate, endDate, league);
         String fileName = "league" + DateUtils.getNowStr("yyyyMMdd_HHmmss") + ".xls";

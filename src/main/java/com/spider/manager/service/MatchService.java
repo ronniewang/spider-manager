@@ -22,7 +22,21 @@ public interface MatchService {
      */
     List<MatchModel> listMatch(Date startDate, Date endDate);
 
+    /**
+     * 根据时间和联赛查询比赛
+     *
+     * @param startDate
+     * @param endDate
+     * @param league
+     * @return
+     */
     List<MatchPlayerInfoModel> listMatchByLeague(Date startDate, Date endDate, String league);
 
+    /**
+     * @param startDate
+     * @param endDate
+     * @param league
+     * @return
+     */
     List<ExcelMatchStatisticModel> getExcelStatisticModels(Date startDate, Date endDate, String league);
 }

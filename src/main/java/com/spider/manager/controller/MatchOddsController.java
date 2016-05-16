@@ -100,13 +100,6 @@ public class MatchOddsController {
                 sheet.addCell(new Label(index++, i, oddsList.get(i).getSportteryHhadA()));
                 SportteryAllModel sportteryAllModel = oddsList.get(i).getSportteryAllModel();
                 if (sportteryAllModel != null) {
-//                    sheet.addCell(new Label(index++, i, sportteryAllModel.getHadH()));
-//                    sheet.addCell(new Label(index++, i, sportteryAllModel.getHadD()));
-//                    sheet.addCell(new Label(index++, i, sportteryAllModel.getHadA()));
-//                    sheet.addCell(new Label(index++, i, sportteryAllModel.getHhadH()));
-//                    sheet.addCell(new Label(index++, i, sportteryAllModel.getHhadD()));
-//                    sheet.addCell(new Label(index++, i, sportteryAllModel.getHhadA()));
-//                    sheet.addCell(new Label(index++, i, sportteryAllModel.getHhadLine()));
                     sheet.addCell(new Label(index++, i, sportteryAllModel.getHafuHh()));
                     sheet.addCell(new Label(index++, i, sportteryAllModel.getHafuHd()));
                     sheet.addCell(new Label(index++, i, sportteryAllModel.getHafuHa()));

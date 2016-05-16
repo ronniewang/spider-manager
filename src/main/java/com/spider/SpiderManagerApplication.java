@@ -15,8 +15,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.Properties;
@@ -33,21 +31,11 @@ public class SpiderManagerApplication extends SpringBootServletInitializer {
     @Autowired
     private Environment environment;
 
-    @Bean
-    public static JavaMailSender javaMailSender() {
-
-        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-        javaMailSender.setHost("smtp-mail.outlook.com");
-        javaMailSender.setPort(587);
-        javaMailSender.setUsername("ronniewang1993@outlook.com");
-        javaMailSender.setPassword("1b3456789!");
-        Properties javaMailProperties = new Properties();
-        javaMailProperties.put("mail.smtp.auth", true);
-        javaMailProperties.put("mail.smtp.starttls.enable", true);
-        javaMailSender.setJavaMailProperties(javaMailProperties);
-        return javaMailSender;
-    }
-
+    /**
+     * 两个消息发送者，分别为本地mq和ons，通过mq.is.ons属性来配置
+     *
+     * @return
+     */
     @Bean
     public MessageSender messageSender() {
 
