@@ -55,6 +55,13 @@ public class MatchOddsController {
         return matchOddsService.listOdds(startDate, endDate);
     }
 
+    /**
+     * 刷新某个赔率
+     *
+     * @param matchCode
+     * @param absenceState
+     * @return
+     */
     @RequestMapping(value = "/refreshOdds", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public OddsModel refreshOdds(@RequestParam String matchCode, @RequestParam String absenceState) {
@@ -64,6 +71,12 @@ public class MatchOddsController {
         return refreshOdds;
     }
 
+    /**
+     * 计算sup和ttg
+     *
+     * @param oddsModel
+     * @return
+     */
     @RequestMapping(value = "/calcSupAndTtg", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public Map<String, SupAndTtgModel> calcSupAndTtg(@RequestParam String oddsModel) {
@@ -72,6 +85,12 @@ public class MatchOddsController {
         return matchOddsService.calcSupAndTtg(model);
     }
 
+    /**
+     * 导出赔率excel
+     *
+     * @param oddsModels
+     * @return
+     */
     @RequestMapping(value = "/matchOddsExcel", produces = {MediaType.APPLICATION_JSON_VALUE}, method = RequestMethod.POST)
     @ResponseBody
     public DownloadFileResult excel(@RequestParam String oddsModels) {

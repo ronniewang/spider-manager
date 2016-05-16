@@ -57,27 +57,11 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-solr</artifactId>
-        </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-security</artifactId>-->
-        <!--</dependency>-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mail</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-messaging</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -100,11 +84,6 @@
             <artifactId>jxl</artifactId>
             <version>2.6.10</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.apache.poi</groupId>-->
-            <!--<artifactId>poi</artifactId>-->
-            <!--<version>3.14</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
@@ -253,20 +232,6 @@
             <version>1.3.165</version>
             <scope>test</scope>
         </dependency>
-        <!-- solr -->
-
-        <!-- Required by embedded solr server -->
-        <dependency>
-            <groupId>org.apache.solr</groupId>
-            <artifactId>solr-core</artifactId>
-            <version>4.1.0</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>slf4j-jdk14</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
     </dependencies>
 
 
@@ -292,30 +257,6 @@
                     <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>
             </plugin>
-            <!--<plugin>-->
-                <!--<groupId>org.mortbay.jetty</groupId>-->
-                <!--<artifactId>jetty-maven-plugin</artifactId>-->
-                <!--<version>8.1.16.v20140903</version>-->
-                <!--<configuration>-->
-                    <!--<stopKey>todostop</stopKey>-->
-                    <!--<stopPort>9999</stopPort>-->
-                    <!--<systemPropertiesFile>${project.basedir}/profiles/${build.profile.id}/system.properties</systemPropertiesFile>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
         </plugins>
     </build>
-    <!--<profiles>-->
-        <!--<profile>-->
-            <!--<id>dev</id>-->
-            <!--<properties>-->
-                <!--<build.profile.id>dev</build.profile.id>-->
-            <!--</properties>-->
-        <!--</profile>-->
-        <!--<profile>-->
-            <!--<id>prod</id>-->
-            <!--<properties>-->
-                <!--<build.profile.id>prod</build.profile.id>-->
-            <!--</properties>-->
-        <!--</profile>-->
-    <!--</profiles>-->
 </project>

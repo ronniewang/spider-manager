@@ -1,13 +1,12 @@
 package com.spider.manager.model;
 
 import com.spider.db.entity.GamingCompanyConfig;
-import com.spider.global.AbsenceState;
 
 import java.util.List;
 
 public class MatchModel implements Comparable<MatchModel> {
 
-    public static final String ABSENCE_STATE_DEFAULT = AbsenceState.Yes.value();
+    public static final String ABSENCE_STATE_DEFAULT = "1";
 
     private Long id;//
 

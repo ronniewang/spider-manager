@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class HomeController {
 
+    /**
+     * 返回首页
+     *
+     * @return
+     */
     @RequestMapping("/index")
     public String index() {
 

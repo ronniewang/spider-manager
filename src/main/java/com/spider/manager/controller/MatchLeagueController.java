@@ -28,6 +28,11 @@ public class MatchLeagueController {
     @Autowired
     private TCrawlerWin310Repository win310Repository;
 
+    /**
+     * 列出所有联赛
+     *
+     * @return
+     */
     @RequestMapping(value = "/listMatchLeague", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public List<SbcLeague> listMatchLeague() {
@@ -35,12 +40,22 @@ public class MatchLeagueController {
         return sbcLeagueRepository.findAll();
     }
 
+    /**
+     * 联赛列表页
+     *
+     * @return
+     */
     @RequestMapping(value = "/listMatchLeaguePage")
     public String listMatchLeaguePage() {
 
         return "listMatchLeague";
     }
 
+    /**
+     * 列出彩客网所有联赛
+     *
+     * @return
+     */
     @RequestMapping(value = "/list310Leagues", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public List<String> list310Leagues() {
@@ -48,6 +63,12 @@ public class MatchLeagueController {
         return win310Repository.findMatchsDistinct();
     }
 
+    /**
+     * 修改联赛
+     *
+     * @param league
+     * @return
+     */
     @RequestMapping(value = "/modifyLeague", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public JsonResult modifyLeague(String league) {
