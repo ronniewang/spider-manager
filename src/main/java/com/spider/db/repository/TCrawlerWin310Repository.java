@@ -23,6 +23,14 @@ public interface TCrawlerWin310Repository extends JpaRepository<TCrawlerWin310, 
     @Query(nativeQuery = true, value = "SELECT DISTINCT matchs FROM t_crawler_win310 ORDER BY matchs")
     List<String> findMatchsDistinct();
 
+    /**
+     * 根据联赛，日期区间查找310赛事
+     *
+     * @param league
+     * @param startDate
+     * @param endDate
+     * @return
+     */
     List<TCrawlerWin310> findByMatchsAndUpdateTimeBetween(String league, Date startDate, Date endDate);
 
     /**
