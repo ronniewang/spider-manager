@@ -13,6 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class DownloadController {
 
+    /**
+     * 下载文件
+     *
+     * @param downloadname
+     * @param response
+     * @throws Exception
+     */
     @RequestMapping("download")
     public void download(@RequestParam String downloadname, HttpServletResponse response) throws Exception {
 

@@ -20,6 +20,11 @@ import java.util.Properties;
 @EnableJpaRepositories(basePackages = "com.spider.db.repository")
 public class DatabaseConfig {
 
+    /**
+     * 数据源配置
+     *
+     * @return
+     */
     @Bean
     public DataSource dataSource() {
 
@@ -33,6 +38,11 @@ public class DatabaseConfig {
         return dataSource;
     }
 
+    /**
+     * JPA的entityManager的配置
+     *
+     * @return
+     */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 
@@ -52,6 +62,11 @@ public class DatabaseConfig {
         return entityManagerFactory;
     }
 
+    /**
+     * Spring事务管理器的配置
+     *
+     * @return
+     */
     @Bean
     public JpaTransactionManager transactionManager() {
 
@@ -60,6 +75,11 @@ public class DatabaseConfig {
         return transactionManager;
     }
 
+    /**
+     * 异常转换器
+     *
+     * @return
+     */
     @Bean
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
 

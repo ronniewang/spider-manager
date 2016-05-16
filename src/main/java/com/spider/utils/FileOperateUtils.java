@@ -18,7 +18,7 @@ import java.io.*;
 public class FileOperateUtils {
 
     /**
-     * @param response 响应对象 ，用于获取输出流
+     * @param response 响应对象，用于获取输出流
      * @param fileName 文件名
      * @throws DownloadException 文件不存在或者io异常时抛出此异常
      */
