@@ -11,7 +11,7 @@ public interface TCrawlerWin310Repository extends JpaRepository<TCrawlerWin310, 
 
     TCrawlerWin310 findByStartDateTimeAndCompetitionNum(Date startDateTime, String competitionNum);
 
-    TCrawlerWin310 findByUniqueId(String uniqueId);
+    TCrawlerWin310 findByUniqueId(Long uniqueId);
 
     TCrawlerWin310 findByWin310EuropeId(String europeId);
 

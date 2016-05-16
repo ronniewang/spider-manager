@@ -4,7 +4,6 @@ import com.alibaba.rocketmq.client.producer.DefaultMQProducer;
 import com.aliyun.openservices.ons.api.ONSFactory;
 import com.aliyun.openservices.ons.api.Producer;
 import com.aliyun.openservices.ons.api.PropertyKeyConst;
-import com.spider.config.AsyncConfig;
 import com.spider.config.DatabaseConfig;
 import com.spider.config.WebSocketConfig;
 import com.spider.utils.MessageSender;
@@ -22,15 +21,12 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.Properties;
-//import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 /**
  * @author ronnie
  */
 @SpringBootApplication
-@Import(value = {DatabaseConfig.class, WebSocketConfig.class, AsyncConfig.class})
+@Import(value = {DatabaseConfig.class, WebSocketConfig.class})
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableAsync
 public class SpiderManagerApplication extends SpringBootServletInitializer {
