@@ -71,7 +71,7 @@ public class MatchProductServiceImpl implements MatchProductService {
             } else {
                 productModel.setHHAD("N");
             }
-            //rtodo 暂时都写为Y
+            //todo 暂时都写为Y
             SportteryAllEntity sportteryAllEntity = sportteryAllRepository.findByMatchCode(sporttery.getCompetitionNum());
             productModel.setHAFU(sportteryAllEntity != null && sportteryAllEntity.getHafuAa() != null ? "Y" : "N");
             productModel.setCRS(sportteryAllEntity != null && sportteryAllEntity.getScore00() != null ? "Y" : "N");
@@ -101,46 +101,6 @@ public class MatchProductServiceImpl implements MatchProductService {
 
     public boolean compareTwo(TCrawlerSporttery sporttery, TCrawlerWin310 win310) {// 判断竞猜官网和彩客是否匹配
 
-        // boolean flag1 = false;
-        // boolean flag2 = false;
-        // boolean flag3 = false;
-        // boolean flag4 = false;
-        // boolean flag5 = false;
-        // boolean flag6 = false;
-        // String scheduleMatchDate = sporttery.getStartDate().substring(5, 10)
-        // + " " + sporttery.getStartTime().substring(0, 5);
-        // String win310MatchDate = win310.getStartTime();
-        //
-        // if (scheduleMatchDate.equals(win310MatchDate) || scheduleMatchDate ==
-        // win310MatchDate) {
-        // flag1 = true; // 验证日期
-        // }
-        // if (sporttery.getWinCountTwo() == win310.getWinCountTwo()) {
-        // flag6 = true; // 验证让分线
-        // }
-        // if ((sporttery.getStatusOne() == Constants.STATUS_SELLING ||
-        // sporttery.getStatusOne().equals(Constants.STATUS_SELLING)) &&
-        // (!win310.getWinProbabilityTwo().equals(""))) {
-        // flag2 = true; // 验证had存在
-        // flag3 = true;// 验证had不存在
-        // } else if ((sporttery.getStatusOne() == "" ||
-        // sporttery.getStatusOne().equals("")) &&
-        // (win310.getWinProbabilityOne().equals(""))) {
-        // flag3 = true;// 验证had不存在
-        // flag2 = true; // 验证had存在
-        // }
-        // if ((sporttery.getStatusTwo() == Constants.STATUS_SELLING ||
-        // sporttery.getStatusTwo().equals(Constants.STATUS_SELLING)) &&
-        // (!win310.getWinProbabilityTwo().equals(""))) {
-        // flag4 = true;// 验证hhad存在
-        // flag5 = true;// 验证hhad不存在
-        // } else if ((sporttery.getStatusTwo() == "" ||
-        // sporttery.getStatusTwo().equals("")) &&
-        // (win310.getWinProbabilityOne().equals(""))) {
-        // flag5 = true;// 验证hhad不存在
-        // flag4 = true;// 验证hhad存在
-        // }
-        // return flag1 && flag2 && flag3 && flag4 && flag5 && flag6;
-        return true;// FIXME
+        return true;// TODO: 2016/5/16 暂无实现
     }
 }

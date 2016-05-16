@@ -20,10 +20,6 @@ import java.util.Properties;
 @EnableJpaRepositories(basePackages = "com.spider.db.repository")
 public class DatabaseConfig {
 
-    /**
-     * DataSource definition for database connection. Settings are read from
-     * the application.properties file (using the env object).
-     */
     @Bean
     public DataSource dataSource() {
 
@@ -37,9 +33,6 @@ public class DatabaseConfig {
         return dataSource;
     }
 
-    /**
-     * Declare the JPA entity manager factory.
-     */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 
@@ -47,15 +40,9 @@ public class DatabaseConfig {
                 new LocalContainerEntityManagerFactoryBean();
 
         entityManagerFactory.setDataSource(dataSource);
-
-        // Classpath scanning of @Component, @Service, etc annotated class
         entityManagerFactory.setPackagesToScan(env.getProperty("entitymanager.packagesToScan"));
-
-        // Vendor adapter
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         entityManagerFactory.setJpaVendorAdapter(vendorAdapter);
-
-        // Hibernate properties
         Properties additionalProperties = new Properties();
         additionalProperties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
         additionalProperties.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));

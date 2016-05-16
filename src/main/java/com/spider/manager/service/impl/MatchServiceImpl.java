@@ -152,7 +152,7 @@ public class MatchServiceImpl implements MatchService {
         if (win310 == null) {
             matchModel.setState(STATE_NOT_EXIST);
         } else {
-            if (compareTwo(sporttery, win310)) {
+            if (compareTwo(sporttery, win310)) { // 彩客和官网是否有出入
                 matchModel.setState(STATE_COMPLETELY_MATCH);
             } else {
                 matchModel.setState(STATE_HAS_DIFFERENCE);
@@ -162,18 +162,6 @@ public class MatchServiceImpl implements MatchService {
 
     private boolean compareTwo(TCrawlerSporttery sporttery, TCrawlerWin310 win310) {// 判断竞猜官网和彩客是否匹配
 
-        // boolean flag = false;
-        // String sportteryMatchDate = sporttery.getStartDate().substring(5, 10)
-        // + " " + sporttery.getStartTime().substring(0, 5);
-        // String win310MatchDate = win310.getStartTime();
-        //
-        // if (sportteryMatchDate.equals(win310MatchDate) || sportteryMatchDate
-        // == win310MatchDate) {
-        // flag = true;
-        // } else {
-        // flag = false;
-        // }
-        // return flag;
         return true;// FIXME 暂时不处理
     }
 

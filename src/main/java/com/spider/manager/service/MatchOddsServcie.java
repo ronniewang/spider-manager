@@ -20,7 +20,13 @@ public interface MatchOddsServcie {
      */
     OddsModel refreshOdds(String matchCode);
 
-    Map<String, SupAndTtgModel> calcSupAndTtg(OddsModel oddsModel);
+    /**
+     * 计算sup和ttg
+     *
+     * @param oddsModel 前台传入的参数，用于计算sup和ttg
+     * @return
+     */
+    Map<String/*liji, jbb*/, SupAndTtgModel> calcSupAndTtg(OddsModel oddsModel);
 
     List<ExcelOddsModel> getExcelOddsModels(Date start, Date end, String league);
 }

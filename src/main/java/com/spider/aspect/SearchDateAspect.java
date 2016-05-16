@@ -20,12 +20,27 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class SearchDateAspect {
 
+    /**
+     * 拦截所有Controller下的所有list*方法，这些方法都是根据开始时间和结束时间返回列表数据
+     *
+     * @param startDate
+     * @param endDate
+     */
     @Pointcut("execution(* com.spider.manager.controller.*Controller.list*(java.util.Date,java.util.Date)) && args(startDate,endDate)")
     private void searchDatePointcut(Date startDate, Date endDate) {
 
     }
 
-    @Around(value = "searchDatePointcut(startDate,endDate)", argNames = "startDate,endDate")
+    /**
+     * 由于业务需要，比赛以今天11点到第二天11点编今天的号，我们通过AOP拦截，统一处理一下
+     *
+     * @param joinpoint
+     * @param startDate
+     * @param endDate
+     * @return
+     * @throws Throwable
+     */
+    @Around(value = "searchDatePointcut(startDate,endDate)", argNames = "startDate, endDate")
     public Object dealSearchDate(ProceedingJoinPoint joinpoint, Date startDate, Date endDate) throws Throwable {
 
         Object[] args = joinpoint.getArgs();

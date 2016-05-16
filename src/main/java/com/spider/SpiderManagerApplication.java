@@ -5,7 +5,6 @@ import com.aliyun.openservices.ons.api.ONSFactory;
 import com.aliyun.openservices.ons.api.Producer;
 import com.aliyun.openservices.ons.api.PropertyKeyConst;
 import com.spider.config.DatabaseConfig;
-import com.spider.config.WebSocketConfig;
 import com.spider.utils.MessageSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -26,7 +25,7 @@ import java.util.Properties;
  * @author ronnie
  */
 @SpringBootApplication
-@Import(value = {DatabaseConfig.class, WebSocketConfig.class})
+@Import(value = {DatabaseConfig.class})
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableAsync
 public class SpiderManagerApplication extends SpringBootServletInitializer {
