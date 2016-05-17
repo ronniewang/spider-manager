@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * 关于爬虫运行情况的Controller
+ * 此Controller对应爬虫运行信息页面
  *
  * @author ronnie
  */

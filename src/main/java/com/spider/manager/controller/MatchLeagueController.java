@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * 导出赛程的Controller
+ * 此Controller对应联赛列表页
  *
  * @author ronnie
  */
@@ -24,9 +25,6 @@ public class MatchLeagueController {
 
     @Autowired
     private SbcLeagueRepository sbcLeagueRepository;
-
-    @Autowired
-    private TCrawlerWin310Repository win310Repository;
 
     /**
      * 列出所有联赛
@@ -49,18 +47,6 @@ public class MatchLeagueController {
     public String listMatchLeaguePage() {
 
         return "listMatchLeague";
-    }
-
-    /**
-     * 列出彩客网所有联赛
-     *
-     * @return
-     */
-    @RequestMapping(value = "/list310Leagues", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
-    public List<String> list310Leagues() {
-
-        return win310Repository.findMatchsDistinct();
     }
 
     /**

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * 导出赛程的Controller
+ * 同步sbc的Controller
  *
  * @author ronnie
  */

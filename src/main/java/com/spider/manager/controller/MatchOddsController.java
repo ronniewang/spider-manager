@@ -27,6 +27,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 此Controller对应赔率信息页面
+ *
+ * @author ronnie
+ */
 @Controller
 public class MatchOddsController {
 
@@ -182,74 +187,5 @@ public class MatchOddsController {
             ExcelUtils.close(workbook);
         }
         return new DownloadFileResult(fileName);
-    }
-
-    @RequestMapping(value = "/matchOddsExcelByLeague", produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
-    public DownloadFileResult excel(@RequestParam Date startDate, @RequestParam Date endDate, @RequestParam String league) {
-
-        String fileName = "odds" + DateUtils.getNowStr("yyyyMMdd_HHmmss") + ".xls";
-        WritableWorkbook workbook = null;
-        try {
-            workbook = Workbook.createWorkbook(new File(downloadXlsPath + fileName));
-            WritableSheet sheet = workbook.createSheet(SHEET_NAME, 0);
-
-            buildHeader(sheet);
-            List<ExcelOddsModel> models = matchOddsService.getExcelOddsModels(startDate, endDate, league);
-            for (int i = 0; i < models.size(); i++) {
-                models.get(i).addRowToExcel(sheet, i + 2);
-            }
-            workbook.write();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            ExcelUtils.close(workbook);
-        }
-        return new DownloadFileResult(fileName);
-    }
-
-    private void buildHeader(WritableSheet sheet) throws WriteException {
-
-        //表头第一行有的单元格需要合并
-        sheet.addCell(new Label(0, 0, "League"));
-        sheet.mergeCells(0, 0, 4, 0);
-        sheet.addCell(new Label(5, 0, "HAD"));
-        sheet.addCell(new Label(6, 0, "Home"));
-        sheet.mergeCells(6, 0, 7, 0);
-        sheet.addCell(new Label(8, 0, "Draw"));
-        sheet.mergeCells(8, 0, 9, 0);
-        sheet.addCell(new Label(10, 0, "Away"));
-        sheet.mergeCells(10, 0, 11, 0);
-        sheet.addCell(new Label(12, 0, "Time"));
-        sheet.mergeCells(12, 0, 13, 0);
-        sheet.addCell(new Label(14, 0, "HDC"));
-        sheet.addCell(new Label(15, 0, "HC"));
-        sheet.mergeCells(15, 0, 16, 0);
-        sheet.addCell(new Label(17, 0, "Home"));
-        sheet.mergeCells(17, 0, 18, 0);
-        sheet.addCell(new Label(19, 0, "Away"));
-        sheet.mergeCells(19, 0, 20, 0);
-        sheet.addCell(new Label(21, 0, "Time"));
-        sheet.mergeCells(21, 0, 22, 0);
-        sheet.addCell(new Label(23, 0, "HILO"));
-        sheet.addCell(new Label(24, 0, "Key"));
-        sheet.mergeCells(24, 0, 25, 0);
-        sheet.addCell(new Label(26, 0, "Home"));
-        sheet.mergeCells(26, 0, 27, 0);
-        sheet.addCell(new Label(28, 0, "Away"));
-        sheet.mergeCells(28, 0, 29, 0);
-        sheet.addCell(new Label(30, 0, "Time"));
-        sheet.mergeCells(30, 0, 31, 0);
-
-        //表头第二行
-        String[] headers = {
-                "Date", "Home Team", "Score", "Half Score", "Away Team",
-                "Bookmaker", "Start", "Close", "Start", "Close", "Start", "Close", "Start", "Close",
-                "Bookmaker", "Start", "Close", "Start", "Close", "Start", "Close", "Start", "Close",
-                "Bookmaker", "Start", "Close", "Start", "Close", "Start", "Close", "Start", "Close"
-        };
-        for (int i = 0; i < headers.length; i++) {
-            sheet.addCell(new Label(i, 1, headers[i]));
-        }
     }
 }

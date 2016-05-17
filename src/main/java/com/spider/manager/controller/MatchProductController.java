@@ -24,6 +24,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 此Controller对应奖池信息页面
+ *
+ * @author ronnie
+ */
 @Controller
 public class MatchProductController {
 
