@@ -11,7 +11,6 @@ public interface CompanyOddsRepository extends JpaRepository<CompanyOddsEntity, 
 
     CompanyOddsEntity findByEuropeIdAndOddsTypeAndGamingCompany(Integer europeId, Integer oddsType, String gamingCompany);
 
-    @Query(nativeQuery = true,
-            value = "select * from company_odds where europe_id = :europeId and (odds_type = 1 or odds_type = 2)")
+    @Query("from CompanyOddsEntity c where c.europeId = :europeId and (c.oddsType = 1 or c.oddsType = 2)")
     List<CompanyOddsEntity> findHdcAndHilo(@Param("europeId") Integer europeId);
 }

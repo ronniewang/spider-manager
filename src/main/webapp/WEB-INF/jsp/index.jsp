@@ -59,9 +59,9 @@
     <ul class="list-group">
         <li class="list-group-item" ng-repeat="odds in oddsList | filter:filterMatchCode | orderBy:orderProp">
             <h3>
-					<span class="label label-info">
-						{{odds.matchCode}} | {{odds.matchDate}} | {{odds.matchLeague}} | {{odds.homeTeam}} VS {{odds.awayTeam}} | 让球 {{odds.handicapLine}} | 比分 {{odds.score}} | 进行时间 {{odds.durationTime}}
-					</span>
+                <span class="label label-info">
+                    {{odds.matchCode}} | {{odds.matchDate}} | {{odds.matchLeague}} | {{odds.homeTeam}} VS {{odds.awayTeam}} | 让球 {{odds.handicapLine}} | 比分 {{odds.score}} | 进行时间 {{odds.durationTime}}
+                </span>
                 <span class="label label-danger">{{odds.absenceState}}</span>
                 <span class="label label-danger">{{odds.state}}</span>
                 <button type="button" class="btn btn-success btn-sm" ng-click="refreshOdds(odds)"
@@ -391,12 +391,6 @@
                     alert("失败！");
                 }
             });
-//			$http.get("calcSupAndTtg.do?hdcHome=" + odds.lijiHdcHome + "&hdcLine=" + odds.lijiHdcLine + "&hdcAway=" + odds.lijiHdcAway + "&hiloHigh=" + odds.lijiHiloH + "&hiloLine=" + odds.lijiHiloLine + "&hiloLow=" + odds.lijiHiloL +"&durationTime=" + (odds.durationTime==''?'-':odds.durationTime) + "&score=" + odds.score)
-//				.success(function(response) {
-//					$("#calcSupAndTtg" + odds.id).attr("disabled", false);
-//					$("#supAndTtg" + odds.id).text('');
-//					$("#supAndTtg" + odds.id).text('SUP: '+response.sup+', TTG: '+response.ttg);
-//				});
         };
         $scope.exportExcel = function () {
             var data = [];
