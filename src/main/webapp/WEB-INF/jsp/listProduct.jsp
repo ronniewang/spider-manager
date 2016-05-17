@@ -12,7 +12,6 @@
     <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.2/ui-bootstrap.min.js"></script>
     <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.2/ui-bootstrap-tpls.min.js"></script>
     <link href="//cdn.bootcss.com/bootstrap-datepicker/1.4.0/css/bootstrap-datepicker3.min.css" rel="stylesheet">
-    <!-- 		<script src="//cdn.bootcss.com/bootstrap-datepicker/1.4.0/js/bootstrap-datepicker.min.js"></script> -->
     <script src="js/bootstrap-datepicker.js"></script>
     <style>
         .chosen {
@@ -250,5 +249,4 @@
             return true;
         }
     });
-
 </script>
