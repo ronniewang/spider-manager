@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * spider-web的导出文件功能都使用这个接口
+ *
  * @author ronnie
  */
 @Controller

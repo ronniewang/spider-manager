@@ -28,6 +28,11 @@ public class ServiceStateController {
     @Autowired
     private ServiceStateHistoryRepository serviceStateHistoryRepository;
 
+    /**
+     * 所有爬虫的最新一次运行情况
+     *
+     * @return
+     */
     @RequestMapping(value = "/listServiceState", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public List<ServiceStateEntity> listServiceState() {
@@ -35,12 +40,23 @@ public class ServiceStateController {
         return serviceStateRepository.findAll();
     }
 
+    /**
+     * 爬虫运行情况页面
+     *
+     * @return
+     */
     @RequestMapping(value = "/listServiceStatePage")
     public String listServiceStatePage() {
 
         return "listServiceState";
     }
 
+    /**
+     * 列出最近爬虫20次的运行情况
+     *
+     * @param service 爬虫名称
+     * @return
+     */
     @RequestMapping(value = "listHistory", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public List<ServiceStateHistoryEntity> listHistory(String service) {

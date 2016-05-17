@@ -10,7 +10,7 @@ import java.nio.charset.Charset;
 
 public class JsonResponseHandler extends ResponseHandlerSupport<String> {
 
-    private String charset = Constants.UTF_8;
+    private String charset = "utf-8";
 
     @Override
     public String getRawResponse() {

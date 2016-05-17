@@ -21,6 +21,12 @@ public class SbcSyncController {
     @Autowired
     private SbcService sbcService;
 
+    /**
+     * @param matchCode
+     * @param type
+     * @return
+     * @see SbcService
+     */
     @RequestMapping(value = "/sync.do", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public JsonResult sync(@RequestParam String matchCode, @RequestParam(required = false) Integer type) {
@@ -28,6 +34,11 @@ public class SbcSyncController {
         return sbcService.sync(matchCode, type);
     }
 
+    /**
+     * @param id
+     * @return
+     * @see SbcService
+     */
     @RequestMapping(value = "/syncOdds", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public JsonResult sync(@RequestParam String id) {

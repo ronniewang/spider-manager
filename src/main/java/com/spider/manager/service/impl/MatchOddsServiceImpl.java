@@ -1,5 +1,6 @@
 package com.spider.manager.service.impl;
 
+import com.google.common.base.Preconditions;
 import com.spider.db.entity.*;
 import com.spider.global.Constants;
 import com.spider.global.GamingCompany;
@@ -35,9 +36,9 @@ import java.util.Map;
 @Service
 public class MatchOddsServiceImpl implements MatchOddsServcie {
 
-    private static final String JBB_NAME = Constants.JINBAOBO_NAME;
+    private static final String JBB_NAME = GamingCompany.JinBaoBo.getName();
 
-    private static final String LJ_NAME = Constants.LIJI_NAME;
+    private static final String LJ_NAME = GamingCompany.LiJi.getName();
 
     private static final Logger errorLogger = LogHelper.getErrorLogger();
 
@@ -75,6 +76,9 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
 
     @Override
     public List<OddsModel> listOdds(Date startDate, Date endDate) {
+
+        Preconditions.checkNotNull(startDate);
+        Preconditions.checkNotNull(endDate);
 
         List<OddsModel> oddslist = Lists.newArrayList();
         List<TCrawlerSporttery> sportteryList = sportteryRepository.findByStartDateTimeBetween(startDate, endDate);

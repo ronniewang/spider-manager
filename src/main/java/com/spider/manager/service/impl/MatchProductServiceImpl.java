@@ -23,6 +23,8 @@ import java.util.List;
 @Service
 public class MatchProductServiceImpl implements MatchProductService {
 
+    private static final String STATUS_SELLING = "SELLING";
+
     @Autowired
     private TCrawlerSportteryRepository sportteryRepository;
 
@@ -61,12 +63,12 @@ public class MatchProductServiceImpl implements MatchProductService {
             productModel.setAwayTeam(sporttery.getVisitionTeam());
             Integer winCountTwo = sporttery.getWinCountTwo();
             productModel.setHandicapLine(winCountTwo == null ? null : winCountTwo.toString());
-            if (Constants.STATUS_SELLING.equals(sporttery.getStatusOne())) {
+            if (STATUS_SELLING.equals(sporttery.getStatusOne())) {
                 productModel.setHAD("Y");
             } else {
                 productModel.setHAD("N");
             }
-            if (Constants.STATUS_SELLING.equals(sporttery.getStatusTwo())) {
+            if (STATUS_SELLING.equals(sporttery.getStatusTwo())) {
                 productModel.setHHAD("Y");
             } else {
                 productModel.setHHAD("N");

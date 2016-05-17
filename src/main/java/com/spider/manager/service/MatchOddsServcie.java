@@ -10,6 +10,14 @@ import java.util.Map;
 
 public interface MatchOddsServcie {
 
+    /**
+     * 根据日期区间查找赔率信息
+     *
+     * @param startDate not null
+     * @param endDate   not null
+     * @return
+     * @see OddsModel
+     */
     List<OddsModel> listOdds(Date startDate, Date endDate);
 
     /**
@@ -28,5 +36,13 @@ public interface MatchOddsServcie {
      */
     Map<String/*liji, jbb*/, SupAndTtgModel> calcSupAndTtg(OddsModel oddsModel);
 
+    /**
+     * 根据联赛和日期区间获取赔率信息，用于导出excel
+     *
+     * @param start
+     * @param end
+     * @param league
+     * @return
+     */
     List<ExcelOddsModel> getExcelOddsModels(Date start, Date end, String league);
 }

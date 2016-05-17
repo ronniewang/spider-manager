@@ -1,6 +1,5 @@
 package com.spider.httputil;
 
-import com.spider.global.Constants;
 import com.spider.httputil.request.JsonRequestHandler;
 import com.spider.httputil.request.RequestHandler;
 import com.spider.httputil.response.JsonResponseHandler;
@@ -30,14 +29,24 @@ import java.util.List;
 
 public class HttpRequest {
 
+    private static final Integer HTTP_UTIL_REQUEST_CONNECTION_TIMEOUT = 1000;
+
+    private static final Integer HTTP_UTIL_CONNECTION_TIMEOUT = 1000;
+
+    private static final Integer HTTP_UTIL_SOCKET_TIMEOUT = 1000;
+
+    private static final Integer HTTP_UTIL_CONNECTION_MANAGER_MAX_TOTAL = 200;
+
+    private static final Integer HTTP_UTIL_CONNECTION_MANAGER_MAX_PER_ROUTE = 1000;
+
     private static Logger logger = Logger.getLogger(HttpRequest.class);
 
     private static PoolingHttpClientConnectionManager connectionManager;
 
     {
         connectionManager = new PoolingHttpClientConnectionManager();
-        connectionManager.setMaxTotal(Constants.HTTP_UTIL_CONNECTION_MANAGER_MAX_TOTAL);
-        connectionManager.setDefaultMaxPerRoute(Constants.HTTP_UTIL_CONNECTION_MANAGER_MAX_PER_ROUTE);
+        connectionManager.setMaxTotal(HTTP_UTIL_CONNECTION_MANAGER_MAX_TOTAL);
+        connectionManager.setDefaultMaxPerRoute(HTTP_UTIL_CONNECTION_MANAGER_MAX_PER_ROUTE);
     }
 
     public static HttpRequest createRequest(final String endpoint) {
@@ -63,9 +72,9 @@ public class HttpRequest {
         this.parameters = new ArrayList<>();
         this.headers = new ArrayList<>();
         Builder requestConfigBuilder = RequestConfig.custom();
-        requestConfigBuilder.setConnectionRequestTimeout(Constants.HTTP_UTIL_REQUEST_CONNECTION_TIMEOUT);
-        requestConfigBuilder.setConnectTimeout(Constants.HTTP_UTIL_CONNECTION_TIMEOUT);
-        requestConfigBuilder.setSocketTimeout(Constants.HTTP_UTIL_SOCKET_TIMEOUT);
+        requestConfigBuilder.setConnectionRequestTimeout(HTTP_UTIL_REQUEST_CONNECTION_TIMEOUT);
+        requestConfigBuilder.setConnectTimeout(HTTP_UTIL_CONNECTION_TIMEOUT);
+        requestConfigBuilder.setSocketTimeout(HTTP_UTIL_SOCKET_TIMEOUT);
         this.requestConfig = requestConfigBuilder.build();
     }
 

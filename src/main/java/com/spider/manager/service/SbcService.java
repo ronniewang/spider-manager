@@ -7,6 +7,8 @@ import com.spider.manager.model.JsonResult;
 
 /**
  * Created by wsy on 2015/10/21.
+ *
+ * @author ronnie
  */
 public interface SbcService {
 
