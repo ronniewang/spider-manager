@@ -14,10 +14,6 @@ public class UpdateScoreAndHalf implements Serializable {
 
     private static long serialVersionUID = -6756531442008657932L;
 
-    private Date catchTime;
-
-    private Integer timeMinute;
-
     public UpdateScoreAndHalf(
             String matchCode, String score, String halfScore, String half, Integer homeRedCard, Integer awayRedCard, Integer timeMinute) {
 
@@ -32,6 +28,10 @@ public class UpdateScoreAndHalf implements Serializable {
         this.homeRedCard = homeRedCard;
         this.awayRedCard = awayRedCard;
     }
+
+    private Date catchTime;
+
+    private Integer timeMinute;
 
     private String half;
 
