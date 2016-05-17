@@ -1,6 +1,7 @@
 package com.spider.manager.controller;
 
-import com.spider.utils.FileOperateUtils;
+import com.spider.utils.FileDownloader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class DownloadController {
 
+    @Autowired
+    private FileDownloader fileDownloader;
+
     /**
      * 下载文件
      *
@@ -26,6 +30,6 @@ public class DownloadController {
     public void download(@RequestParam String downloadname, HttpServletResponse response) throws Exception {
 
         downloadname = downloadname.replaceAll("\"", "");
-        FileOperateUtils.download(response, downloadname);
+        fileDownloader.download(response, downloadname);
     }
 }

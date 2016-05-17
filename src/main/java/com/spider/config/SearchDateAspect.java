@@ -1,4 +1,4 @@
-package com.spider.aspect;
+package com.spider.config;
 
 import com.spider.utils.Calendars;
 import com.spider.utils.DateUtils;
@@ -48,8 +48,8 @@ public class SearchDateAspect {
             args[0] = Calendars.getTodayEleven();
             args[1] = DateUtils.add(new Date(), 7, TimeUnit.DAYS);//默认显示今天及以后的所有赔率
         } else {
-            args[0] = DateUtils.addHours(startDate, 11);
-            args[1] = DateUtils.addHours(endDate, 11);
+            args[0] = DateUtils.add(startDate, 11, TimeUnit.HOURS);
+            args[1] = DateUtils.add(endDate, 11, TimeUnit.HOURS);
         }
         return joinpoint.proceed(args);
     }

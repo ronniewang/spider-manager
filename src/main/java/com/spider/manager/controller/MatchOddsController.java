@@ -1,8 +1,8 @@
 package com.spider.manager.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.spider.config.SearchDateAspect;
 import com.spider.db.entity.OddsModel;
-import com.spider.global.Constants;
 import com.spider.manager.model.*;
 import com.spider.manager.service.MatchOddsServcie;
 import com.spider.utils.DateUtils;
@@ -13,6 +13,7 @@ import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,11 @@ import java.util.Map;
 @Controller
 public class MatchOddsController {
 
+    private static final String SHEET_NAME = "First Sheet";
+
+    @Value("${download.xls.path}")
+    private String downloadXlsPath;
+
     @Autowired
     private MatchOddsServcie matchOddsService;
 
@@ -41,12 +47,12 @@ public class MatchOddsController {
     }
 
     /**
-     * startDate和endDate经过aop处理了，{@link com.spider.aspect.SearchDateAspect}
+     * startDate和endDate经过aop处理了，{@link SearchDateAspect}
      *
      * @param startDate
      * @param endDate
      * @return
-     * @see com.spider.aspect.SearchDateAspect
+     * @see SearchDateAspect
      */
     @RequestMapping(value = "/listOdds", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
@@ -100,8 +106,8 @@ public class MatchOddsController {
         String fileName = "odds" + DateUtils.getNowStr("yyyyMMdd_HHmmss") + ".xls";
         WritableWorkbook workbook = null;
         try {
-            workbook = Workbook.createWorkbook(new File(Constants.DOWNLOAD_XLS_PATH + fileName));
-            WritableSheet sheet = workbook.createSheet(Constants.SHEET_NAME, 0);
+            workbook = Workbook.createWorkbook(new File(downloadXlsPath + fileName));
+            WritableSheet sheet = workbook.createSheet(SHEET_NAME, 0);
 
             for (int i = 0; i < oddsList.size(); i++) {
                 int index = 0;
@@ -185,8 +191,8 @@ public class MatchOddsController {
         String fileName = "odds" + DateUtils.getNowStr("yyyyMMdd_HHmmss") + ".xls";
         WritableWorkbook workbook = null;
         try {
-            workbook = Workbook.createWorkbook(new File(Constants.DOWNLOAD_XLS_PATH + fileName));
-            WritableSheet sheet = workbook.createSheet(Constants.SHEET_NAME, 0);
+            workbook = Workbook.createWorkbook(new File(downloadXlsPath + fileName));
+            WritableSheet sheet = workbook.createSheet(SHEET_NAME, 0);
 
             buildHeader(sheet);
             List<ExcelOddsModel> models = matchOddsService.getExcelOddsModels(startDate, endDate, league);

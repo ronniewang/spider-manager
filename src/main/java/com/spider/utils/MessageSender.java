@@ -9,6 +9,7 @@ import com.spider.SpiderManagerApplication;
 import com.spider.manager.sbc.SbcUpdateManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -40,8 +41,8 @@ public class MessageSender {
 
     private Producer onsParameterProducer = null;
 
-    @Autowired
-    private SbcUpdateManager sbcUpdateManager;
+    @Value("${inplay.odds.topic.parameter}")
+    private String inplayParameterTopic;
 
     public MessageSender(MQProducer mqProducer) {
 
@@ -85,7 +86,7 @@ public class MessageSender {
                 messageOns.setTag(tag);
                 messageOns.setBody(getBody(object));
                 com.aliyun.openservices.ons.api.SendResult sendResultOns;
-                if (topic.equals(sbcUpdateManager.getInplayOddsTopic())) {
+                if (topic.equals(inplayParameterTopic)) {
                     sendResultOns = onsOddsProducer.send(messageOns);
                 } else {
                     sendResultOns = onsParameterProducer.send(messageOns);

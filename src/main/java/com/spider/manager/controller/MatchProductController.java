@@ -1,7 +1,6 @@
 package com.spider.manager.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.spider.global.Constants;
 import com.spider.manager.model.DownloadFileResult;
 import com.spider.manager.model.ProductModel;
 import com.spider.manager.service.MatchProductService;
@@ -12,6 +11,7 @@ import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -26,6 +26,11 @@ import java.util.List;
 
 @Controller
 public class MatchProductController {
+
+    private static final String SHEET_NAME = "First Sheet";
+
+    @Value("${download.xls.path}")
+    private String downloadXlsPath;
 
     @Autowired
     private MatchProductService matchProductService;
@@ -59,8 +64,8 @@ public class MatchProductController {
         String fileName = "product" + DateUtils.getNowStr("yyyyMMdd_HHmmss") + ".xls";
         WritableWorkbook workbook = null;
         try {
-            workbook = Workbook.createWorkbook(new File(Constants.DOWNLOAD_XLS_PATH + fileName));
-            WritableSheet sheet = workbook.createSheet(Constants.SHEET_NAME, 0);
+            workbook = Workbook.createWorkbook(new File(downloadXlsPath + fileName));
+            WritableSheet sheet = workbook.createSheet(SHEET_NAME, 0);
 
             for (int i = 0; i < productList.size(); i++) {
                 sheet.addCell(new Label(0, i, productList.get(i).getMatchDate()));

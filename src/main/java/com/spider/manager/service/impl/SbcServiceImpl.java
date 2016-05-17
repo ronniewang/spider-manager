@@ -12,6 +12,7 @@ import com.spider.domain.UpdateHiloOdds;
 import com.spider.domain.UpdateScoreAndHalf;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +28,21 @@ public class SbcServiceImpl implements SbcService {
     public static final int ODDS_TYPE_HILO = 2;
 
     private Logger logger = Logger.getLogger("info_logger");
+
+    @Value("${inplay.odds.hdc.tag}")
+    private String hdcTag;
+
+    @Value("${inplay.odds.hilo.tag}")
+    private String hiloTag;
+
+    @Value("${inplay.odds.score_half.tag}")
+    private String scoreAndHalfTag;
+
+    @Value("${inplay.odds.topic}")
+    private String inplayOddsTopic;
+
+    @Value("${inplay.odds.topic.parameter}")
+    private String inplayParameterTopic;
 
     @Autowired
     private SbcUpdateManager sbcUpdateManager;
@@ -127,9 +143,9 @@ public class SbcServiceImpl implements SbcService {
     private void doUpdateToMQ(String matchCode, CompanyOddsEntity odds) throws UpdateException {
 
         if (odds.getOddsType() == ODDS_TYPE_HILO) {
-            sbcUpdateManager.update(buildUpdateHiloOdds(odds, matchCode), sbcUpdateManager.getHiloTag());
+            sbcUpdateManager.update(buildUpdateHiloOdds(odds, matchCode), hiloTag);
         } else {
-            sbcUpdateManager.update(buildUpdateHdcOdds(odds, matchCode), sbcUpdateManager.getHdcTag());
+            sbcUpdateManager.update(buildUpdateHdcOdds(odds, matchCode), hdcTag);
         }
     }
 
@@ -161,6 +177,6 @@ public class SbcServiceImpl implements SbcService {
             timeMinute = null;
         }
         UpdateScoreAndHalf scoreAndHalf = new UpdateScoreAndHalf(w500.getMatchCode() + "", score, halfScore, half, homeRedCard, awayRedCard, timeMinute);
-        sbcUpdateManager.update(scoreAndHalf, sbcUpdateManager.getScoreAndHalfTag(), sbcUpdateManager.getInplayParameterTopic());
+        sbcUpdateManager.update(scoreAndHalf, scoreAndHalfTag, inplayParameterTopic);
     }
 }

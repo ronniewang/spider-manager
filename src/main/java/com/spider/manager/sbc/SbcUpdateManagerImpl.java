@@ -17,21 +17,17 @@ public class SbcUpdateManagerImpl implements SbcUpdateManager {
     @Value("${inplay.odds.topic}")
     private String inplayOddsTopic;
 
-    @Value("${inplay.odds.topic.parameter}")
-    private String inplayParameterTopic;
-
-    @Value("${inplay.odds.hdc.tag}")
-    private String hdcTag;
-
-    @Value("${inplay.odds.hilo.tag}")
-    private String hiloTag;
-
-    @Value("${inplay.odds.score_half.tag}")
-    private String scoreAndHalfTag;
-
     @Autowired
     private MessageSender messageSender;
 
+    /**
+     * 默认发往inplayOddsTopic
+     *
+     * @param data
+     * @param tag
+     * @param <T>
+     * @throws UpdateException
+     */
     @Override
     public <T> void update(T data, String tag) throws UpdateException {
 
@@ -51,35 +47,4 @@ public class SbcUpdateManagerImpl implements SbcUpdateManager {
             throw new UpdateException(e);
         }
     }
-
-    @Override
-    public String getHdcTag() {
-
-        return hdcTag;
-    }
-
-    @Override
-    public String getHiloTag() {
-
-        return hiloTag;
-    }
-
-    @Override
-    public String getScoreAndHalfTag() {
-
-        return scoreAndHalfTag;
-    }
-
-    @Override
-    public String getInplayParameterTopic() {
-
-        return inplayParameterTopic;
-    }
-
-    @Override
-    public String getInplayOddsTopic() {
-
-        return inplayOddsTopic;
-    }
-
 }

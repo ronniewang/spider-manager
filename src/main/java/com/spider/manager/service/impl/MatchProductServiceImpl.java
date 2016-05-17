@@ -3,7 +3,6 @@ package com.spider.manager.service.impl;
 import com.spider.db.entity.SportteryAllEntity;
 import com.spider.db.entity.TCrawlerSporttery;
 import com.spider.db.entity.TCrawlerWin310;
-import com.spider.global.Constants;
 import com.spider.manager.model.ProductModel;
 import com.spider.db.repository.SportteryAllRepository;
 import com.spider.db.repository.TCrawlerSportteryRepository;

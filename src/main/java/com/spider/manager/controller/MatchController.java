@@ -1,7 +1,7 @@
 package com.spider.manager.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.spider.global.Constants;
+import com.spider.config.SearchDateAspect;
 import com.spider.manager.model.*;
 import com.spider.manager.service.MatchService;
 import com.spider.utils.DateUtils;
@@ -12,6 +12,7 @@ import jxl.format.Colour;
 import jxl.format.UnderlineStyle;
 import jxl.write.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,11 @@ import java.util.List;
 public class MatchController {
 
     public static final int MAX_PLAYER_NUMBER = 23;
+
+    private static final String SHEET_NAME = "First Sheet";
+
+    @Value("${download.xls.path}")
+    private String downloadXlsPath;
 
     @Autowired
     private MatchService matchService;
@@ -58,7 +64,7 @@ public class MatchController {
      * @param startDate 11点起
      * @param endDate   11点结束
      * @return
-     * @see com.spider.aspect.SearchDateAspect
+     * @see SearchDateAspect
      */
     @RequestMapping(value = "/listMatch", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
@@ -93,8 +99,8 @@ public class MatchController {
         String fileName = "match" + DateUtils.getNowStr("yyyyMMdd_HHmmss") + ".xls";
         WritableWorkbook workbook = null;
         try {
-            workbook = Workbook.createWorkbook(new File(Constants.DOWNLOAD_XLS_PATH + fileName));
-            WritableSheet sheet = workbook.createSheet(Constants.SHEET_NAME, 0);
+            workbook = Workbook.createWorkbook(new File(downloadXlsPath + fileName));
+            WritableSheet sheet = workbook.createSheet(SHEET_NAME, 0);
             int i = 0;
             sheet.addCell(new Label(0, i, matchList.get(i).getMatchDate()));
             sheet.addCell(new Label(1, i, matchList.get(i).getMatchCode()));
@@ -136,8 +142,8 @@ public class MatchController {
         String fileName = "league" + DateUtils.getNowStr("yyyyMMdd_HHmmss") + ".xls";
         WritableWorkbook workbook = null;
         try {
-            workbook = Workbook.createWorkbook(new File(Constants.DOWNLOAD_XLS_PATH + fileName));
-            WritableSheet playerSheet = workbook.createSheet(Constants.SHEET_NAME, 0);
+            workbook = Workbook.createWorkbook(new File(downloadXlsPath + fileName));
+            WritableSheet playerSheet = workbook.createSheet(SHEET_NAME, 0);
             generatePlayerSheetHeader(playerSheet);
             setPlayerSheetData(matchList, playerSheet);
 
@@ -238,8 +244,8 @@ public class MatchController {
         String fileName = "statistic_" + DateUtils.getNowStr("yyyyMMdd_HHmmss") + ".xls";
         WritableWorkbook workbook = null;
         try {
-            workbook = Workbook.createWorkbook(new File(Constants.DOWNLOAD_XLS_PATH + fileName));
-            WritableSheet sheet = workbook.createSheet(Constants.SHEET_NAME, 0);
+            workbook = Workbook.createWorkbook(new File(downloadXlsPath + fileName));
+            WritableSheet sheet = workbook.createSheet(SHEET_NAME, 0);
 
             buildHeader(sheet);
             List<ExcelMatchStatisticModel> models = matchService.getExcelStatisticModels(startDate, endDate, league);

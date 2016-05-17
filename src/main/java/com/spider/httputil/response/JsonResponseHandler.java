@@ -1,6 +1,5 @@
 package com.spider.httputil.response;
 
-import com.spider.global.Constants;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.util.EntityUtils;
