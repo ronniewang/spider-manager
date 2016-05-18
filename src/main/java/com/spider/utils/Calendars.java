@@ -1,6 +1,5 @@
 package com.spider.utils;
 
-import com.spider.global.Mills;
 import com.google.common.base.Preconditions;
 
 import java.util.Calendar;
@@ -9,65 +8,14 @@ import java.util.Date;
 /**
  * Calendar utils
  *
- * @author wsy
+ * @author ronnie
  */
 public class Calendars {
-
-    public static Date getEleven(Date date) {
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        return set(calendar, 11, 0, 0).getTime();
-    }
-
-    public static Date getTommorrowEleven() {
-
-        return getNextElevenByGiven(new Date());
-    }
 
     public static Date getTodayEleven() {
 
         Calendar instance = Calendar.getInstance();
         return set(instance, instance.get(Calendar.DAY_OF_MONTH), 11, 0, 0).getTime();
-    }
-
-    public static Date getTodayZero() {
-
-        Calendar instance = Calendar.getInstance();
-        return set(instance, instance.get(Calendar.DAY_OF_MONTH), 0, 0, 0).getTime();
-    }
-
-    public static Date getTomorrowZero() {
-
-        return new Date(getTodayZero().getTime() + Mills.DAY);
-    }
-
-    public static Date getNextElevenByGiven(Date date) {
-
-        Calendar calendar = Calendar.getInstance();
-        Date eleven = getEleven(date);
-        return new Date(eleven.getTime() + Mills.DAY);
-    }
-
-    /**
-     * 24小时制
-     *
-     * @param calendar not null
-     * @param hour     0-23
-     * @param minute   0-59
-     * @param second   0-59
-     * @return
-     */
-    public static Calendar set(Calendar calendar, int hour, int minute, int second) {
-
-        Preconditions.checkNotNull(calendar);
-        Preconditions.checkArgument(0 <= hour && hour < 24);
-        Preconditions.checkArgument(0 <= minute && minute < 60);
-        Preconditions.checkArgument(0 <= second && second < 60);
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, minute);
-        calendar.set(Calendar.SECOND, second);
-        return calendar;
     }
 
     /**
@@ -80,7 +28,7 @@ public class Calendars {
      * @param second   0-59
      * @return
      */
-    public static Calendar set(Calendar calendar, int day, int hour, int minute, int second) {
+    private static Calendar set(Calendar calendar, int day, int hour, int minute, int second) {
 
         Preconditions.checkNotNull(calendar);
         Preconditions.checkArgument(0 <= hour && hour < 24);
@@ -91,6 +39,7 @@ public class Calendars {
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, second);
+        calendar.set(Calendar.MILLISECOND, 0);
         return calendar;
     }
 }

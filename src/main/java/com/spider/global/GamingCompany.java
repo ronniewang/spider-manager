@@ -3,11 +3,11 @@ package com.spider.global;
 /**
  * 关注的博彩公司
  *
- * @author wsy
+ * @author ronnie
  */
 public enum GamingCompany {
 
-    JinBaoBo("23", "金宝博"), LiJi("31", "利记"), Sporttery("0", "官网");
+    JinBaoBo("23", "金宝博"), LiJi("31", "利记");
 
     GamingCompany(String id, String name) {
 
@@ -31,9 +31,9 @@ public enum GamingCompany {
 
     public static String abbr(String company) {
 
-        if(company.contains("金")){
+        if (company.contains("金")) {
             return "jbb";
-        }else{
+        } else {
             return "lj";
         }
     }

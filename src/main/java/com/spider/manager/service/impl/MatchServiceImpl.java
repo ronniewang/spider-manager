@@ -2,32 +2,31 @@ package com.spider.manager.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.spider.db.entity.*;
-import com.spider.global.Constants;
 import com.spider.httputil.HttpRequest;
 import com.spider.manager.model.ExcelMatchStatisticModel;
 import com.spider.manager.model.MatchModel;
 import com.spider.manager.model.MatchPlayerInfoModel;
 import com.spider.db.repository.*;
-import com.spider.db.repository.specifications.SpotterySpecifications;
-import com.spider.db.repository.specifications.Win310Specifications;
 import com.spider.manager.service.MatchService;
 import com.spider.manager.service.SbcLeagueService;
-import com.spider.utils.Calendars;
 import com.spider.utils.DateUtils;
 import com.spider.utils.LotteryUtils;
 import org.apache.http.HttpException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class MatchServiceImpl implements MatchService {
+
+    @Value("${endpoint.sbc.match_compare}")
+    private String ENDPOINT_SBC_MATCH_COMPARE;
 
     private static Logger logger = Logger.getLogger(MatchServiceImpl.class);
 
@@ -59,7 +58,7 @@ public class MatchServiceImpl implements MatchService {
     public List<MatchModel> listMatch(Date startDate, Date endDate) {
 
         List<MatchModel> matchList = new ArrayList<>();
-        List<TCrawlerSporttery> sportteryList = sportteryRepository.findAll(SpotterySpecifications.startDateTimeBetween(startDate, endDate));
+        List<TCrawlerSporttery> sportteryList = sportteryRepository.findByStartDateTimeBetween(startDate, endDate);
         if (sportteryList == null) {
             return matchList;
         }
@@ -133,7 +132,7 @@ public class MatchServiceImpl implements MatchService {
         jsonArray.addAll(matchCodes);
         List<String> absenceMatchSet = new ArrayList<>();
         try {
-            HttpRequest httpRequest = HttpRequest.createRequest(Constants.ENDPOINT_SBC_MATCH_COMPARE);
+            HttpRequest httpRequest = HttpRequest.createRequest(ENDPOINT_SBC_MATCH_COMPARE);
             httpRequest.addParameter("matchCodes", jsonArray.toJSONString());
             List<String> absenceMatchList = Arrays.asList(httpRequest.POST("").replaceAll("\\[", "").replaceAll("\\]", "").split(","));
             for (String matchCode : absenceMatchList) {
@@ -153,7 +152,7 @@ public class MatchServiceImpl implements MatchService {
         if (win310 == null) {
             matchModel.setState(STATE_NOT_EXIST);
         } else {
-            if (compareTwo(sporttery, win310)) {
+            if (compareTwo(sporttery, win310)) { // 彩客和官网是否有出入
                 matchModel.setState(STATE_COMPLETELY_MATCH);
             } else {
                 matchModel.setState(STATE_HAS_DIFFERENCE);
@@ -163,25 +162,7 @@ public class MatchServiceImpl implements MatchService {
 
     private boolean compareTwo(TCrawlerSporttery sporttery, TCrawlerWin310 win310) {// 判断竞猜官网和彩客是否匹配
 
-        // boolean flag = false;
-        // String sportteryMatchDate = sporttery.getStartDate().substring(5, 10)
-        // + " " + sporttery.getStartTime().substring(0, 5);
-        // String win310MatchDate = win310.getStartTime();
-        //
-        // if (sportteryMatchDate.equals(win310MatchDate) || sportteryMatchDate
-        // == win310MatchDate) {
-        // flag = true;
-        // } else {
-        // flag = false;
-        // }
-        // return flag;
         return true;// FIXME 暂时不处理
-    }
-
-    @Override
-    public TCrawlerWin310 getWin310MatchByMatchCode(String matchCode) {
-
-        return win310Repository.findOne(Win310Specifications.equalsCompetitionNum(matchCode));
     }
 
     @Override

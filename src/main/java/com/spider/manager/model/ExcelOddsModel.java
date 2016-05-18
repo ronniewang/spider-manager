@@ -10,7 +10,7 @@ import java.lang.reflect.Field;
  * Created by wsy on 2016/2/15.
  * 字段顺序很重要，不要轻易更改，导出的excel字段按照此顺序排列
  *
- * @author wsy
+ * @author ronnie
  */
 public class ExcelOddsModel {
 

@@ -55,6 +55,7 @@ public class TCrawlerSportteryHistory implements java.io.Serializable {
     private String drawProbabilityTwo;
 
     private Date updateTime = new Date();
+
     private Date stopSaleTime;
 
     @Temporal(TemporalType.TIMESTAMP)

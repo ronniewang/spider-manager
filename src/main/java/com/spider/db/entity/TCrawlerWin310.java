@@ -22,6 +22,9 @@ public class TCrawlerWin310 implements java.io.Serializable {
 
     private String win310EuropeId = "";
 
+    /**
+     * 这个字段表示match_code，这个名字是历史遗留问题，改动起来成本较高
+     */
     private String competitionNum = "";
 
     private String startTime = "";

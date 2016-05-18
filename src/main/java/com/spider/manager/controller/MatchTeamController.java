@@ -15,8 +15,9 @@ import java.util.List;
 
 /**
  * 修改队名匹配表
+ * 此Controller对应队名列表页
  *
- * @author wsy
+ * @author ronnie
  */
 @Controller
 public class MatchTeamController {
@@ -24,18 +25,35 @@ public class MatchTeamController {
     @Autowired
     private SbcTeamRepository sbcTeamRepository;
 
+    /**
+     * 列出所有队伍信息
+     *
+     * @return
+     */
     @RequestMapping(value = "/listMatchTeam", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public List<SbcTeamEntity> listMatchTeam() {
 
         return sbcTeamRepository.findAll();
     }
+
+    /**
+     * 返回队伍列表页
+     *
+     * @return
+     */
     @RequestMapping(value = "/listMatchTeamPage")
     public String listMatchTeamPage() {
 
         return "listMatchTeam";
     }
 
+    /**
+     * 修改队伍信息
+     *
+     * @param team
+     * @return
+     */
     @RequestMapping(value = "/modifyTeam", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public JsonResult modifyLeague(String team) {

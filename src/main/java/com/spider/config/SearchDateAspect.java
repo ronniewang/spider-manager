@@ -1,4 +1,4 @@
-package com.spider.aspect;
+package com.spider.config;
 
 import com.spider.utils.Calendars;
 import com.spider.utils.DateUtils;
@@ -14,18 +14,33 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created on 2016/3/10-11:06.
  *
- * @author wsy
+ * @author ronnie
  */
 @Aspect
 @Configuration
 public class SearchDateAspect {
 
+    /**
+     * 拦截所有Controller下的所有list*方法，这些方法都是根据开始时间和结束时间返回列表数据
+     *
+     * @param startDate
+     * @param endDate
+     */
     @Pointcut("execution(* com.spider.manager.controller.*Controller.list*(java.util.Date,java.util.Date)) && args(startDate,endDate)")
     private void searchDatePointcut(Date startDate, Date endDate) {
 
     }
 
-    @Around(value = "searchDatePointcut(startDate,endDate)", argNames = "startDate,endDate")
+    /**
+     * 由于业务需要，比赛以今天11点到第二天11点编今天的号，我们通过AOP拦截，统一处理一下
+     *
+     * @param joinpoint
+     * @param startDate
+     * @param endDate
+     * @return
+     * @throws Throwable
+     */
+    @Around(value = "searchDatePointcut(startDate,endDate)", argNames = "startDate, endDate")
     public Object dealSearchDate(ProceedingJoinPoint joinpoint, Date startDate, Date endDate) throws Throwable {
 
         Object[] args = joinpoint.getArgs();
@@ -33,8 +48,8 @@ public class SearchDateAspect {
             args[0] = Calendars.getTodayEleven();
             args[1] = DateUtils.add(new Date(), 7, TimeUnit.DAYS);//默认显示今天及以后的所有赔率
         } else {
-            args[0] = DateUtils.addHours(startDate, 11);
-            args[1] = DateUtils.addHours(endDate, 11);
+            args[0] = DateUtils.add(startDate, 11, TimeUnit.HOURS);
+            args[1] = DateUtils.add(endDate, 11, TimeUnit.HOURS);
         }
         return joinpoint.proceed(args);
     }

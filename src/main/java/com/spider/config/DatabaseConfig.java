@@ -21,8 +21,9 @@ import java.util.Properties;
 public class DatabaseConfig {
 
     /**
-     * DataSource definition for database connection. Settings are read from
-     * the application.properties file (using the env object).
+     * 数据源配置
+     *
+     * @return
      */
     @Bean
     public DataSource dataSource() {
@@ -38,7 +39,9 @@ public class DatabaseConfig {
     }
 
     /**
-     * Declare the JPA entity manager factory.
+     * JPA的entityManager的配置
+     *
+     * @return
      */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
@@ -47,15 +50,9 @@ public class DatabaseConfig {
                 new LocalContainerEntityManagerFactoryBean();
 
         entityManagerFactory.setDataSource(dataSource);
-
-        // Classpath scanning of @Component, @Service, etc annotated class
         entityManagerFactory.setPackagesToScan(env.getProperty("entitymanager.packagesToScan"));
-
-        // Vendor adapter
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         entityManagerFactory.setJpaVendorAdapter(vendorAdapter);
-
-        // Hibernate properties
         Properties additionalProperties = new Properties();
         additionalProperties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
         additionalProperties.put("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
@@ -65,6 +62,11 @@ public class DatabaseConfig {
         return entityManagerFactory;
     }
 
+    /**
+     * Spring事务管理器的配置
+     *
+     * @return
+     */
     @Bean
     public JpaTransactionManager transactionManager() {
 
@@ -73,6 +75,11 @@ public class DatabaseConfig {
         return transactionManager;
     }
 
+    /**
+     * 异常转换器
+     *
+     * @return
+     */
     @Bean
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
 

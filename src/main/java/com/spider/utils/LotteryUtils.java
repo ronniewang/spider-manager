@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 /**
  * 赔率工具类
  *
- * @author wsy
+ * @author ronnie
  */
 public class LotteryUtils {
 
@@ -121,56 +121,6 @@ public class LotteryUtils {
         return true;
     }
 
-    /**
-     * 将彩客网抓取的开踢时间转换为对应的日期和时间
-     *
-     * @param win310MatchDateTime 形如 08-07 10:00
-     * @return
-     */
-    public static Date convertWin310MatchDateTime(String win310MatchDateTime) {
-
-        Preconditions.checkArgument(!StringUtils.isBlank(win310MatchDateTime), "参数不能为空");
-        Preconditions.checkState(Pattern.matches("\\d{2}-\\d{2}\\s\\d{2}:\\d{2}", win310MatchDateTime), "日期格式不正确");
-        String year = Calendar.getInstance().get(Calendar.YEAR) + "-";
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        try {
-            return format.parse(year + win310MatchDateTime);
-        } catch (ParseException e) {
-            return null;
-        }
-    }
-
-    /**
-     * 将彩客网抓取的开踢时间转换为对应的日期
-     *
-     * @param win310MatchDate 形如 08-07 10:00
-     * @return 日期字符串
-     */
-    public static String convertWin310MatchDate(String win310MatchDate) {
-
-        Preconditions.checkArgument(!StringUtils.isBlank(win310MatchDate), "参数不能为空");
-        String year = Calendar.getInstance().get(Calendar.YEAR) + "-";
-        return year + win310MatchDate.replaceAll("\\s\\d{2}:\\d{2}", "");
-    }
-
-    private LotteryUtils() {
-
-    }
-
-    /**
-     * @param oddsTwo
-     * @return if ok return result added one, else return "-"
-     */
-    public static String addOneToOdds(String oddsTwo) {
-
-        if (isGoodFormatOdds(oddsTwo)) {
-            return new BigDecimal(oddsTwo).add(BigDecimal.ONE).setScale(2).toString();
-        } else {
-            return "-";
-        }
-    }
-
-
     public static List<String> getMatchCodes(List<TCrawlerSporttery> sportteries) {
 
         Preconditions.checkNotNull(sportteries);
@@ -180,5 +130,9 @@ public class LotteryUtils {
             matchCodes.add(sporttery.getCompetitionNum().trim());
         }
         return matchCodes;
+    }
+
+    private LotteryUtils() {
+
     }
 }

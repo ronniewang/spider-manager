@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author wsy
+ * @author ronnie
  *         该类用于更新比分和比赛进行阶段
  *         两者有一个变化时即进行推送
  *         比分默认为“0-0”
@@ -13,10 +13,6 @@ import java.util.Date;
 public class UpdateScoreAndHalf implements Serializable {
 
     private static long serialVersionUID = -6756531442008657932L;
-
-    private Date catchTime;
-
-    private Integer timeMinute;
 
     public UpdateScoreAndHalf(
             String matchCode, String score, String halfScore, String half, Integer homeRedCard, Integer awayRedCard, Integer timeMinute) {
@@ -32,6 +28,10 @@ public class UpdateScoreAndHalf implements Serializable {
         this.homeRedCard = homeRedCard;
         this.awayRedCard = awayRedCard;
     }
+
+    private Date catchTime;
+
+    private Integer timeMinute;
 
     private String half;
 

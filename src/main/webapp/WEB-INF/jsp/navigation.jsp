@@ -1,21 +1,5 @@
-<%@ page import="org.springframework.security.core.context.SecurityContextHolder" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <ul class="list-group">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <b>
-                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                Welcome <%=SecurityContextHolder.getContext().getAuthentication().getName()%>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <a onclick="document.getElementById('logoutForm').submit();">退出</a>
-            </b>
-        </div>
-    </div>
-    <form type="hidden" id="logoutForm" action="/logout" method="post">
-        <input type="hidden"
-               name="${_csrf.parameterName}"
-               value="${_csrf.token}"/>
-    </form>
     <a href="listMatchLeaguePage">
         <li class="list-group-item">联赛列表</li>
     </a>

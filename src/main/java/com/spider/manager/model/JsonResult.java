@@ -2,6 +2,8 @@ package com.spider.manager.model;
 
 /**
  * Created by wsy on 2015/9/1.
+ *
+ * @author ronnie
  */
 public class JsonResult {
 
@@ -46,4 +48,5 @@ public class JsonResult {
 
         return value == 0;
     }
+
 }

@@ -16,8 +16,9 @@ import java.util.List;
 
 /**
  * 导出赛程的Controller
+ * 此Controller对应联赛列表页
  *
- * @author wsy
+ * @author ronnie
  */
 @Controller
 public class MatchLeagueController {
@@ -25,9 +26,11 @@ public class MatchLeagueController {
     @Autowired
     private SbcLeagueRepository sbcLeagueRepository;
 
-    @Autowired
-    private TCrawlerWin310Repository win310Repository;
-
+    /**
+     * 列出所有联赛
+     *
+     * @return
+     */
     @RequestMapping(value = "/listMatchLeague", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public List<SbcLeague> listMatchLeague() {
@@ -35,19 +38,23 @@ public class MatchLeagueController {
         return sbcLeagueRepository.findAll();
     }
 
+    /**
+     * 联赛列表页
+     *
+     * @return
+     */
     @RequestMapping(value = "/listMatchLeaguePage")
     public String listMatchLeaguePage() {
 
         return "listMatchLeague";
     }
 
-    @RequestMapping(value = "/list310Leagues", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
-    public List<String> list310Leagues() {
-
-        return win310Repository.findMatchsDistinct();
-    }
-
+    /**
+     * 修改联赛
+     *
+     * @param league
+     * @return
+     */
     @RequestMapping(value = "/modifyLeague", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public JsonResult modifyLeague(String league) {

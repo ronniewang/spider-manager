@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 
@@ -12,7 +12,6 @@
     <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.2/ui-bootstrap.min.js"></script>
     <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.2/ui-bootstrap-tpls.min.js"></script>
     <link href="//cdn.bootcss.com/bootstrap-datepicker/1.4.0/css/bootstrap-datepicker3.min.css" rel="stylesheet">
-    <!-- 		<script src="//cdn.bootcss.com/bootstrap-datepicker/1.4.0/js/bootstrap-datepicker.min.js"></script> -->
     <script src="js/bootstrap-datepicker.js"></script>
     <style>
         .chosen {
@@ -35,8 +34,8 @@
 <div class="navbar navbar-default navbar-fixed-top">
     <div class="form-inline form-center">
         <div class="form-group">
-            <label for="exampleInputName2">Search</label>
-            <input type="text" class="form-control" id="exampleInputName2" ng-model="query">
+            <label>Search</label>
+            <input type="text" class="form-control" ng-model="query">
             <button type="button" class="btn btn-primary" ng-click="selectAll()">Select All</button>
             <button type="button" class="btn btn-primary" ng-click="deselectAll()">Deselect All</button>
             <label for="startDate">Start Date</label>
@@ -250,5 +249,4 @@
             return true;
         }
     });
-
 </script>

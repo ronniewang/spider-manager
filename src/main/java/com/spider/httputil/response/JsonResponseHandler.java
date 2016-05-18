@@ -1,6 +1,5 @@
 package com.spider.httputil.response;
 
-import com.spider.global.Constants;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.util.EntityUtils;
@@ -10,7 +9,7 @@ import java.nio.charset.Charset;
 
 public class JsonResponseHandler extends ResponseHandlerSupport<String> {
 
-    private String charset = Constants.UTF_8;
+    private String charset = "utf-8";
 
     @Override
     public String getRawResponse() {

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 
@@ -12,7 +12,6 @@
     <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.2/ui-bootstrap.min.js"></script>
     <script src="//cdn.bootcss.com/angular-ui-bootstrap/0.13.2/ui-bootstrap-tpls.min.js"></script>
     <link href="//cdn.bootcss.com/bootstrap-datepicker/1.4.0/css/bootstrap-datepicker3.min.css" rel="stylesheet">
-    <!-- 		<script src="//cdn.bootcss.com/bootstrap-datepicker/1.4.0/js/bootstrap-datepicker.min.js"></script> -->
     <script src="/spider-web/js/bootstrap-datepicker.js"></script>
     <style>
         body {
@@ -37,13 +36,17 @@
                 <th>PARSE TIME</th>
                 <th>HISTORY</th>
             </tr>
+            <%--初始化是会从后台加载数据，放入$scope.serivces中--%>
             <tr ng-repeat="service in services">
+                <%--遍历$scope.serivces--%>
                 <td>{{service.service}}</td>
+                <%--通过过滤器修改日期的显示形式--%>
                 <td>{{service.startTime | date:'MM-dd HH:mm:ss.sss'}}</td>
                 <td>{{service.endTime | date:'MM-dd HH:mm:ss.sss'}}</td>
                 <td>{{service.success}}</td>
                 <td>{{service.endTime-service.startTime | date:'s.sss'}}s</td>
                 <td>
+                    <%--click时间绑定到$scope.listHistory(service)函数--%>
                     <button type="button" class="btn btn-info" ng-click="listHistory(service.service)">历史</button>
                 </td>
             </tr>
@@ -86,5 +89,4 @@
                     });
         }
     });
-
 </script>

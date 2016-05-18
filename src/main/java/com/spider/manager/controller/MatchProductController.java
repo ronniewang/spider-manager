@@ -1,7 +1,6 @@
 package com.spider.manager.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.spider.global.Constants;
 import com.spider.manager.model.DownloadFileResult;
 import com.spider.manager.model.ProductModel;
 import com.spider.manager.service.MatchProductService;
@@ -12,6 +11,7 @@ import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -24,8 +24,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 此Controller对应奖池信息页面
+ *
+ * @author ronnie
+ */
 @Controller
 public class MatchProductController {
+
+    private static final String SHEET_NAME = "First Sheet";
+
+    @Value("${download.xls.path}")
+    private String downloadXlsPath;
 
     @Autowired
     private MatchProductService matchProductService;
@@ -38,7 +48,7 @@ public class MatchProductController {
         binder.registerCustomEditor(Date.class, orderDateEditor);
     }
 
-    @RequestMapping(value = "/listProduct", method = RequestMethod.GET, produces = { MediaType.APPLICATION_JSON_VALUE })
+    @RequestMapping(value = "/listProduct", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public List<ProductModel> listProduct(@RequestParam Date startDate, @RequestParam Date endDate) {
 
@@ -51,7 +61,7 @@ public class MatchProductController {
         return "listProduct";
     }
 
-    @RequestMapping(value = "/matchProductExcel",produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "/matchProductExcel", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public DownloadFileResult excel(@RequestParam String productModels) {
 
@@ -59,8 +69,8 @@ public class MatchProductController {
         String fileName = "product" + DateUtils.getNowStr("yyyyMMdd_HHmmss") + ".xls";
         WritableWorkbook workbook = null;
         try {
-            workbook = Workbook.createWorkbook(new File(Constants.DOWNLOAD_XLS_PATH + fileName));
-            WritableSheet sheet = workbook.createSheet(Constants.SHEET_NAME, 0);
+            workbook = Workbook.createWorkbook(new File(downloadXlsPath + fileName));
+            WritableSheet sheet = workbook.createSheet(SHEET_NAME, 0);
 
             for (int i = 0; i < productList.size(); i++) {
                 sheet.addCell(new Label(0, i, productList.get(i).getMatchDate()));

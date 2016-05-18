@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface ServiceStateHistoryRepository extends JpaRepository<ServiceStateHistoryEntity, Long> {
 
-    @Query("from ServiceStateHistoryEntity s where SERVICE = :serviceName")
+    @Query("from ServiceStateHistoryEntity s where s.service = :serviceName")
     List<ServiceStateHistoryEntity> findHistory(@Param("serviceName") String serviceName, Pageable pageable);
 }
