@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.Properties;
 
@@ -25,7 +24,6 @@ import java.util.Properties;
 @SpringBootApplication
 @Import(value = {DatabaseConfig.class})
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-@EnableAsync
 public class SpiderManagerApplication extends SpringBootServletInitializer {
 
     @Autowired

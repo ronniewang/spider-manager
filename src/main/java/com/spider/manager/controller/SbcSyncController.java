@@ -41,7 +41,7 @@ public class SbcSyncController {
      */
     @RequestMapping(value = "/syncOdds", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public JsonResult sync(@RequestParam String id) {
+    public JsonResult syncOdds(@RequestParam String id) {
 
         return sbcService.syncOdds(id);
     }

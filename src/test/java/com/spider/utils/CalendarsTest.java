@@ -1,8 +1,8 @@
 package com.spider.utils;
 
-import static org.testng.Assert.*;
+import org.junit.Test;
 
-import org.testng.annotations.Test;
+import static org.junit.Assert.*;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -24,6 +24,6 @@ public class CalendarsTest {
         Date elevenClockStub = calendar.getTime();
         Date elevenClockToday = Calendars.getTodayEleven();
 
-        assertTrue(elevenClockStub.equals(elevenClockToday), "date doesn't not equal");
+        assertTrue(elevenClockStub.equals(elevenClockToday));
     }
 }

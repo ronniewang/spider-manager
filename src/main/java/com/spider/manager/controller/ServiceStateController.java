@@ -58,7 +58,7 @@ public class ServiceStateController {
      * @param service 爬虫名称
      * @return
      */
-    @RequestMapping(value = "listHistory", produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "/listHistory", produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public List<ServiceStateHistoryEntity> listHistory(String service) {
 

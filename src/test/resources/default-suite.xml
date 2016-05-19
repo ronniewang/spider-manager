@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Default Suite">
-  <test name="spider-web">
-    <classes>
-      <class name="com.spider.utils.CalendarsTest"/>
-    </classes>
-  </test> <!-- spider-web -->
-</suite> <!-- Default Suite -->

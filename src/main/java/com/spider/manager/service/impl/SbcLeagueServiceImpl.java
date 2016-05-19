@@ -19,7 +19,7 @@ public class SbcLeagueServiceImpl implements SbcLeagueService {
     @Override
     public String getLeagueName(TCrawlerSporttery sporttery) {
 
-        SbcLeague league = null;
+        SbcLeague league;
         String leagueName = sporttery.getMatchs();
         try {
             league = sbcLeagueRepository.findBySportteryName(sporttery.getMatchs());
