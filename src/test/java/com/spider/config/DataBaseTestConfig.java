@@ -44,12 +44,6 @@ public class DataBaseTestConfig {
 
     private String PROPERTY_NAME_HIBERNATE_HBM2DDL = "hibernate.hbm2ddl.auto";
 
-    @Value("${connection.auto_connection}")
-    private String HIBERNATE_AUTO_RECONNECT;
-
-    private String PROPERTY_NAME_AUTO_RECONNECT = "connection.autoReconnect";
-
-
     @Value("${entitymanager.packagesToScan}")
     private String ENTITYMANAGER_PACKAGES_TO_SCAN;
 
@@ -89,7 +83,6 @@ public class DataBaseTestConfig {
         properties.put(PROPERTY_NAME_HIBERNATE_DIALECT, HIBERNATE_DIALECT);
         properties.put(PROPERTY_NAME_HIBERNATE_SHOW_SQL, HIBERNATE_SHOW_SQL);
         properties.put(PROPERTY_NAME_HIBERNATE_HBM2DDL, "create-drop");
-        properties.put(PROPERTY_NAME_AUTO_RECONNECT, HIBERNATE_AUTO_RECONNECT);
         return properties;
     }
 

@@ -3,7 +3,6 @@ package com.spider.manager.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.spider.db.entity.*;
 import com.spider.httputil.HttpRequest;
-import com.spider.manager.model.ExcelMatchStatisticModel;
 import com.spider.manager.model.MatchModel;
 import com.spider.manager.model.MatchPlayerInfoModel;
 import com.spider.db.repository.*;
@@ -165,16 +164,4 @@ public class MatchServiceImpl implements MatchService {
         return true;// FIXME 暂时不处理
     }
 
-    @Override
-    public List<ExcelMatchStatisticModel> getExcelStatisticModels(Date start, Date end, String league) {
-
-        List<TCrawlerWin310> win310s = win310Repository.findByMatchsAndUpdateTimeBetween(league, start, end);
-        List<ExcelMatchStatisticModel> statisticModels = new ArrayList<>();
-        for (TCrawlerWin310 win310 : win310s) {
-            Long europeId = Long.valueOf(win310.getWin310EuropeId());
-            List<NowgoalMatchStatisticEntity> statisticEntities = statisticRepository.findByMatchId(europeId);
-            statisticModels.add(new ExcelMatchStatisticModel().build(win310, statisticEntities));
-        }
-        return statisticModels;
-    }
 }

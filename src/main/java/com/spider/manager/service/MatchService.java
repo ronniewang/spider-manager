@@ -32,11 +32,4 @@ public interface MatchService {
      */
     List<MatchPlayerInfoModel> listMatchByLeague(Date startDate, Date endDate, String league);
 
-    /**
-     * @param startDate
-     * @param endDate
-     * @param league
-     * @return
-     */
-    List<ExcelMatchStatisticModel> getExcelStatisticModels(Date startDate, Date endDate, String league);
 }
