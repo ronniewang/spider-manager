@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -16,6 +17,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Created by ronniewang on 16/5/22.
+ *
+ * @author ronnie
  */
 @RunWith(MockitoJUnitRunner.class)
 public class SbcSyncControllerTest {
@@ -23,7 +26,7 @@ public class SbcSyncControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private SbcService sbcService = new SbcServiceImpl();
+    private SbcService sbcService = Mockito.mock(SbcService.class);
 
     @InjectMocks
     private SbcSyncController sbcSyncController;

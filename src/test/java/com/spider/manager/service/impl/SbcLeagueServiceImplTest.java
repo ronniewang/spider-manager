@@ -16,6 +16,8 @@ import static org.mockito.Mockito.*;
 
 /**
  * Created by ronniewang on 16/5/22.
+ *
+ * @author ronnie
  */
 @RunWith(MockitoJUnitRunner.class)
 public class SbcLeagueServiceImplTest {
@@ -30,6 +32,7 @@ public class SbcLeagueServiceImplTest {
     public void testGetLeagueName_leagueExists_shouldReturnLeagueName() throws Exception {
 
         when(sbcLeagueRepository.findBySportteryName(isA(String.class))).then(new Answer<SbcLeague>() {
+
             @Override
             public SbcLeague answer(InvocationOnMock invocationOnMock) throws Throwable {
 
@@ -50,6 +53,7 @@ public class SbcLeagueServiceImplTest {
     public void testGetLeagueName_leagueNotExists_shouldReturnSportteryMatchs() throws Exception {
 
         when(sbcLeagueRepository.findBySportteryName(isA(String.class))).then(new Answer<SbcLeague>() {
+
             @Override
             public SbcLeague answer(InvocationOnMock invocationOnMock) throws Throwable {
 

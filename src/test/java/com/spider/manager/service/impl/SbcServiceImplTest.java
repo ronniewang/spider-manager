@@ -18,6 +18,8 @@ import static org.mockito.Mockito.*;
 
 /**
  * Created by ronniewang on 16/5/22.
+ *
+ * @author ronnie
  */
 @RunWith(MockitoJUnitRunner.class)
 public class SbcServiceImplTest {
@@ -35,6 +37,7 @@ public class SbcServiceImplTest {
     public void testSync_win310NotFound_shouldReturnErrorResult() throws Exception {
 
         when(win310Repository.findByUniqueId(isA(Long.class))).then(new Answer<TCrawlerWin310>() {
+
             @Override
             public TCrawlerWin310 answer(InvocationOnMock invocationOnMock) throws Throwable {
 
@@ -51,6 +54,7 @@ public class SbcServiceImplTest {
     public void testSync_500NotFound_shouldReturnErrorResult() throws Exception {
 
         when(win310Repository.findByUniqueId(isA(Long.class))).then(new Answer<TCrawlerWin310>() {
+
             @Override
             public TCrawlerWin310 answer(InvocationOnMock invocationOnMock) throws Throwable {
 
@@ -58,6 +62,7 @@ public class SbcServiceImplTest {
             }
         });
         when(w500Repository.findByMatchCode(isA(String.class))).then(new Answer<W500Entity>() {
+
             @Override
             public W500Entity answer(InvocationOnMock invocationOnMock) throws Throwable {
 
