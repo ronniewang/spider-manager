@@ -1,9 +1,13 @@
 package com.spider.manager.controller;
 
-import com.spider.config.BasicTest;
+import com.spider.manager.service.SbcService;
+import com.spider.manager.service.impl.SbcServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -13,11 +17,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by ronniewang on 16/5/22.
  */
-public class SbcSyncControllerTest extends BasicTest {
+@RunWith(MockitoJUnitRunner.class)
+public class SbcSyncControllerTest {
 
     private MockMvc mockMvc;
 
-    @Autowired
+    @Mock
+    private SbcService sbcService = new SbcServiceImpl();
+
+    @InjectMocks
     private SbcSyncController sbcSyncController;
 
     @Before

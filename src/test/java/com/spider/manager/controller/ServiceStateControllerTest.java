@@ -1,9 +1,14 @@
 package com.spider.manager.controller;
 
-import com.spider.config.BasicTest;
+import com.spider.db.repository.ServiceStateHistoryRepository;
+import com.spider.db.repository.ServiceStateRepository;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -13,9 +18,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by ronniewang on 16/5/22.
  */
-public class ServiceStateControllerTest extends BasicTest{
+@RunWith(MockitoJUnitRunner.class)
+public class ServiceStateControllerTest {
 
-    @Autowired
+    @Mock
+    private ServiceStateRepository serviceStateRepository = Mockito.mock(ServiceStateRepository.class);
+
+    @Mock
+    private ServiceStateHistoryRepository serviceStateHistoryRepository = Mockito.mock(ServiceStateHistoryRepository.class);
+
+    @InjectMocks
     private ServiceStateController serviceStateController;
 
     private MockMvc mockMvc;

@@ -11,6 +11,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
@@ -24,7 +25,7 @@ import java.util.Properties;
 @SpringBootApplication
 @Import(value = {DatabaseConfig.class})
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-public class SpiderManagerApplication extends SpringBootServletInitializer {
+public class SpiderManagerApplication{
 
     @Autowired
     private Environment environment;
@@ -66,12 +67,6 @@ public class SpiderManagerApplication extends SpringBootServletInitializer {
             return new MessageSender(onsOddsProducer, onsParameterProducer);
         }
         throw new NullPointerException("no specified mq producer");
-    }
-
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-
-        return application.sources(SpiderManagerApplication.class);
     }
 
     public static void main(String[] args) throws Exception {
