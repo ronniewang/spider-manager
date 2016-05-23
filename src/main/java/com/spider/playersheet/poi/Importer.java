@@ -63,7 +63,7 @@ public class Importer {
 
     private static JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
-    public static void main(String[] args) throws IOException {
+    public static void mainA(String[] args) throws IOException {
 
         String path = "C:\\workspace\\import-playersheet-mvn\\CSL_playersheet2016.xlsm";
         String sheetName = "重庆力帆";
