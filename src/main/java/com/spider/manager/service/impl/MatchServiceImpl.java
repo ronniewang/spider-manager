@@ -1,9 +1,9 @@
 package com.spider.manager.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
+import com.google.common.base.Preconditions;
 import com.spider.db.entity.*;
 import com.spider.httputil.HttpRequest;
-import com.spider.httputil.response.JsonResponseHandler;
 import com.spider.manager.model.MatchModel;
 import com.spider.manager.model.MatchPlayerInfoModel;
 import com.spider.db.repository.*;
@@ -12,35 +12,11 @@ import com.spider.manager.service.SbcLeagueService;
 import com.spider.utils.DateUtils;
 import com.spider.utils.LotteryUtils;
 import org.apache.http.HttpException;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.config.Registry;
-import org.apache.http.config.RegistryBuilder;
-import org.apache.http.conn.socket.ConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.X509HostnameVerifier;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.ssl.SSLContextBuilder;
-import org.apache.http.ssl.SSLContexts;
-import org.apache.http.ssl.TrustStrategy;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLException;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocket;
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -73,17 +49,17 @@ public class MatchServiceImpl implements MatchService {
     private NowgoalMatchPlayersRepository playersRepository;
 
     @Autowired
-    private NowgoalMatchStatisticRepository statisticRepository;
-
-    @Autowired
     private NowgoalKeyEventRepository keyEventRepository;
 
     @Override
     public List<MatchModel> listMatch(Date startDate, Date endDate) {
 
+        Preconditions.checkNotNull(startDate);
+        Preconditions.checkNotNull(endDate);
+
         List<MatchModel> matchList = new ArrayList<>();
         List<TCrawlerSporttery> sportteryList = sportteryRepository.findByStartDateTimeBetween(startDate, endDate);
-        if (sportteryList == null) {
+        if (sportteryList == null || sportteryList.size() == 0) {
             return matchList;
         }
         List<String> matchCodes = LotteryUtils.getMatchCodes(sportteryList);
@@ -158,10 +134,14 @@ public class MatchServiceImpl implements MatchService {
         try {
             HttpRequest httpRequest = HttpRequest.createRequest(ENDPOINT_SBC_MATCH_COMPARE);
             httpRequest.addParameter("matchCodes", jsonArray.toJSONString());
-            List<String> absenceMatchList = Arrays.asList(httpRequest.POST("").replaceAll("\\[", "").replaceAll("\\]", "").split(","));
-            for (String matchCode : absenceMatchList) {
-                absenceMatchSet.add(matchCode.trim());
+            String res = httpRequest.POST("");
+            if (res != null) {
+                List<String> absenceMatchList = Arrays.asList(res.replaceAll("\\[", "").replaceAll("\\]", "").split(","));
+                for (String matchCode : absenceMatchList) {
+                    absenceMatchSet.add(matchCode.trim());
+                }
             }
+            return absenceMatchSet;
         } catch (HttpException e) {
             logger.error("get absence match codes error", e);
         }

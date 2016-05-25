@@ -1,5 +1,6 @@
 package com.spider.manager.service.impl;
 
+import com.google.common.base.Preconditions;
 import com.spider.db.entity.SportteryAllEntity;
 import com.spider.db.entity.TCrawlerSporttery;
 import com.spider.db.entity.TCrawlerWin310;
@@ -41,6 +42,9 @@ public class MatchProductServiceImpl implements MatchProductService {
 
     @Override
     public List<ProductModel> listMatchProduct(Date startDate, Date endDate) {
+
+        Preconditions.checkNotNull(startDate);
+        Preconditions.checkNotNull(endDate);
 
         List<ProductModel> productlist = new ArrayList<>();
         List<TCrawlerSporttery> sportteryList = sportteryRepository.findByStartDateTimeBetween(startDate, endDate);
@@ -100,7 +104,7 @@ public class MatchProductServiceImpl implements MatchProductService {
         }
     }
 
-    public boolean compareTwo(TCrawlerSporttery sporttery, TCrawlerWin310 win310) {// 判断竞猜官网和彩客是否匹配
+    private boolean compareTwo(TCrawlerSporttery sporttery, TCrawlerWin310 win310) {// 判断竞猜官网和彩客是否匹配
 
         return true;// TODO: 2016/5/16 暂无实现
     }

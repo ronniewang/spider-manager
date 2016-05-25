@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
+import org.springframework.expression.AccessException;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -58,6 +59,25 @@ public class SbcLeagueServiceImplTest {
             public SbcLeague answer(InvocationOnMock invocationOnMock) throws Throwable {
 
                 return null;
+            }
+        });
+        TCrawlerSporttery sporttery = new TCrawlerSporttery();
+        sporttery.setMatchs("csl");
+        String result = sbcLeagueService.getLeagueName(sporttery);
+        assertTrue(result.equals("csl"));
+        verify(sbcLeagueRepository).findBySportteryName(isA(String.class));
+        verifyNoMoreInteractions(sbcLeagueRepository);
+    }
+
+    @Test
+    public void testGetLeagueName_queryException_shouldReturnSportteryMatchs() throws Exception {
+
+        when(sbcLeagueRepository.findBySportteryName(isA(String.class))).then(new Answer<SbcLeague>() {
+
+            @Override
+            public SbcLeague answer(InvocationOnMock invocationOnMock) throws Throwable {
+
+                throw new AccessException("");
             }
         });
         TCrawlerSporttery sporttery = new TCrawlerSporttery();

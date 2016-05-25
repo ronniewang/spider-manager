@@ -114,6 +114,9 @@ public class HttpRequest {
     public <REQ, RES> RES POST(final Class<RES> cls, final REQ postBody, final RequestHandler<REQ> requestHandler, final ResponseHandlerSupport<RES> responseHandler) throws HttpException {
 
         URI uri = buildURI();
+        if (uri == null) {
+            return null;
+        }
         HttpPost httpPost = new HttpPost(uri);
         httpPost.setConfig(requestConfig);
         httpPost.setEntity(requestHandler.parse(postBody));
@@ -136,6 +139,9 @@ public class HttpRequest {
 
         try {
             URIBuilder uriBuilder = null;
+            if (this.endpoint == null) {
+                return null;
+            }
             uriBuilder = new URIBuilder(this.endpoint);
             uriBuilder.setParameters(this.parameters);
             return uriBuilder.build();

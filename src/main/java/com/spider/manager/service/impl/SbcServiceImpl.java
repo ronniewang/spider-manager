@@ -10,6 +10,7 @@ import com.google.common.base.Preconditions;
 import com.spider.domain.UpdateHdcOdds;
 import com.spider.domain.UpdateHiloOdds;
 import com.spider.domain.UpdateScoreAndHalf;
+import com.spider.utils.CaiexOddsUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -77,12 +78,13 @@ public class SbcServiceImpl implements SbcService {
             }
             String europeId = odds.getEuropeId() + "";
             TCrawlerWin310 win310 = win310Repository.findByWin310EuropeId(europeId);
-            String matchCode = win310.getCompetitionNum();
             if (win310 == null) {
                 logger.error("no this win310, europeId is [" + europeId + "]");
                 return new JsonResult(2, "no this win310, europeId is [" + europeId + "]");
             }
+            String matchCode = win310.getCompetitionNum();
             doUpdateToMQ(matchCode, odds);
+            return JsonResult.SUCCESS;
         } catch (UpdateException e) {
             logger.error("mq error", e);
             return new JsonResult(2, "mq error");
@@ -90,7 +92,6 @@ public class SbcServiceImpl implements SbcService {
             logger.error(e.getMessage(), e);
             return new JsonResult(1, e.getMessage());
         }
-        return new JsonResult(1, "unknown exception");
     }
 
     @Override
@@ -116,9 +117,9 @@ public class SbcServiceImpl implements SbcService {
             return new JsonResult(1, "mysql error, " + e.getMessage());
         }
         try {
-            Integer europeId = Integer.valueOf(win310.getWin310EuropeId());
             updateSbcScoreAndHalf(w500Entity);
             if (type == null) {
+                Integer europeId = Integer.valueOf(win310.getWin310EuropeId());
                 updateHiloAndHdcOdds(uniqueId, europeId);
             }
             return JsonResult.SUCCESS;
@@ -142,25 +143,11 @@ public class SbcServiceImpl implements SbcService {
 
     private void doUpdateToMQ(String matchCode, CompanyOddsEntity odds) throws UpdateException {
 
-        if (odds.getOddsType() == ODDS_TYPE_HILO) {
-            sbcUpdateManager.update(buildUpdateHiloOdds(odds, matchCode), hiloTag);
+        if (ODDS_TYPE_HILO == odds.getOddsType()) {
+            sbcUpdateManager.update(CaiexOddsUtils.buildHiloUpdate(odds, matchCode), hiloTag);
         } else {
-            sbcUpdateManager.update(buildUpdateHdcOdds(odds, matchCode), hdcTag);
+            sbcUpdateManager.update(CaiexOddsUtils.buildHdcUpdate(odds, matchCode), hdcTag);
         }
-    }
-
-    private UpdateHdcOdds buildUpdateHdcOdds(CompanyOddsEntity odds, String matchCode) {
-
-        return new UpdateHdcOdds(matchCode, odds.getGamingCompany(), odds.getDurationTime(), odds.getScore(),
-                odds.getOddsOne(), odds.getOddsThree(), odds.getOddsTwo(), odds.getHomeRedCard(),
-                odds.getAwayRedCard(), odds.getOddsUpdateTime());
-    }
-
-    private UpdateHiloOdds buildUpdateHiloOdds(CompanyOddsEntity odds, String matchCode) {
-
-        return new UpdateHiloOdds(matchCode, odds.getGamingCompany(), odds.getDurationTime(), odds.getScore(),
-                odds.getOddsOne(), odds.getOddsThree(), odds.getOddsTwo(),
-                odds.getHomeRedCard(), odds.getAwayRedCard(), odds.getOddsUpdateTime());
     }
 
     private void updateSbcScoreAndHalf(W500Entity w500) throws UpdateException {

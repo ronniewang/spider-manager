@@ -81,7 +81,7 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
 
         List<OddsModel> oddslist = Lists.newArrayList();
         List<TCrawlerSporttery> sportteryList = sportteryRepository.findByStartDateTimeBetween(startDate, endDate);
-        if (sportteryList == null) {
+        if (sportteryList == null || sportteryList.size() == 0) {
             return oddslist;
         }
         List<String> matchCodes = LotteryUtils.getMatchCodes(sportteryList);
@@ -356,6 +356,10 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
 
     @Override
     public List<ExcelOddsModel> getExcelOddsModels(Date start, Date end, String league) {
+
+        Preconditions.checkNotNull(start);
+        Preconditions.checkNotNull(end);
+        Preconditions.checkNotNull(league);
 
         List<TCrawlerWin310> win310s = win310Repository.findByMatchsAndUpdateTimeBetween(league, start, end);
         List<ExcelOddsModel> excelOddsModels = new ArrayList<>();
