@@ -88,30 +88,21 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
         List<String> absenceMatchSet = matchService.getAbsenceMatchCodes(matchCodes);
         for (TCrawlerSporttery sporttery : sportteryList) {
             TCrawlerWin310 win310 = win310Repository.findTop1ByCompetitionNumOrderByStartDateTimeDesc(sporttery.getCompetitionNum());
-
-            if (win310 == null) {
-                System.out.println("win310 doesn't exist, match code is " + sporttery.getCompetitionNum());
-                continue;
-            }
-            OddsModel oddsModel = oddsModelRepository.findByEuropeId(Integer.valueOf(win310.getWin310EuropeId()));
-            if (oddsModel == null) {
-                continue;
-            }
-            if (win310 != null) {
-                if (!win310.sameAs(sporttery)) {
-                    oddsModel.setIsDifferent(true);
-                }
-                setState(sporttery, absenceMatchSet, oddsModel);
-            } else {
-                if (sporttery.getStartDateTime().before(new Date())) {//老的那一场
-                    continue;
+            OddsModel oddsModel;
+            if (win310 != null && !sporttery.getStartDateTime().before(new Date())/*老的那一场*/) {
+                oddsModel = oddsModelRepository.findByEuropeId(Integer.valueOf(win310.getWin310EuropeId()));
+                if (oddsModel != null) {
+                    if (!win310.sameAs(sporttery)) {
+                        oddsModel.setIsDifferent(true);
+                    }
+                    setState(sporttery, absenceMatchSet, oddsModel);
+                    SportteryAllEntity sportteryAllEntity = sportteryAllRepository.findByMatchCode(sporttery.getCompetitionNum());
+                    if (sportteryAllEntity != null && oddsModel != null) {
+                        oddsModel.setSportteryAllModel(new SportteryAllModel(sportteryAllEntity));
+                    }
+                    oddslist.add(oddsModel);
                 }
             }
-            SportteryAllEntity sportteryAllEntity = sportteryAllRepository.findByMatchCode(sporttery.getCompetitionNum());
-            if (sportteryAllEntity != null && oddsModel != null) {
-                oddsModel.setSportteryAllModel(new SportteryAllModel(sportteryAllEntity));
-            }
-            oddslist.add(oddsModel);
         }
         return oddslist;
     }
