@@ -1,11 +1,10 @@
 package com.spider.manager.service.impl;
 
-import com.spider.db.entity.OddsModel;
-import com.spider.db.entity.SportteryAllEntity;
-import com.spider.db.entity.TCrawlerSporttery;
-import com.spider.db.entity.TCrawlerWin310;
+import com.spider.db.entity.*;
 import com.spider.db.repository.*;
+import com.spider.global.GamingCompany;
 import com.spider.global.Mills;
+import com.spider.manager.model.ExcelOddsModel;
 import com.spider.manager.service.MatchOddsServcie;
 import com.spider.manager.service.MatchService;
 import com.spider.manager.service.SbcLeagueService;
@@ -171,7 +170,19 @@ public class MatchOddsServiceImplTest {
             @Override
             public TCrawlerWin310 answer(InvocationOnMock invocationOnMock) throws Throwable {
 
-                return null;
+                TCrawlerWin310 win310 = new TCrawlerWin310();
+                win310.setWin310EuropeId("121212");
+                return win310;
+            }
+        });
+        when(companyOddsRepository.findByEuropeIdAndOddsTypeAndGamingCompany(isA(Integer.class), isA(Integer.class), isA(String.class))).thenAnswer(new Answer<CompanyOddsEntity>() {
+
+            @Override
+            public CompanyOddsEntity answer(InvocationOnMock invocation) throws Throwable {
+
+                CompanyOddsEntity entity = new CompanyOddsEntity();
+                entity.setOddsTwo("2.12");
+                return entity;
             }
         });
         matchOddsServcie.refreshOdds("1001");
@@ -201,5 +212,45 @@ public class MatchOddsServiceImplTest {
         matchOddsServcie.getExcelOddsModels(new Date(), new Date(), "csl");
         verify(win310Repository).findByMatchsAndUpdateTimeBetween(isA(String.class), isA(Date.class), isA(Date.class));
         verifyNoMoreInteractions(win310Repository);
+    }
+
+    @Test
+    public void testGetExcelOddsModels_win310ListIsNotEmpty_shouldReturnOneElementList() throws Exception {
+
+        when(win310Repository.findByMatchsAndUpdateTimeBetween(isA(String.class), isA(Date.class), isA(Date.class))).thenAnswer(new Answer<List<TCrawlerWin310>>() {
+
+            @Override
+            public List<TCrawlerWin310> answer(InvocationOnMock invocationOnMock) throws Throwable {
+
+                ArrayList<TCrawlerWin310> tCrawlerWin310s = new ArrayList<>();
+                TCrawlerWin310 win310 = new TCrawlerWin310();
+                win310.setWin310EuropeId("12121");
+                tCrawlerWin310s.add(win310);
+                return tCrawlerWin310s;
+            }
+        });
+        when(companyOddsHistoryRepository.findByEuropeIdAndDurationTimeEqualsEmpty(isA(Integer.class))).thenAnswer(new Answer<List<CompanyOddsHistoryEntity>>() {
+
+            @Override
+            public List<CompanyOddsHistoryEntity> answer(InvocationOnMock invocation) throws Throwable {
+
+                List<CompanyOddsHistoryEntity> companyOddsEntities = new ArrayList<>();
+                CompanyOddsHistoryEntity entity1 = new CompanyOddsHistoryEntity();
+                entity1.setOddsTwo("2.12");
+                entity1.setOddsType(1);
+                entity1.setGamingCompany(GamingCompany.LiJi.getName());
+                companyOddsEntities.add(entity1);
+                CompanyOddsHistoryEntity entity2 = new CompanyOddsHistoryEntity();
+                entity2.setOddsTwo("2.12");
+                entity2.setOddsType(1);
+                entity2.setGamingCompany(GamingCompany.JinBaoBo.getName());
+                companyOddsEntities.add(entity2);
+                return companyOddsEntities;
+            }
+        });
+        List<ExcelOddsModel> excelOddsModels = matchOddsServcie.getExcelOddsModels(new Date(), new Date(), "csl");
+        verify(win310Repository).findByMatchsAndUpdateTimeBetween(isA(String.class), isA(Date.class), isA(Date.class));
+        verifyNoMoreInteractions(win310Repository);
+        assertTrue(excelOddsModels.size() == 2);
     }
 }

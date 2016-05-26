@@ -12,20 +12,12 @@ import com.spider.manager.service.MatchService;
 import com.spider.manager.service.SbcLeagueService;
 import com.spider.utils.*;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.mathworks.toolbox.javabuilder.MWException;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 关于赔率的Service，包含较多业务逻辑
@@ -38,10 +30,6 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
     private static final String JBB_NAME = GamingCompany.JinBaoBo.getName();
 
     private static final String LJ_NAME = GamingCompany.LiJi.getName();
-
-    private static final Logger errorLogger = LogHelper.getErrorLogger();
-
-    private static final Logger infoLogger = LogHelper.getInfoLogger();
 
     public static final int ODDS_TYPE_HILO = 2;
 
@@ -254,95 +242,7 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
     @Override
     public Map<String, SupAndTtgModel> calcSupAndTtg(OddsModel oddsModel) {
 
-        Map<String/*liji, jbb*/, SupAndTtgModel> map = Maps.newHashMap();
-        LogHelper.infoLog(infoLogger, null, "start calc sup and ttg, oddsModel={0} ", oddsModel);
-        double duration = 0.0;
-        String durationTime = oddsModel.getDurationTime();
-        if (!StringUtils.isBlank(durationTime)) {
-            try {
-                duration = Double.valueOf(durationTime);
-            } catch (NumberFormatException e) {
-            }
-        }
-        double homeScore = 0.0;
-        double awayScore = 0.0;
-        String score = oddsModel.getScore();
-        String[] socres = score.split("-");
-        if (score.length() > 1) {
-            if (StringUtils.isNotBlank(socres[ODDS_TYPE_HAD])) {
-                try {
-                    homeScore = Double.valueOf(socres[ODDS_TYPE_HAD].trim());
-                } catch (NumberFormatException e) {
-                }
-            }
-            if (StringUtils.isNotBlank(socres[1])) {
-                try {
-                    awayScore = Double.valueOf(socres[1].trim());
-                } catch (NumberFormatException e) {
-                }
-            }
-        }
-        //~~~~~~~~~~~~~~~~~~~~~~liji~~~~~~~~~~~~~~~~~~~~~~~~
-        double[][] supAndTtg;
-        try {
-            String hdcHome = oddsModel.getLijiHdcHome();
-            String hdcLine = oddsModel.getLijiHdcLine();
-            String hdcAway = oddsModel.getLijiHdcAway();
-            String hiloHigh = oddsModel.getLijiHiloH();
-            String hiloLine = oddsModel.getLijiHiloLine();
-            String hiloLow = oddsModel.getLijiHiloL();
-            supAndTtg = CaiexOddsUtils.calcSUPandTTG(
-                    Double.valueOf(hdcHome),
-                    Double.valueOf(hdcLine),
-                    Double.valueOf(hdcAway),
-                    Double.valueOf(hiloHigh),
-                    Double.valueOf(hiloLine),
-                    Double.valueOf(hiloLow),
-                    duration, homeScore, awayScore);
-        } catch (NumberFormatException e) {
-            LogHelper.errorLog(errorLogger, e, "calc sup and ttg error");
-            return null;
-        } catch (MWException e) {
-            LogHelper.errorLog(errorLogger, e, "calc sup and ttg error");
-            return null;
-        } catch (Exception e) {
-            LogHelper.errorLog(errorLogger, e, "calc sup and ttg runtime error");
-            return null;
-        }
-        map.put("liji", new SupAndTtgModel(
-                new BigDecimal(supAndTtg[0][0]).setScale(2, RoundingMode.HALF_DOWN).toString(),
-                new BigDecimal(supAndTtg[0][1]).setScale(2, RoundingMode.HALF_DOWN).toString()));
-        //~~~~~~~~~~~~~~~~~~~~~~jinbaobo~~~~~~~~~~~~~~~~~~~~~~~
-        double[][] supAndTtg1;
-        try {
-            String hdcHome1 = oddsModel.getJinbaoboHdcHome();
-            String hdcLine1 = oddsModel.getJinbaoboHdcLine();
-            String hdcAway1 = oddsModel.getJinbaoboHdcAway();
-            String hiloHigh1 = oddsModel.getJinbaoboHiloH();
-            String hiloLine1 = oddsModel.getJinbaoboHiloLine();
-            String hiloLow1 = oddsModel.getJinbaoboHiloL();
-            supAndTtg1 = CaiexOddsUtils.calcSUPandTTG(
-                    Double.valueOf(hdcHome1),
-                    Double.valueOf(hdcLine1),
-                    Double.valueOf(hdcAway1),
-                    Double.valueOf(hiloHigh1),
-                    Double.valueOf(hiloLine1),
-                    Double.valueOf(hiloLow1),
-                    duration, homeScore, awayScore);
-        } catch (NumberFormatException e) {
-            LogHelper.errorLog(errorLogger, e, "calc sup and ttg error");
-            return null;
-        } catch (MWException e) {
-            LogHelper.errorLog(errorLogger, e, "calc sup and ttg error");
-            return null;
-        } catch (Exception e) {
-            LogHelper.errorLog(errorLogger, e, "calc sup and ttg runtime error");
-            return null;
-        }
-        map.put("jinbaobo", new SupAndTtgModel(
-                new BigDecimal(supAndTtg1[0][0]).setScale(2, RoundingMode.HALF_DOWN).toString(),
-                new BigDecimal(supAndTtg1[0][1]).setScale(2, RoundingMode.HALF_DOWN).toString()));
-        return map;
+        return CaiexOddsUtils.getStringSupAndTtgModelMap(oddsModel);
     }
 
     @Override
@@ -356,41 +256,31 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
         List<ExcelOddsModel> excelOddsModels = new ArrayList<>();
         for (TCrawlerWin310 win310 : win310s) {
             Integer europeId = Integer.valueOf(win310.getWin310EuropeId());
-            List<CompanyOddsHistoryEntity> companyOddsEntities = companyOddsHistoryRepository.findByEuropeIdAndDurationTimeEqualsEmpty(europeId);
+            List<CompanyOddsHistoryEntity> historyEntities = companyOddsHistoryRepository.findByEuropeIdAndDurationTimeEqualsEmpty(europeId);
 
-            List<CompanyOddsHistoryEntity> lj0List = new ArrayList<>();
-            List<CompanyOddsHistoryEntity> lj1List = new ArrayList<>();
-            List<CompanyOddsHistoryEntity> lj2List = new ArrayList<>();
-            List<CompanyOddsHistoryEntity> jbb0List = new ArrayList<>();
-            List<CompanyOddsHistoryEntity> jbb1List = new ArrayList<>();
-            List<CompanyOddsHistoryEntity> jbb2List = new ArrayList<>();
-            for (CompanyOddsHistoryEntity companyOddsEntity : companyOddsEntities) {
-                if (companyOddsEntity.getGamingCompany().equals(GamingCompany.JinBaoBo.getName())) {
-                    if (companyOddsEntity.getOddsType() == 0) {
-                        jbb0List.add(companyOddsEntity);
-                    } else if (companyOddsEntity.getOddsType() == 1) {
-                        jbb1List.add(companyOddsEntity);
-                    } else if (companyOddsEntity.getOddsType() == 2) {
-                        jbb2List.add(companyOddsEntity);
-                    }
-                } else if (companyOddsEntity.getGamingCompany().equals(GamingCompany.LiJi.getName())) {
-                    if (companyOddsEntity.getOddsType() == 0) {
-                        lj0List.add(companyOddsEntity);
-                    } else if (companyOddsEntity.getOddsType() == 1) {
-                        lj1List.add(companyOddsEntity);
-                    } else if (companyOddsEntity.getOddsType() == 2) {
-                        lj2List.add(companyOddsEntity);
-                    }
+            Map<Integer/*odds type*/, List<CompanyOddsHistoryEntity>> ljOddsTypeAndHistoryListMap = new HashMap<>();
+            ljOddsTypeAndHistoryListMap.put(ODDS_TYPE_HAD, new ArrayList<CompanyOddsHistoryEntity>());
+            ljOddsTypeAndHistoryListMap.put(ODDS_TYPE_HDC, new ArrayList<CompanyOddsHistoryEntity>());
+            ljOddsTypeAndHistoryListMap.put(ODDS_TYPE_HILO, new ArrayList<CompanyOddsHistoryEntity>());
+            Map<Integer/*odds type*/, List<CompanyOddsHistoryEntity>> jbbOddsTypeAndHistoryListMap = new HashMap<>();
+            jbbOddsTypeAndHistoryListMap.put(ODDS_TYPE_HAD, new ArrayList<CompanyOddsHistoryEntity>());
+            jbbOddsTypeAndHistoryListMap.put(ODDS_TYPE_HDC, new ArrayList<CompanyOddsHistoryEntity>());
+            jbbOddsTypeAndHistoryListMap.put(ODDS_TYPE_HILO, new ArrayList<CompanyOddsHistoryEntity>());
+            for (CompanyOddsHistoryEntity historyEntity : historyEntities) {
+                if (historyEntity.getGamingCompany().equals(GamingCompany.JinBaoBo.getName())) {
+                    jbbOddsTypeAndHistoryListMap.get(historyEntity.getOddsType()).add(historyEntity);
+                } else if (historyEntity.getGamingCompany().equals(GamingCompany.LiJi.getName())) {
+                    ljOddsTypeAndHistoryListMap.get(historyEntity.getOddsType()).add(historyEntity);
                 } else {
                     //ignore
                 }
             }
-            ExcelOddsModel lj = getExcelOddsModel(win310, lj0List, lj1List, lj2List);
+            ExcelOddsModel lj = getExcelOddsModel(win310, ljOddsTypeAndHistoryListMap);
             lj.setHadBookmaker(LJ_NAME);
             lj.setHdcBookmaker(LJ_NAME);
             lj.setHiloBookmaker(LJ_NAME);
             excelOddsModels.add(lj);
-            ExcelOddsModel jbb = getExcelOddsModel(win310, jbb0List, jbb1List, jbb2List);
+            ExcelOddsModel jbb = getExcelOddsModel(win310, jbbOddsTypeAndHistoryListMap);
             jbb.setHadBookmaker(JBB_NAME);
             jbb.setHdcBookmaker(JBB_NAME);
             jbb.setHiloBookmaker(JBB_NAME);
@@ -399,7 +289,7 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
         return excelOddsModels;
     }
 
-    private ExcelOddsModel getExcelOddsModel(TCrawlerWin310 win310, List<CompanyOddsHistoryEntity> hadList, List<CompanyOddsHistoryEntity> hdcList, List<CompanyOddsHistoryEntity> hiloList) {
+    private ExcelOddsModel getExcelOddsModel(TCrawlerWin310 win310, Map<Integer/*odds type*/, List<CompanyOddsHistoryEntity>> oddsTypeAndHistoryListMap) {
 
         ExcelOddsModel excelOddsModel = new ExcelOddsModel();
         excelOddsModel.setHomeTeam(win310.getHomeTeam());
@@ -407,6 +297,7 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
         excelOddsModel.setDate(win310.getBDate());
         excelOddsModel.setScore(win310.getScore());
         excelOddsModel.setHalfScore(win310.getHalfScore());
+        List<CompanyOddsHistoryEntity> hadList = oddsTypeAndHistoryListMap.get(ODDS_TYPE_HAD);
         if (CollectionUtils.isNotEmpty(hadList)) {
             Integer size = hadList.size();
             CompanyOddsHistoryEntity startOdds = hadList.get(0);
@@ -420,6 +311,7 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
             excelOddsModel.setHadAClose(closeOdds.getOddsThree());
             excelOddsModel.setHadTimeClose(closeOdds.getOddsUpdateTime());
         }
+        List<CompanyOddsHistoryEntity> hdcList = oddsTypeAndHistoryListMap.get(ODDS_TYPE_HDC);
         if (CollectionUtils.isNotEmpty(hdcList)) {
             Integer size = hdcList.size();
             CompanyOddsHistoryEntity startOdds = hdcList.get(0);
@@ -433,6 +325,7 @@ public class MatchOddsServiceImpl implements MatchOddsServcie {
             excelOddsModel.setHdcAwayClose(closeOdds.getOddsThree());
             excelOddsModel.setHdcTimeClose(closeOdds.getOddsUpdateTime());
         }
+        List<CompanyOddsHistoryEntity> hiloList = oddsTypeAndHistoryListMap.get(ODDS_TYPE_HILO);
         if (CollectionUtils.isNotEmpty(hiloList)) {
             Integer size = hiloList.size();
             CompanyOddsHistoryEntity startOdds = hiloList.get(0);
